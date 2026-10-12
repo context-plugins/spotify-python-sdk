@@ -51,9 +51,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /albums/{id}/tracks`
 - **Auth**: `oauth_2_0` OR `oauth_2_0_client_credentials`
-- **Signature**: `def get_an_albums_tracks(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query · `limit` — query · `offset` — query
+- **Signature**: `def get_an_albums_tracks(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSimplifiedTrackObject`
 - **Returns (raw)**: `ApiResult[PagingSimplifiedTrackObject, GetAnAlbumsTracksErrorBody]`
 - **Error**: `GetAnAlbumsTracksErrorBody` — **Case A (typed)**
@@ -71,9 +71,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /artists/{id}/top-tracks`
 - **Auth**: `oauth_2_0`
-- **Signature**: `def get_an_artists_top_tracks(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query
+- **Signature**: `def get_an_artists_top_tracks(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query
 - **Returns (parsed)**: `ManyTracks`
 - **Returns (raw)**: `ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]`
 - **Error**: `GetAnArtistsTopTracksErrorBody` — **Case A (typed)**
@@ -91,9 +91,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /audio-analysis/{id}`
 - **Auth**: `oauth_2_0`
-- **Signature**: `def get_audio_analysis(id: str, *, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path
+- **Signature**: `def get_audio_analysis(id_: str, *, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id`
 - **Returns (parsed)**: `AudioAnalysisObject`
 - **Returns (raw)**: `ApiResult[AudioAnalysisObject, GetAudioAnalysisErrorBody]`
 - **Error**: `GetAudioAnalysisErrorBody` — **Case A (typed)**
@@ -111,9 +111,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /audio-features/{id}`
 - **Auth**: `oauth_2_0`
-- **Signature**: `def get_audio_features(id: str, *, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path
+- **Signature**: `def get_audio_features(id_: str, *, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id`
 - **Returns (parsed)**: `AudioFeaturesObject`
 - **Returns (raw)**: `ApiResult[AudioFeaturesObject, GetAudioFeaturesErrorBody]`
 - **Error**: `GetAudioFeaturesErrorBody` — **Case A (typed)**
@@ -210,9 +210,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /tracks/{id}`
 - **Auth**: `oauth_2_0` OR `oauth_2_0_client_credentials`
-- **Signature**: `def get_track(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query
+- **Signature**: `def get_track(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query
 - **Returns (parsed)**: `TrackObject`
 - **Returns (raw)**: `ApiResult[TrackObject, GetTrackErrorBody]`
 - **Error**: `GetTrackErrorBody` — **Case A (typed)**

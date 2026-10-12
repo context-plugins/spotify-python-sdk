@@ -32,7 +32,9 @@ Check if one or more albums is already saved in the current Spotify user's 'Your
 **Sync**
 
 ```python
-result = client.albums.with_raw_response.check_users_saved_albums(ids)
+result = client.albums.with_raw_response.check_users_saved_albums(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -43,7 +45,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.albums.with_raw_response.check_users_saved_albums(ids)
+result = await async_client.albums.with_raw_response.check_users_saved_albums(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -62,7 +66,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -96,7 +100,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_album(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[AlbumObject, GetAnAlbumErrorBody]</code></summary>
+<summary><code>def get_an_album(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[AlbumObject, GetAnAlbumErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -119,7 +123,7 @@ Get Spotify catalog information for a single album.
 **Sync**
 
 ```python
-result = client.albums.with_raw_response.get_an_album(id)
+result = client.albums.with_raw_response.get_an_album("4aawyAB9vmqN3uQ7FjRGTy", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type AlbumObject
@@ -130,7 +134,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.albums.with_raw_response.get_an_album(id)
+result = await async_client.albums.with_raw_response.get_an_album("4aawyAB9vmqN3uQ7FjRGTy", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type AlbumObject
@@ -148,9 +152,9 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -184,7 +188,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_albums_tracks(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedTrackObject, GetAnAlbumsTracksErrorBody]</code></summary>
+<summary><code>def get_an_albums_tracks(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedTrackObject, GetAnAlbumsTracksErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -208,7 +212,7 @@ Optional parameters can be used to limit the number of tracks returned.
 **Sync**
 
 ```python
-result = client.albums.with_raw_response.get_an_albums_tracks(id)
+result = client.albums.with_raw_response.get_an_albums_tracks("4aawyAB9vmqN3uQ7FjRGTy", market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedTrackObject
@@ -219,7 +223,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.albums.with_raw_response.get_an_albums_tracks(id)
+result = await async_client.albums.with_raw_response.get_an_albums_tracks(
+    "4aawyAB9vmqN3uQ7FjRGTy", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedTrackObject
@@ -237,11 +243,11 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -275,7 +281,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_artists_albums(id: str, *, include_groups: str | None = None, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingArtistDiscographyAlbumObject, GetAnArtistsAlbumsErrorBody]</code></summary>
+<summary><code>def get_an_artists_albums(id_: str, *, include_groups: str | None = None, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingArtistDiscographyAlbumObject, GetAnArtistsAlbumsErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -298,7 +304,9 @@ Get Spotify catalog information about an artist's albums.
 **Sync**
 
 ```python
-result = client.albums.with_raw_response.get_an_artists_albums(id)
+result = client.albums.with_raw_response.get_an_artists_albums(
+    "0TnOYISbd1XYRBk9myaseg", include_groups="single,appears_on", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistDiscographyAlbumObject
@@ -309,7 +317,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.albums.with_raw_response.get_an_artists_albums(id)
+result = await async_client.albums.with_raw_response.get_an_artists_albums(
+    "0TnOYISbd1XYRBk9myaseg", include_groups="single,appears_on", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistDiscographyAlbumObject
@@ -327,12 +337,12 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>include_groups</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -389,7 +399,9 @@ Get Spotify catalog information for multiple albums identified by their Spotify 
 **Sync**
 
 ```python
-result = client.albums.with_raw_response.get_multiple_albums(ids)
+result = client.albums.with_raw_response.get_multiple_albums(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyAlbums
@@ -400,7 +412,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.albums.with_raw_response.get_multiple_albums(ids)
+result = await async_client.albums.with_raw_response.get_multiple_albums(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyAlbums
@@ -420,7 +434,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -477,7 +491,7 @@ Get a list of new album releases featured in Spotify (shown, for example, on a S
 **Sync**
 
 ```python
-result = client.albums.with_raw_response.get_new_releases()
+result = client.albums.with_raw_response.get_new_releases(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagedAlbums
@@ -488,7 +502,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.albums.with_raw_response.get_new_releases()
+result = await async_client.albums.with_raw_response.get_new_releases(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagedAlbums
@@ -508,7 +522,7 @@ match result:
 | --- | --- | --- |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -565,7 +579,7 @@ Get a list of the albums saved in the current Spotify user's 'Your Music' librar
 **Sync**
 
 ```python
-result = client.albums.with_raw_response.get_users_saved_albums()
+result = client.albums.with_raw_response.get_users_saved_albums(limit=10, offset=5, market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedAlbumObject
@@ -576,7 +590,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.albums.with_raw_response.get_users_saved_albums()
+result = await async_client.albums.with_raw_response.get_users_saved_albums(limit=10, offset=5, market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedAlbumObject
@@ -597,7 +611,7 @@ match result:
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -654,7 +668,9 @@ Remove one or more albums from the current user's 'Your Music' library.
 **Sync**
 
 ```python
-result = client.albums.with_raw_response.remove_albums_user(ids)
+result = client.albums.with_raw_response.remove_albums_user(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -665,7 +681,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.albums.with_raw_response.remove_albums_user(ids)
+result = await async_client.albums.with_raw_response.remove_albums_user(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -685,7 +703,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[RemoveAlbumsRequest](spotify_web_api/models/remove_albums_request.py) \| [RemoveAlbumsRequestDict](spotify_web_api/models/remove_albums_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -742,7 +760,9 @@ Save one or more albums to the current user's 'Your Music' library.
 **Sync**
 
 ```python
-result = client.albums.with_raw_response.save_albums_user(ids)
+result = client.albums.with_raw_response.save_albums_user(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -753,7 +773,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.albums.with_raw_response.save_albums_user(ids)
+result = await async_client.albums.with_raw_response.save_albums_user(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -773,7 +795,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[SaveAlbumsRequest](spotify_web_api/models/save_albums_request.py) \| [SaveAlbumsRequestDict](spotify_web_api/models/save_albums_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -834,7 +856,9 @@ Check to see if the current user is following one or more artists or other Spoti
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.check_current_user_follows(type_, ids)
+result = client.artists.with_raw_response.check_current_user_follows(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -845,7 +869,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.check_current_user_follows(type_, ids)
+result = await async_client.artists.with_raw_response.check_current_user_follows(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -865,7 +891,7 @@ match result:
 | --- | --- | --- |
 | <code>type_</code> | <code>[ItemType3OrStr](spotify_web_api/models/enums/item_type3.py)</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -922,7 +948,9 @@ Add the current user as a follower of one or more artists or other Spotify users
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.follow_artists_users(type_, ids)
+result = client.artists.with_raw_response.follow_artists_users(
+    ItemType2.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -933,7 +961,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.follow_artists_users(type_, ids)
+result = await async_client.artists.with_raw_response.follow_artists_users(
+    ItemType2.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -954,7 +984,7 @@ match result:
 | <code>type_</code> | <code>[ItemType2OrStr](spotify_web_api/models/enums/item_type2.py)</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[FollowArtistsOrUsersRequest](spotify_web_api/models/follow_artists_or_users_request.py) \| [FollowArtistsOrUsersRequestDict](spotify_web_api/models/follow_artists_or_users_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -988,7 +1018,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_artist(id: str, *, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ArtistObject, GetAnArtistErrorBody]</code></summary>
+<summary><code>def get_an_artist(id_: str, *, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ArtistObject, GetAnArtistErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -1011,7 +1041,7 @@ Get Spotify catalog information for a single artist identified by their unique S
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.get_an_artist(id)
+result = client.artists.with_raw_response.get_an_artist("0TnOYISbd1XYRBk9myaseg")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ArtistObject
@@ -1022,7 +1052,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.get_an_artist(id)
+result = await async_client.artists.with_raw_response.get_an_artist("0TnOYISbd1XYRBk9myaseg")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ArtistObject
@@ -1040,8 +1070,8 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1075,7 +1105,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_artists_albums(id: str, *, include_groups: str | None = None, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingArtistDiscographyAlbumObject, GetAnArtistsAlbumsErrorBody]</code></summary>
+<summary><code>def get_an_artists_albums(id_: str, *, include_groups: str | None = None, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingArtistDiscographyAlbumObject, GetAnArtistsAlbumsErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -1098,7 +1128,9 @@ Get Spotify catalog information about an artist's albums.
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.get_an_artists_albums(id)
+result = client.artists.with_raw_response.get_an_artists_albums(
+    "0TnOYISbd1XYRBk9myaseg", include_groups="single,appears_on", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistDiscographyAlbumObject
@@ -1109,7 +1141,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.get_an_artists_albums(id)
+result = await async_client.artists.with_raw_response.get_an_artists_albums(
+    "0TnOYISbd1XYRBk9myaseg", include_groups="single,appears_on", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistDiscographyAlbumObject
@@ -1127,12 +1161,12 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>include_groups</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1166,7 +1200,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_artists_related_artists(id: str, *, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ManyArtists, GetAnArtistsRelatedArtistsErrorBody]</code></summary>
+<summary><code>def get_an_artists_related_artists(id_: str, *, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ManyArtists, GetAnArtistsRelatedArtistsErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -1189,7 +1223,7 @@ Get Spotify catalog information about artists similar to a given artist. Similar
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.get_an_artists_related_artists(id)
+result = client.artists.with_raw_response.get_an_artists_related_artists("0TnOYISbd1XYRBk9myaseg")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyArtists
@@ -1200,7 +1234,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.get_an_artists_related_artists(id)
+result = await async_client.artists.with_raw_response.get_an_artists_related_artists("0TnOYISbd1XYRBk9myaseg")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyArtists
@@ -1218,8 +1252,8 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1253,7 +1287,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_artists_top_tracks(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]</code></summary>
+<summary><code>def get_an_artists_top_tracks(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -1276,7 +1310,7 @@ Get Spotify catalog information about an artist's top tracks by country.
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.get_an_artists_top_tracks(id)
+result = client.artists.with_raw_response.get_an_artists_top_tracks("0TnOYISbd1XYRBk9myaseg", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyTracks
@@ -1287,7 +1321,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.get_an_artists_top_tracks(id)
+result = await async_client.artists.with_raw_response.get_an_artists_top_tracks("0TnOYISbd1XYRBk9myaseg", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyTracks
@@ -1305,9 +1339,9 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1364,7 +1398,7 @@ Get the current user's followed artists.
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.get_followed(type_)
+result = client.artists.with_raw_response.get_followed(ItemType1.ARTIST, after="0I2XqVXqHScXjHhk6AYYRe", limit=10)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CursorPagedArtists
@@ -1375,7 +1409,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.get_followed(type_)
+result = await async_client.artists.with_raw_response.get_followed(
+    ItemType1.ARTIST, after="0I2XqVXqHScXjHhk6AYYRe", limit=10
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CursorPagedArtists
@@ -1396,7 +1432,7 @@ match result:
 | <code>type_</code> | <code>[ItemType1OrStr](spotify_web_api/models/enums/item_type1.py)</code> | Value sent with the request. |
 | <code>after</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1453,7 +1489,9 @@ Get Spotify catalog information for several artists based on their Spotify IDs.
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.get_multiple_artists(ids)
+result = client.artists.with_raw_response.get_multiple_artists(
+    "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyArtists
@@ -1464,7 +1502,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.get_multiple_artists(ids)
+result = await async_client.artists.with_raw_response.get_multiple_artists(
+    "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyArtists
@@ -1483,7 +1523,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1540,7 +1580,7 @@ Get the current user's top artists based on calculated affinity.
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.get_users_top_artists()
+result = client.artists.with_raw_response.get_users_top_artists(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistObject
@@ -1551,7 +1591,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.get_users_top_artists()
+result = await async_client.artists.with_raw_response.get_users_top_artists(
+    time_range="medium_term", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistObject
@@ -1572,7 +1614,7 @@ match result:
 | <code>time_range</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>"medium_term"</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1629,7 +1671,9 @@ Remove the current user as a follower of one or more artists or other Spotify us
 **Sync**
 
 ```python
-result = client.artists.with_raw_response.unfollow_artists_users(type_, ids)
+result = client.artists.with_raw_response.unfollow_artists_users(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -1640,7 +1684,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.artists.with_raw_response.unfollow_artists_users(type_, ids)
+result = await async_client.artists.with_raw_response.unfollow_artists_users(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -1661,7 +1707,7 @@ match result:
 | <code>type_</code> | <code>[ItemType3OrStr](spotify_web_api/models/enums/item_type3.py)</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[UnfollowArtistsOrUsersRequest](spotify_web_api/models/unfollow_artists_or_users_request.py) \| [UnfollowArtistsOrUsersRequestDict](spotify_web_api/models/unfollow_artists_or_users_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1722,7 +1768,9 @@ Check if one or more audiobooks are already saved in the current Spotify user's 
 **Sync**
 
 ```python
-result = client.audiobooks.with_raw_response.check_users_saved_audiobooks(ids)
+result = client.audiobooks.with_raw_response.check_users_saved_audiobooks(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -1733,7 +1781,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.audiobooks.with_raw_response.check_users_saved_audiobooks(ids)
+result = await async_client.audiobooks.with_raw_response.check_users_saved_audiobooks(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -1752,7 +1802,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1786,7 +1836,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_audiobook(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[AudiobookObject, GetAnAudiobookErrorBody]</code></summary>
+<summary><code>def get_an_audiobook(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[AudiobookObject, GetAnAudiobookErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -1809,7 +1859,7 @@ Get Spotify catalog information for a single audiobook. Audiobooks are only avai
 **Sync**
 
 ```python
-result = client.audiobooks.with_raw_response.get_an_audiobook(id)
+result = client.audiobooks.with_raw_response.get_an_audiobook("7iHfbu1YPACw6oZPAFJtqe", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type AudiobookObject
@@ -1820,7 +1870,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.audiobooks.with_raw_response.get_an_audiobook(id)
+result = await async_client.audiobooks.with_raw_response.get_an_audiobook("7iHfbu1YPACw6oZPAFJtqe", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type AudiobookObject
@@ -1838,9 +1888,9 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1876,7 +1926,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_audiobook_chapters(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedChapterObject, GetAudiobookChaptersErrorBody]</code></summary>
+<summary><code>def get_audiobook_chapters(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedChapterObject, GetAudiobookChaptersErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -1899,7 +1949,9 @@ Get Spotify catalog information about an audiobook's chapters. Audiobooks are on
 **Sync**
 
 ```python
-result = client.audiobooks.with_raw_response.get_audiobook_chapters(id)
+result = client.audiobooks.with_raw_response.get_audiobook_chapters(
+    "7iHfbu1YPACw6oZPAFJtqe", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedChapterObject
@@ -1910,7 +1962,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.audiobooks.with_raw_response.get_audiobook_chapters(id)
+result = await async_client.audiobooks.with_raw_response.get_audiobook_chapters(
+    "7iHfbu1YPACw6oZPAFJtqe", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedChapterObject
@@ -1928,11 +1982,11 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -1989,7 +2043,9 @@ Get Spotify catalog information for several audiobooks identified by their Spoti
 **Sync**
 
 ```python
-result = client.audiobooks.with_raw_response.get_multiple_audiobooks(ids)
+result = client.audiobooks.with_raw_response.get_multiple_audiobooks(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyAudiobooks
@@ -2000,7 +2056,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.audiobooks.with_raw_response.get_multiple_audiobooks(ids)
+result = await async_client.audiobooks.with_raw_response.get_multiple_audiobooks(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyAudiobooks
@@ -2020,7 +2078,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2077,7 +2135,7 @@ Get a list of the audiobooks saved in the current Spotify user's 'Your Music' li
 **Sync**
 
 ```python
-result = client.audiobooks.with_raw_response.get_users_saved_audiobooks()
+result = client.audiobooks.with_raw_response.get_users_saved_audiobooks(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedAudiobookObject
@@ -2088,7 +2146,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.audiobooks.with_raw_response.get_users_saved_audiobooks()
+result = await async_client.audiobooks.with_raw_response.get_users_saved_audiobooks(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedAudiobookObject
@@ -2108,7 +2166,7 @@ match result:
 | --- | --- | --- |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2165,7 +2223,9 @@ Remove one or more audiobooks from the Spotify user's library.
 **Sync**
 
 ```python
-result = client.audiobooks.with_raw_response.remove_audiobooks_user(ids)
+result = client.audiobooks.with_raw_response.remove_audiobooks_user(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -2176,7 +2236,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.audiobooks.with_raw_response.remove_audiobooks_user(ids)
+result = await async_client.audiobooks.with_raw_response.remove_audiobooks_user(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -2195,7 +2257,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2252,7 +2314,9 @@ Save one or more audiobooks to the current Spotify user's library.
 **Sync**
 
 ```python
-result = client.audiobooks.with_raw_response.save_audiobooks_user(ids)
+result = client.audiobooks.with_raw_response.save_audiobooks_user(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -2263,7 +2327,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.audiobooks.with_raw_response.save_audiobooks_user(ids)
+result = await async_client.audiobooks.with_raw_response.save_audiobooks_user(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -2282,7 +2348,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2343,7 +2409,7 @@ Get a list of Spotify playlists tagged with a particular category.
 **Sync**
 
 ```python
-result = client.categories_api.with_raw_response.get_a_categories_playlists(category_id)
+result = client.categories_api.with_raw_response.get_a_categories_playlists("dinner", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingFeaturedPlaylistObject
@@ -2354,7 +2420,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.categories_api.with_raw_response.get_a_categories_playlists(category_id)
+result = await async_client.categories_api.with_raw_response.get_a_categories_playlists("dinner", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingFeaturedPlaylistObject
@@ -2375,7 +2441,7 @@ match result:
 | <code>category_id</code> | <code>str</code> | Value sent with the request. |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2432,7 +2498,7 @@ Get a single category used to tag items in Spotify (on, for example, the Spotify
 **Sync**
 
 ```python
-result = client.categories_api.with_raw_response.get_a_category(category_id)
+result = client.categories_api.with_raw_response.get_a_category("dinner", locale="sv_SE")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CategoryObject
@@ -2443,7 +2509,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.categories_api.with_raw_response.get_a_category(category_id)
+result = await async_client.categories_api.with_raw_response.get_a_category("dinner", locale="sv_SE")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CategoryObject
@@ -2463,7 +2529,7 @@ match result:
 | --- | --- | --- |
 | <code>category_id</code> | <code>str</code> | Value sent with the request. |
 | <code>locale</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2520,7 +2586,7 @@ Get a list of categories used to tag items in Spotify (on, for example, the Spot
 **Sync**
 
 ```python
-result = client.categories_api.with_raw_response.get_categories()
+result = client.categories_api.with_raw_response.get_categories(locale="sv_SE", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagedCategories
@@ -2531,7 +2597,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.categories_api.with_raw_response.get_categories()
+result = await async_client.categories_api.with_raw_response.get_categories(locale="sv_SE", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagedCategories
@@ -2552,7 +2618,7 @@ match result:
 | <code>locale</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2590,7 +2656,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 > Source: [Chapters](spotify_web_api/apis/chapters.py)
 
 <details>
-<summary><code>def get_a_chapter(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ChapterObject, GetAChapterErrorBody]</code></summary>
+<summary><code>def get_a_chapter(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ChapterObject, GetAChapterErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -2613,7 +2679,7 @@ Get Spotify catalog information for a single audiobook chapter. Chapters are onl
 **Sync**
 
 ```python
-result = client.chapters.with_raw_response.get_a_chapter(id)
+result = client.chapters.with_raw_response.get_a_chapter("0D5wENdkdwbqlrHoaJ9g29", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ChapterObject
@@ -2624,7 +2690,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.chapters.with_raw_response.get_a_chapter(id)
+result = await async_client.chapters.with_raw_response.get_a_chapter("0D5wENdkdwbqlrHoaJ9g29", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ChapterObject
@@ -2642,9 +2708,9 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2678,7 +2744,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_audiobook_chapters(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedChapterObject, GetAudiobookChaptersErrorBody]</code></summary>
+<summary><code>def get_audiobook_chapters(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedChapterObject, GetAudiobookChaptersErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -2701,7 +2767,9 @@ Get Spotify catalog information about an audiobook's chapters. Audiobooks are on
 **Sync**
 
 ```python
-result = client.chapters.with_raw_response.get_audiobook_chapters(id)
+result = client.chapters.with_raw_response.get_audiobook_chapters(
+    "7iHfbu1YPACw6oZPAFJtqe", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedChapterObject
@@ -2712,7 +2780,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.chapters.with_raw_response.get_audiobook_chapters(id)
+result = await async_client.chapters.with_raw_response.get_audiobook_chapters(
+    "7iHfbu1YPACw6oZPAFJtqe", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedChapterObject
@@ -2730,11 +2800,11 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2791,7 +2861,9 @@ Get Spotify catalog information for several audiobook chapters identified by the
 **Sync**
 
 ```python
-result = client.chapters.with_raw_response.get_several_chapters(ids)
+result = client.chapters.with_raw_response.get_several_chapters(
+    "0IsXVP0JmcB2adSE338GkK,3ZXb8FKZGU0EHALYX6uCzU,0D5wENdkdwbqlrHoaJ9g29", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyChapters
@@ -2802,7 +2874,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.chapters.with_raw_response.get_several_chapters(ids)
+result = await async_client.chapters.with_raw_response.get_several_chapters(
+    "0IsXVP0JmcB2adSE338GkK,3ZXb8FKZGU0EHALYX6uCzU,0D5wENdkdwbqlrHoaJ9g29", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyChapters
@@ -2822,7 +2896,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2884,7 +2958,7 @@ This API endpoint is in __beta__ and could change without warning. Please share 
 **Sync**
 
 ```python
-result = client.episodes.with_raw_response.check_users_saved_episodes(ids)
+result = client.episodes.with_raw_response.check_users_saved_episodes("77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -2895,7 +2969,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.episodes.with_raw_response.check_users_saved_episodes(ids)
+result = await async_client.episodes.with_raw_response.check_users_saved_episodes(
+    "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -2914,7 +2990,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -2948,7 +3024,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_a_shows_episodes(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedEpisodeObject, GetAShowsEpisodesErrorBody]</code></summary>
+<summary><code>def get_a_shows_episodes(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedEpisodeObject, GetAShowsEpisodesErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -2971,7 +3047,9 @@ Get Spotify catalog information about an show’s episodes. Optional parameters 
 **Sync**
 
 ```python
-result = client.episodes.with_raw_response.get_a_shows_episodes(id)
+result = client.episodes.with_raw_response.get_a_shows_episodes(
+    "38bS44xjbVVZ3No3ByF1dJ", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedEpisodeObject
@@ -2982,7 +3060,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.episodes.with_raw_response.get_a_shows_episodes(id)
+result = await async_client.episodes.with_raw_response.get_a_shows_episodes(
+    "38bS44xjbVVZ3No3ByF1dJ", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedEpisodeObject
@@ -3000,11 +3080,11 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3038,7 +3118,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_episode(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[EpisodeObject, GetAnEpisodeErrorBody]</code></summary>
+<summary><code>def get_an_episode(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[EpisodeObject, GetAnEpisodeErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -3062,7 +3142,7 @@ unique Spotify ID.
 **Sync**
 
 ```python
-result = client.episodes.with_raw_response.get_an_episode(id)
+result = client.episodes.with_raw_response.get_an_episode("512ojhOuo1ktJprKbVcKyQ", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type EpisodeObject
@@ -3073,7 +3153,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.episodes.with_raw_response.get_an_episode(id)
+result = await async_client.episodes.with_raw_response.get_an_episode("512ojhOuo1ktJprKbVcKyQ", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type EpisodeObject
@@ -3091,9 +3171,9 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3150,7 +3230,9 @@ Get Spotify catalog information for several episodes based on their Spotify IDs.
 **Sync**
 
 ```python
-result = client.episodes.with_raw_response.get_multiple_episodes(ids)
+result = client.episodes.with_raw_response.get_multiple_episodes(
+    "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyEpisodes
@@ -3161,7 +3243,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.episodes.with_raw_response.get_multiple_episodes(ids)
+result = await async_client.episodes.with_raw_response.get_multiple_episodes(
+    "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyEpisodes
@@ -3181,7 +3265,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3239,7 +3323,7 @@ This API endpoint is in __beta__ and could change without warning. Please share 
 **Sync**
 
 ```python
-result = client.episodes.with_raw_response.get_users_saved_episodes()
+result = client.episodes.with_raw_response.get_users_saved_episodes(market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedEpisodeObject
@@ -3250,7 +3334,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.episodes.with_raw_response.get_users_saved_episodes()
+result = await async_client.episodes.with_raw_response.get_users_saved_episodes(market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedEpisodeObject
@@ -3271,7 +3355,7 @@ match result:
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3329,7 +3413,9 @@ This API endpoint is in __beta__ and could change without warning. Please share 
 **Sync**
 
 ```python
-result = client.episodes.with_raw_response.remove_episodes_user(ids)
+result = client.episodes.with_raw_response.remove_episodes_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -3340,7 +3426,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.episodes.with_raw_response.remove_episodes_user(ids)
+result = await async_client.episodes.with_raw_response.remove_episodes_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -3360,7 +3448,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[RemoveEpisodesRequest](spotify_web_api/models/remove_episodes_request.py) \| [RemoveEpisodesRequestDict](spotify_web_api/models/remove_episodes_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3418,7 +3506,7 @@ This API endpoint is in __beta__ and could change without warning. Please share 
 **Sync**
 
 ```python
-result = client.episodes.with_raw_response.save_episodes_user(ids)
+result = client.episodes.with_raw_response.save_episodes_user("77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -3429,7 +3517,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.episodes.with_raw_response.save_episodes_user(ids)
+result = await async_client.episodes.with_raw_response.save_episodes_user(
+    "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -3449,7 +3539,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[SaveEpisodesRequest](spotify_web_api/models/save_episodes_request.py) \| [SaveEpisodesRequestDict](spotify_web_api/models/save_episodes_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3539,7 +3629,7 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3601,7 +3691,7 @@ course, own the playlist.)
 **Sync**
 
 ```python
-result = client.library.with_raw_response.change_playlist_details(playlist_id)
+result = client.library.with_raw_response.change_playlist_details("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -3612,7 +3702,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.change_playlist_details(playlist_id)
+result = await async_client.library.with_raw_response.change_playlist_details("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -3632,7 +3722,7 @@ match result:
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[PlaylistsRequest](spotify_web_api/models/playlists_request.py) \| [PlaylistsRequestDict](spotify_web_api/models/playlists_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3689,7 +3779,9 @@ Check to see if the current user is following one or more artists or other Spoti
 **Sync**
 
 ```python
-result = client.library.with_raw_response.check_current_user_follows(type_, ids)
+result = client.library.with_raw_response.check_current_user_follows(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -3700,7 +3792,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.check_current_user_follows(type_, ids)
+result = await async_client.library.with_raw_response.check_current_user_follows(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -3720,7 +3814,7 @@ match result:
 | --- | --- | --- |
 | <code>type_</code> | <code>[ItemType3OrStr](spotify_web_api/models/enums/item_type3.py)</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3777,7 +3871,9 @@ Check if one or more albums is already saved in the current Spotify user's 'Your
 **Sync**
 
 ```python
-result = client.library.with_raw_response.check_users_saved_albums(ids)
+result = client.library.with_raw_response.check_users_saved_albums(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -3788,7 +3884,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.check_users_saved_albums(ids)
+result = await async_client.library.with_raw_response.check_users_saved_albums(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -3807,7 +3905,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3864,7 +3962,9 @@ Check if one or more audiobooks are already saved in the current Spotify user's 
 **Sync**
 
 ```python
-result = client.library.with_raw_response.check_users_saved_audiobooks(ids)
+result = client.library.with_raw_response.check_users_saved_audiobooks(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -3875,7 +3975,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.check_users_saved_audiobooks(ids)
+result = await async_client.library.with_raw_response.check_users_saved_audiobooks(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -3894,7 +3996,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -3952,7 +4054,7 @@ This API endpoint is in __beta__ and could change without warning. Please share 
 **Sync**
 
 ```python
-result = client.library.with_raw_response.check_users_saved_episodes(ids)
+result = client.library.with_raw_response.check_users_saved_episodes("77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -3963,7 +4065,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.check_users_saved_episodes(ids)
+result = await async_client.library.with_raw_response.check_users_saved_episodes(
+    "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -3982,7 +4086,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4039,7 +4143,7 @@ Check if one or more shows is already saved in the current Spotify user's librar
 **Sync**
 
 ```python
-result = client.library.with_raw_response.check_users_saved_shows(ids)
+result = client.library.with_raw_response.check_users_saved_shows("5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -4050,7 +4154,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.check_users_saved_shows(ids)
+result = await async_client.library.with_raw_response.check_users_saved_shows(
+    "5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -4069,7 +4175,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4126,7 +4232,9 @@ Check if one or more tracks is already saved in the current Spotify user's 'Your
 **Sync**
 
 ```python
-result = client.library.with_raw_response.check_users_saved_tracks(ids)
+result = client.library.with_raw_response.check_users_saved_tracks(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -4137,7 +4245,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.check_users_saved_tracks(ids)
+result = await async_client.library.with_raw_response.check_users_saved_tracks(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -4156,7 +4266,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4215,7 +4325,7 @@ Each user is generally limited to a maximum of 11000 playlists.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.create_playlist(user_id)
+result = client.library.with_raw_response.create_playlist("smedjan")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistObject
@@ -4226,7 +4336,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.create_playlist(user_id)
+result = await async_client.library.with_raw_response.create_playlist("smedjan")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistObject
@@ -4246,7 +4356,7 @@ match result:
 | --- | --- | --- |
 | <code>user_id</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[UsersPlaylistsRequest](spotify_web_api/models/users_playlists_request.py) \| [UsersPlaylistsRequestDict](spotify_web_api/models/users_playlists_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4303,7 +4413,9 @@ Add the current user as a follower of one or more artists or other Spotify users
 **Sync**
 
 ```python
-result = client.library.with_raw_response.follow_artists_users(type_, ids)
+result = client.library.with_raw_response.follow_artists_users(
+    ItemType2.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -4314,7 +4426,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.follow_artists_users(type_, ids)
+result = await async_client.library.with_raw_response.follow_artists_users(
+    ItemType2.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -4335,7 +4449,7 @@ match result:
 | <code>type_</code> | <code>[ItemType2OrStr](spotify_web_api/models/enums/item_type2.py)</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[FollowArtistsOrUsersRequest](spotify_web_api/models/follow_artists_or_users_request.py) \| [FollowArtistsOrUsersRequestDict](spotify_web_api/models/follow_artists_or_users_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4393,7 +4507,7 @@ user.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.get_a_list_of_current_users_playlists()
+result = client.library.with_raw_response.get_a_list_of_current_users_playlists(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistObject
@@ -4404,7 +4518,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.get_a_list_of_current_users_playlists()
+result = await async_client.library.with_raw_response.get_a_list_of_current_users_playlists(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistObject
@@ -4424,7 +4538,7 @@ match result:
 | --- | --- | --- |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4481,7 +4595,7 @@ Get the current user's followed artists.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.get_followed(type_)
+result = client.library.with_raw_response.get_followed(ItemType1.ARTIST, after="0I2XqVXqHScXjHhk6AYYRe", limit=10)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CursorPagedArtists
@@ -4492,7 +4606,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.get_followed(type_)
+result = await async_client.library.with_raw_response.get_followed(
+    ItemType1.ARTIST, after="0I2XqVXqHScXjHhk6AYYRe", limit=10
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CursorPagedArtists
@@ -4513,7 +4629,7 @@ match result:
 | <code>type_</code> | <code>[ItemType1OrStr](spotify_web_api/models/enums/item_type1.py)</code> | Value sent with the request. |
 | <code>after</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4570,7 +4686,7 @@ Get a list of the albums saved in the current Spotify user's 'Your Music' librar
 **Sync**
 
 ```python
-result = client.library.with_raw_response.get_users_saved_albums()
+result = client.library.with_raw_response.get_users_saved_albums(limit=10, offset=5, market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedAlbumObject
@@ -4581,7 +4697,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.get_users_saved_albums()
+result = await async_client.library.with_raw_response.get_users_saved_albums(limit=10, offset=5, market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedAlbumObject
@@ -4602,7 +4718,7 @@ match result:
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4659,7 +4775,7 @@ Get a list of the audiobooks saved in the current Spotify user's 'Your Music' li
 **Sync**
 
 ```python
-result = client.library.with_raw_response.get_users_saved_audiobooks()
+result = client.library.with_raw_response.get_users_saved_audiobooks(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedAudiobookObject
@@ -4670,7 +4786,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.get_users_saved_audiobooks()
+result = await async_client.library.with_raw_response.get_users_saved_audiobooks(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedAudiobookObject
@@ -4690,7 +4806,7 @@ match result:
 | --- | --- | --- |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4748,7 +4864,7 @@ This API endpoint is in __beta__ and could change without warning. Please share 
 **Sync**
 
 ```python
-result = client.library.with_raw_response.get_users_saved_episodes()
+result = client.library.with_raw_response.get_users_saved_episodes(market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedEpisodeObject
@@ -4759,7 +4875,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.get_users_saved_episodes()
+result = await async_client.library.with_raw_response.get_users_saved_episodes(market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedEpisodeObject
@@ -4780,7 +4896,7 @@ match result:
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4837,7 +4953,7 @@ Get a list of shows saved in the current Spotify user's library. Optional parame
 **Sync**
 
 ```python
-result = client.library.with_raw_response.get_users_saved_shows()
+result = client.library.with_raw_response.get_users_saved_shows(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedShowObject
@@ -4848,7 +4964,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.get_users_saved_shows()
+result = await async_client.library.with_raw_response.get_users_saved_shows(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedShowObject
@@ -4868,7 +4984,7 @@ match result:
 | --- | --- | --- |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -4925,7 +5041,7 @@ Get a list of the songs saved in the current Spotify user's 'Your Music' library
 **Sync**
 
 ```python
-result = client.library.with_raw_response.get_users_saved_tracks()
+result = client.library.with_raw_response.get_users_saved_tracks(market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedTrackObject
@@ -4936,7 +5052,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.get_users_saved_tracks()
+result = await async_client.library.with_raw_response.get_users_saved_tracks(market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedTrackObject
@@ -4957,7 +5073,7 @@ match result:
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5014,7 +5130,7 @@ Get the current user's top artists based on calculated affinity.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.get_users_top_artists()
+result = client.library.with_raw_response.get_users_top_artists(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistObject
@@ -5025,7 +5141,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.get_users_top_artists()
+result = await async_client.library.with_raw_response.get_users_top_artists(
+    time_range="medium_term", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistObject
@@ -5046,7 +5164,7 @@ match result:
 | <code>time_range</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>"medium_term"</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5103,7 +5221,7 @@ Get the current user's top tracks based on calculated affinity.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.get_users_top_tracks()
+result = client.library.with_raw_response.get_users_top_tracks(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingTrackObject
@@ -5114,7 +5232,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.get_users_top_tracks()
+result = await async_client.library.with_raw_response.get_users_top_tracks(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingTrackObject
@@ -5135,7 +5253,7 @@ match result:
 | <code>time_range</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>"medium_term"</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5192,7 +5310,9 @@ Remove one or more albums from the current user's 'Your Music' library.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.remove_albums_user(ids)
+result = client.library.with_raw_response.remove_albums_user(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5203,7 +5323,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.remove_albums_user(ids)
+result = await async_client.library.with_raw_response.remove_albums_user(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5223,7 +5345,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[RemoveAlbumsRequest](spotify_web_api/models/remove_albums_request.py) \| [RemoveAlbumsRequestDict](spotify_web_api/models/remove_albums_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5280,7 +5402,9 @@ Remove one or more audiobooks from the Spotify user's library.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.remove_audiobooks_user(ids)
+result = client.library.with_raw_response.remove_audiobooks_user(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5291,7 +5415,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.remove_audiobooks_user(ids)
+result = await async_client.library.with_raw_response.remove_audiobooks_user(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5310,7 +5436,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5368,7 +5494,9 @@ This API endpoint is in __beta__ and could change without warning. Please share 
 **Sync**
 
 ```python
-result = client.library.with_raw_response.remove_episodes_user(ids)
+result = client.library.with_raw_response.remove_episodes_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5379,7 +5507,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.remove_episodes_user(ids)
+result = await async_client.library.with_raw_response.remove_episodes_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5399,7 +5529,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[RemoveEpisodesRequest](spotify_web_api/models/remove_episodes_request.py) \| [RemoveEpisodesRequestDict](spotify_web_api/models/remove_episodes_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5456,7 +5586,9 @@ Delete one or more shows from current Spotify user's library.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.remove_shows_user(ids)
+result = client.library.with_raw_response.remove_shows_user(
+    "5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ", market="ES"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5467,7 +5599,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.remove_shows_user(ids)
+result = await async_client.library.with_raw_response.remove_shows_user(
+    "5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ", market="ES"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5488,7 +5622,7 @@ match result:
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>body</code> | <code>[RemoveShowsRequest](spotify_web_api/models/remove_shows_request.py) \| [RemoveShowsRequestDict](spotify_web_api/models/remove_shows_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5545,7 +5679,9 @@ Remove one or more tracks from the current user's 'Your Music' library.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.remove_tracks_user(ids)
+result = client.library.with_raw_response.remove_tracks_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5556,7 +5692,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.remove_tracks_user(ids)
+result = await async_client.library.with_raw_response.remove_tracks_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5576,7 +5714,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[RemoveTracksRequest](spotify_web_api/models/remove_tracks_request.py) \| [RemoveTracksRequestDict](spotify_web_api/models/remove_tracks_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5633,7 +5771,9 @@ Save one or more albums to the current user's 'Your Music' library.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.save_albums_user(ids)
+result = client.library.with_raw_response.save_albums_user(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5644,7 +5784,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.save_albums_user(ids)
+result = await async_client.library.with_raw_response.save_albums_user(
+    "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5664,7 +5806,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[SaveAlbumsRequest](spotify_web_api/models/save_albums_request.py) \| [SaveAlbumsRequestDict](spotify_web_api/models/save_albums_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5721,7 +5863,9 @@ Save one or more audiobooks to the current Spotify user's library.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.save_audiobooks_user(ids)
+result = client.library.with_raw_response.save_audiobooks_user(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5732,7 +5876,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.save_audiobooks_user(ids)
+result = await async_client.library.with_raw_response.save_audiobooks_user(
+    "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5751,7 +5897,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5809,7 +5955,7 @@ This API endpoint is in __beta__ and could change without warning. Please share 
 **Sync**
 
 ```python
-result = client.library.with_raw_response.save_episodes_user(ids)
+result = client.library.with_raw_response.save_episodes_user("77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5820,7 +5966,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.save_episodes_user(ids)
+result = await async_client.library.with_raw_response.save_episodes_user(
+    "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5840,7 +5988,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[SaveEpisodesRequest](spotify_web_api/models/save_episodes_request.py) \| [SaveEpisodesRequestDict](spotify_web_api/models/save_episodes_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5897,7 +6045,7 @@ Save one or more shows to current Spotify user's library.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.save_shows_user(ids)
+result = client.library.with_raw_response.save_shows_user("5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5908,7 +6056,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.save_shows_user(ids)
+result = await async_client.library.with_raw_response.save_shows_user("5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5928,7 +6076,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[SaveShowsRequest](spotify_web_api/models/save_shows_request.py) \| [SaveShowsRequestDict](spotify_web_api/models/save_shows_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -5985,7 +6133,9 @@ Save one or more tracks to the current user's 'Your Music' library.
 **Sync**
 
 ```python
-result = client.library.with_raw_response.save_tracks_user(ids)
+result = client.library.with_raw_response.save_tracks_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -5996,7 +6146,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.save_tracks_user(ids)
+result = await async_client.library.with_raw_response.save_tracks_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6016,7 +6168,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[SaveTracksRequest](spotify_web_api/models/save_tracks_request.py) \| [SaveTracksRequestDict](spotify_web_api/models/save_tracks_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6073,7 +6225,9 @@ Remove the current user as a follower of one or more artists or other Spotify us
 **Sync**
 
 ```python
-result = client.library.with_raw_response.unfollow_artists_users(type_, ids)
+result = client.library.with_raw_response.unfollow_artists_users(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6084,7 +6238,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.library.with_raw_response.unfollow_artists_users(type_, ids)
+result = await async_client.library.with_raw_response.unfollow_artists_users(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6105,7 +6261,7 @@ match result:
 | <code>type_</code> | <code>[ItemType3OrStr](spotify_web_api/models/enums/item_type3.py)</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[UnfollowArtistsOrUsersRequest](spotify_web_api/models/unfollow_artists_or_users_request.py) \| [UnfollowArtistsOrUsersRequestDict](spotify_web_api/models/unfollow_artists_or_users_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6195,7 +6351,7 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6256,7 +6412,9 @@ Add an item to the end of the user's current playback queue. This API only works
 **Sync**
 
 ```python
-result = client.player.with_raw_response.add_to_queue(uri)
+result = client.player.with_raw_response.add_to_queue(
+    "spotify:track:4iV5W9uYEdYUVa79Axb7Rh", device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6267,7 +6425,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.add_to_queue(uri)
+result = await async_client.player.with_raw_response.add_to_queue(
+    "spotify:track:4iV5W9uYEdYUVa79Axb7Rh", device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6287,7 +6447,7 @@ match result:
 | --- | --- | --- |
 | <code>uri</code> | <code>str</code> | Value sent with the request. |
 | <code>device_id</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6373,7 +6533,7 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6430,7 +6590,7 @@ Get information about the user’s current playback state, including track or ep
 **Sync**
 
 ```python
-result = client.player.with_raw_response.get_information_about_the_users_current_playback()
+result = client.player.with_raw_response.get_information_about_the_users_current_playback(market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CurrentlyPlayingContextObject
@@ -6441,7 +6601,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.get_information_about_the_users_current_playback()
+result = await async_client.player.with_raw_response.get_information_about_the_users_current_playback(market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CurrentlyPlayingContextObject
@@ -6461,7 +6621,7 @@ match result:
 | --- | --- | --- |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>additional_types</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6547,7 +6707,7 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6605,7 +6765,7 @@ _**Note**: Currently doesn't support podcast episodes._
 **Sync**
 
 ```python
-result = client.player.with_raw_response.get_recently_played()
+result = client.player.with_raw_response.get_recently_played(limit=10, after=1484811043508)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CursorPagingPlayHistoryObject
@@ -6616,7 +6776,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.get_recently_played()
+result = await async_client.player.with_raw_response.get_recently_played(limit=10, after=1484811043508)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CursorPagingPlayHistoryObject
@@ -6637,7 +6797,7 @@ match result:
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>after</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>before</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6694,7 +6854,7 @@ Get the object currently being played on the user's Spotify account.
 **Sync**
 
 ```python
-result = client.player.with_raw_response.get_the_users_currently_playing_track()
+result = client.player.with_raw_response.get_the_users_currently_playing_track(market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CurrentlyPlayingObject
@@ -6705,7 +6865,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.get_the_users_currently_playing_track()
+result = await async_client.player.with_raw_response.get_the_users_currently_playing_track(market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CurrentlyPlayingObject
@@ -6725,7 +6885,7 @@ match result:
 | --- | --- | --- |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>additional_types</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6782,7 +6942,7 @@ Pause playback on the user's account. This API only works for users who have Spo
 **Sync**
 
 ```python
-result = client.player.with_raw_response.pause_a_users_playback()
+result = client.player.with_raw_response.pause_a_users_playback(device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6793,7 +6953,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.pause_a_users_playback()
+result = await async_client.player.with_raw_response.pause_a_users_playback(
+    device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6812,7 +6974,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>device_id</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6869,7 +7031,9 @@ Seeks to the given position in the user’s currently playing track. This API on
 **Sync**
 
 ```python
-result = client.player.with_raw_response.seek_to_position_in_currently_playing_track(position_ms)
+result = client.player.with_raw_response.seek_to_position_in_currently_playing_track(
+    25000, device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6880,7 +7044,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.seek_to_position_in_currently_playing_track(position_ms)
+result = await async_client.player.with_raw_response.seek_to_position_in_currently_playing_track(
+    25000, device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6900,7 +7066,7 @@ match result:
 | --- | --- | --- |
 | <code>position_ms</code> | <code>int</code> | Value sent with the request. |
 | <code>device_id</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -6957,7 +7123,9 @@ Set the repeat mode for the user's playback. This API only works for users who h
 **Sync**
 
 ```python
-result = client.player.with_raw_response.set_repeat_mode_on_users_playback(state)
+result = client.player.with_raw_response.set_repeat_mode_on_users_playback(
+    "context", device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6968,7 +7136,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.set_repeat_mode_on_users_playback(state)
+result = await async_client.player.with_raw_response.set_repeat_mode_on_users_playback(
+    "context", device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -6988,7 +7158,7 @@ match result:
 | --- | --- | --- |
 | <code>state</code> | <code>str</code> | Value sent with the request. |
 | <code>device_id</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7045,7 +7215,9 @@ Set the volume for the user’s current playback device. This API only works for
 **Sync**
 
 ```python
-result = client.player.with_raw_response.set_volume_for_users_playback(volume_percent)
+result = client.player.with_raw_response.set_volume_for_users_playback(
+    50, device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7056,7 +7228,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.set_volume_for_users_playback(volume_percent)
+result = await async_client.player.with_raw_response.set_volume_for_users_playback(
+    50, device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7076,7 +7250,7 @@ match result:
 | --- | --- | --- |
 | <code>volume_percent</code> | <code>int</code> | Value sent with the request. |
 | <code>device_id</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7133,7 +7307,9 @@ Skips to next track in the user’s queue. This API only works for users who hav
 **Sync**
 
 ```python
-result = client.player.with_raw_response.skip_users_playback_to_next_track()
+result = client.player.with_raw_response.skip_users_playback_to_next_track(
+    device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7144,7 +7320,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.skip_users_playback_to_next_track()
+result = await async_client.player.with_raw_response.skip_users_playback_to_next_track(
+    device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7163,7 +7341,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>device_id</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7220,7 +7398,9 @@ Skips to previous track in the user’s queue. This API only works for users who
 **Sync**
 
 ```python
-result = client.player.with_raw_response.skip_users_playback_to_previous_track()
+result = client.player.with_raw_response.skip_users_playback_to_previous_track(
+    device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7231,7 +7411,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.skip_users_playback_to_previous_track()
+result = await async_client.player.with_raw_response.skip_users_playback_to_previous_track(
+    device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7250,7 +7432,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>device_id</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7307,7 +7489,7 @@ Start a new context or resume current playback on the user's active device. This
 **Sync**
 
 ```python
-result = client.player.with_raw_response.start_a_users_playback()
+result = client.player.with_raw_response.start_a_users_playback(device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7318,7 +7500,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.start_a_users_playback()
+result = await async_client.player.with_raw_response.start_a_users_playback(
+    device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7338,7 +7522,7 @@ match result:
 | --- | --- | --- |
 | <code>device_id</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>body</code> | <code>[StartOrResumePlaybackRequest](spotify_web_api/models/start_or_resume_playback_request.py) \| [StartOrResumePlaybackRequestDict](spotify_web_api/models/start_or_resume_playback_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7395,7 +7579,9 @@ Toggle shuffle on or off for user’s playback. This API only works for users wh
 **Sync**
 
 ```python
-result = client.player.with_raw_response.toggle_shuffle_for_users_playback(state)
+result = client.player.with_raw_response.toggle_shuffle_for_users_playback(
+    True, device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7406,7 +7592,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.player.with_raw_response.toggle_shuffle_for_users_playback(state)
+result = await async_client.player.with_raw_response.toggle_shuffle_for_users_playback(
+    True, device_id="0d1841b0976bae2a3a310dd74c0f3df354899bc8"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7426,7 +7614,7 @@ match result:
 | --- | --- | --- |
 | <code>state</code> | <code>bool</code> | Value sent with the request. |
 | <code>device_id</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7513,7 +7701,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>body</code> | <code>[MePlayerRequest](spotify_web_api/models/me_player_request.py) \| [MePlayerRequestDict](spotify_web_api/models/me_player_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7574,7 +7762,11 @@ Add one or more items to a user's playlist.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.add_tracks_to_playlist(playlist_id)
+result = client.playlists.with_raw_response.add_tracks_to_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n",
+    position=0,
+    uris="spotify:track:4iV5W9uYEdYUVa79Axb7Rh,spotify:track:1301WleyT98MSxVHPZCA6M",
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -7585,7 +7777,11 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.add_tracks_to_playlist(playlist_id)
+result = await async_client.playlists.with_raw_response.add_tracks_to_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n",
+    position=0,
+    uris="spotify:track:4iV5W9uYEdYUVa79Axb7Rh,spotify:track:1301WleyT98MSxVHPZCA6M",
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -7607,7 +7803,7 @@ match result:
 | <code>position</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>uris</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>body</code> | <code>[PlaylistsTracksRequest](spotify_web_api/models/playlists_tracks_request.py) \| [PlaylistsTracksRequestDict](spotify_web_api/models/playlists_tracks_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7665,7 +7861,7 @@ course, own the playlist.)
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.change_playlist_details(playlist_id)
+result = client.playlists.with_raw_response.change_playlist_details("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7676,7 +7872,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.change_playlist_details(playlist_id)
+result = await async_client.playlists.with_raw_response.change_playlist_details("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7696,7 +7892,7 @@ match result:
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[PlaylistsRequest](spotify_web_api/models/playlists_request.py) \| [PlaylistsRequestDict](spotify_web_api/models/playlists_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7753,7 +7949,9 @@ Check to see if one or more Spotify users are following a specified playlist.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.check_if_user_follows_playlist(playlist_id, ids)
+result = client.playlists.with_raw_response.check_if_user_follows_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n", "jmperezperez,thelinmichael,wizzler"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -7764,7 +7962,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.check_if_user_follows_playlist(playlist_id, ids)
+result = await async_client.playlists.with_raw_response.check_if_user_follows_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n", "jmperezperez,thelinmichael,wizzler"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -7784,7 +7984,7 @@ match result:
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7843,7 +8043,7 @@ Each user is generally limited to a maximum of 11000 playlists.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.create_playlist(user_id)
+result = client.playlists.with_raw_response.create_playlist("smedjan")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistObject
@@ -7854,7 +8054,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.create_playlist(user_id)
+result = await async_client.playlists.with_raw_response.create_playlist("smedjan")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistObject
@@ -7874,7 +8074,7 @@ match result:
 | --- | --- | --- |
 | <code>user_id</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[UsersPlaylistsRequest](spotify_web_api/models/users_playlists_request.py) \| [UsersPlaylistsRequestDict](spotify_web_api/models/users_playlists_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -7931,7 +8131,7 @@ Add the current user as a follower of a playlist.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.follow_playlist(playlist_id)
+result = client.playlists.with_raw_response.follow_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7942,7 +8142,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.follow_playlist(playlist_id)
+result = await async_client.playlists.with_raw_response.follow_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -7962,7 +8162,7 @@ match result:
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[PlaylistsFollowersRequest](spotify_web_api/models/playlists_followers_request.py) \| [PlaylistsFollowersRequestDict](spotify_web_api/models/playlists_followers_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8019,7 +8219,7 @@ Get a list of Spotify playlists tagged with a particular category.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.get_a_categories_playlists(category_id)
+result = client.playlists.with_raw_response.get_a_categories_playlists("dinner", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingFeaturedPlaylistObject
@@ -8030,7 +8230,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.get_a_categories_playlists(category_id)
+result = await async_client.playlists.with_raw_response.get_a_categories_playlists("dinner", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingFeaturedPlaylistObject
@@ -8051,7 +8251,7 @@ match result:
 | <code>category_id</code> | <code>str</code> | Value sent with the request. |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8109,7 +8309,7 @@ user.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.get_a_list_of_current_users_playlists()
+result = client.playlists.with_raw_response.get_a_list_of_current_users_playlists(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistObject
@@ -8120,7 +8320,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.get_a_list_of_current_users_playlists()
+result = await async_client.playlists.with_raw_response.get_a_list_of_current_users_playlists(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistObject
@@ -8140,7 +8340,7 @@ match result:
 | --- | --- | --- |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8197,7 +8397,7 @@ Get a list of Spotify featured playlists (shown, for example, on a Spotify playe
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.get_featured_playlists()
+result = client.playlists.with_raw_response.get_featured_playlists(locale="sv_SE", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingFeaturedPlaylistObject
@@ -8208,7 +8408,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.get_featured_playlists()
+result = await async_client.playlists.with_raw_response.get_featured_playlists(locale="sv_SE", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingFeaturedPlaylistObject
@@ -8229,7 +8429,7 @@ match result:
 | <code>locale</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8286,7 +8486,7 @@ Get a list of the playlists owned or followed by a Spotify user.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.get_list_users_playlists(user_id)
+result = client.playlists.with_raw_response.get_list_users_playlists("smedjan", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistObject
@@ -8297,7 +8497,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.get_list_users_playlists(user_id)
+result = await async_client.playlists.with_raw_response.get_list_users_playlists("smedjan", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistObject
@@ -8318,7 +8518,7 @@ match result:
 | <code>user_id</code> | <code>str</code> | Value sent with the request. |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8375,7 +8575,9 @@ Get a playlist owned by a Spotify user.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.get_playlist(playlist_id)
+result = client.playlists.with_raw_response.get_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n", market="ES", fields="items(added_by.id,track(name,href,album(name,href)))"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistObject
@@ -8386,7 +8588,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.get_playlist(playlist_id)
+result = await async_client.playlists.with_raw_response.get_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n", market="ES", fields="items(added_by.id,track(name,href,album(name,href)))"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistObject
@@ -8408,7 +8612,7 @@ match result:
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>fields</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>additional_types</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8465,7 +8669,7 @@ Get the current image associated with a specific playlist.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.get_playlist_cover(playlist_id)
+result = client.playlists.with_raw_response.get_playlist_cover("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[ImageObject]
@@ -8476,7 +8680,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.get_playlist_cover(playlist_id)
+result = await async_client.playlists.with_raw_response.get_playlist_cover("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[ImageObject]
@@ -8495,7 +8699,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8552,7 +8756,13 @@ Get full details of the items of a playlist owned by a Spotify user.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.get_playlists_tracks(playlist_id)
+result = client.playlists.with_raw_response.get_playlists_tracks(
+    "3cEYpjA9oz9GiPac4AsH4n",
+    market="ES",
+    fields="items(added_by.id,track(name,href,album(name,href)))",
+    limit=10,
+    offset=5,
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistTrackObject
@@ -8563,7 +8773,13 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.get_playlists_tracks(playlist_id)
+result = await async_client.playlists.with_raw_response.get_playlists_tracks(
+    "3cEYpjA9oz9GiPac4AsH4n",
+    market="ES",
+    fields="items(added_by.id,track(name,href,album(name,href)))",
+    limit=10,
+    offset=5,
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistTrackObject
@@ -8587,7 +8803,7 @@ match result:
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
 | <code>additional_types</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8644,7 +8860,7 @@ Remove one or more items from a user's playlist.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.remove_tracks_playlist(playlist_id)
+result = client.playlists.with_raw_response.remove_tracks_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -8655,7 +8871,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.remove_tracks_playlist(playlist_id)
+result = await async_client.playlists.with_raw_response.remove_tracks_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -8675,7 +8891,7 @@ match result:
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[PlaylistsTracksRequest2](spotify_web_api/models/playlists_tracks_request2.py) \| [PlaylistsTracksRequest2Dict](spotify_web_api/models/playlists_tracks_request2.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8738,7 +8954,7 @@ These operations can't be applied together in a single request.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.reorder_or_replace_playlists_tracks(playlist_id)
+result = client.playlists.with_raw_response.reorder_or_replace_playlists_tracks("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -8749,7 +8965,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.reorder_or_replace_playlists_tracks(playlist_id)
+result = await async_client.playlists.with_raw_response.reorder_or_replace_playlists_tracks("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -8770,7 +8986,7 @@ match result:
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>uris</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>body</code> | <code>[PlaylistsTracksRequest1](spotify_web_api/models/playlists_tracks_request1.py) \| [PlaylistsTracksRequest1Dict](spotify_web_api/models/playlists_tracks_request1.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8827,7 +9043,7 @@ Remove the current user as a follower of a playlist.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.unfollow_playlist(playlist_id)
+result = client.playlists.with_raw_response.unfollow_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -8838,7 +9054,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.unfollow_playlist(playlist_id)
+result = await async_client.playlists.with_raw_response.unfollow_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -8857,7 +9073,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -8914,7 +9130,7 @@ Replace the image used to represent a specific playlist.
 **Sync**
 
 ```python
-result = client.playlists.with_raw_response.upload_custom_playlist_cover(playlist_id, body)
+result = client.playlists.with_raw_response.upload_custom_playlist_cover("3cEYpjA9oz9GiPac4AsH4n", {})
 match result:
     case Success():
         ...  # 2xx, no content
@@ -8925,7 +9141,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.playlists.with_raw_response.upload_custom_playlist_cover(playlist_id, body)
+result = await async_client.playlists.with_raw_response.upload_custom_playlist_cover("3cEYpjA9oz9GiPac4AsH4n", {})
 match result:
     case Success():
         ...  # 2xx, no content
@@ -8945,7 +9161,7 @@ match result:
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>Any</code> | The request body. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9007,7 +9223,9 @@ that match a keyword string. Audiobooks are only available within the US, UK, Ca
 **Sync**
 
 ```python
-result = client.search.with_raw_response.search(q, type_)
+result = client.search.with_raw_response.search(
+    "remaster%20track:Doxy%20artist:Miles%20Davis", [Itemtype.ALBUM], market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type SearchItems
@@ -9018,7 +9236,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.search.with_raw_response.search(q, type_)
+result = await async_client.search.with_raw_response.search(
+    "remaster%20track:Doxy%20artist:Miles%20Davis", [Itemtype.ALBUM], market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type SearchItems
@@ -9042,7 +9262,7 @@ match result:
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
 | <code>include_external</code> | <code>[IncludeExternalOrStr](spotify_web_api/models/enums/include_external.py) \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9103,7 +9323,7 @@ Check if one or more shows is already saved in the current Spotify user's librar
 **Sync**
 
 ```python
-result = client.shows.with_raw_response.check_users_saved_shows(ids)
+result = client.shows.with_raw_response.check_users_saved_shows("5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -9114,7 +9334,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.shows.with_raw_response.check_users_saved_shows(ids)
+result = await async_client.shows.with_raw_response.check_users_saved_shows(
+    "5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -9133,7 +9355,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9167,7 +9389,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_a_show(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ShowObject, GetAShowErrorBody]</code></summary>
+<summary><code>def get_a_show(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ShowObject, GetAShowErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -9191,7 +9413,7 @@ unique Spotify ID.
 **Sync**
 
 ```python
-result = client.shows.with_raw_response.get_a_show(id)
+result = client.shows.with_raw_response.get_a_show("38bS44xjbVVZ3No3ByF1dJ", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ShowObject
@@ -9202,7 +9424,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.shows.with_raw_response.get_a_show(id)
+result = await async_client.shows.with_raw_response.get_a_show("38bS44xjbVVZ3No3ByF1dJ", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ShowObject
@@ -9220,9 +9442,9 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9256,7 +9478,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_a_shows_episodes(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedEpisodeObject, GetAShowsEpisodesErrorBody]</code></summary>
+<summary><code>def get_a_shows_episodes(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedEpisodeObject, GetAShowsEpisodesErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -9279,7 +9501,7 @@ Get Spotify catalog information about an show’s episodes. Optional parameters 
 **Sync**
 
 ```python
-result = client.shows.with_raw_response.get_a_shows_episodes(id)
+result = client.shows.with_raw_response.get_a_shows_episodes("38bS44xjbVVZ3No3ByF1dJ", market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedEpisodeObject
@@ -9290,7 +9512,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.shows.with_raw_response.get_a_shows_episodes(id)
+result = await async_client.shows.with_raw_response.get_a_shows_episodes(
+    "38bS44xjbVVZ3No3ByF1dJ", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedEpisodeObject
@@ -9308,11 +9532,11 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9369,7 +9593,7 @@ Get Spotify catalog information for several shows based on their Spotify IDs.
 **Sync**
 
 ```python
-result = client.shows.with_raw_response.get_multiple_shows(ids)
+result = client.shows.with_raw_response.get_multiple_shows("5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManySimplifiedShows
@@ -9380,7 +9604,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.shows.with_raw_response.get_multiple_shows(ids)
+result = await async_client.shows.with_raw_response.get_multiple_shows(
+    "5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManySimplifiedShows
@@ -9400,7 +9626,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9457,7 +9683,7 @@ Get a list of shows saved in the current Spotify user's library. Optional parame
 **Sync**
 
 ```python
-result = client.shows.with_raw_response.get_users_saved_shows()
+result = client.shows.with_raw_response.get_users_saved_shows(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedShowObject
@@ -9468,7 +9694,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.shows.with_raw_response.get_users_saved_shows()
+result = await async_client.shows.with_raw_response.get_users_saved_shows(limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedShowObject
@@ -9488,7 +9714,7 @@ match result:
 | --- | --- | --- |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9545,7 +9771,7 @@ Delete one or more shows from current Spotify user's library.
 **Sync**
 
 ```python
-result = client.shows.with_raw_response.remove_shows_user(ids)
+result = client.shows.with_raw_response.remove_shows_user("5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ", market="ES")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -9556,7 +9782,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.shows.with_raw_response.remove_shows_user(ids)
+result = await async_client.shows.with_raw_response.remove_shows_user(
+    "5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ", market="ES"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -9577,7 +9805,7 @@ match result:
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>body</code> | <code>[RemoveShowsRequest](spotify_web_api/models/remove_shows_request.py) \| [RemoveShowsRequestDict](spotify_web_api/models/remove_shows_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9634,7 +9862,7 @@ Save one or more shows to current Spotify user's library.
 **Sync**
 
 ```python
-result = client.shows.with_raw_response.save_shows_user(ids)
+result = client.shows.with_raw_response.save_shows_user("5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -9645,7 +9873,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.shows.with_raw_response.save_shows_user(ids)
+result = await async_client.shows.with_raw_response.save_shows_user("5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -9665,7 +9893,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[SaveShowsRequest](spotify_web_api/models/save_shows_request.py) \| [SaveShowsRequestDict](spotify_web_api/models/save_shows_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9726,7 +9954,11 @@ Add one or more items to a user's playlist.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.add_tracks_to_playlist(playlist_id)
+result = client.tracks.with_raw_response.add_tracks_to_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n",
+    position=0,
+    uris="spotify:track:4iV5W9uYEdYUVa79Axb7Rh,spotify:track:1301WleyT98MSxVHPZCA6M",
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -9737,7 +9969,11 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.add_tracks_to_playlist(playlist_id)
+result = await async_client.tracks.with_raw_response.add_tracks_to_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n",
+    position=0,
+    uris="spotify:track:4iV5W9uYEdYUVa79Axb7Rh,spotify:track:1301WleyT98MSxVHPZCA6M",
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -9759,7 +9995,7 @@ match result:
 | <code>position</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>uris</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>body</code> | <code>[PlaylistsTracksRequest](spotify_web_api/models/playlists_tracks_request.py) \| [PlaylistsTracksRequestDict](spotify_web_api/models/playlists_tracks_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9816,7 +10052,9 @@ Check if one or more tracks is already saved in the current Spotify user's 'Your
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.check_users_saved_tracks(ids)
+result = client.tracks.with_raw_response.check_users_saved_tracks(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -9827,7 +10065,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.check_users_saved_tracks(ids)
+result = await async_client.tracks.with_raw_response.check_users_saved_tracks(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -9846,7 +10086,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9880,7 +10120,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_albums_tracks(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedTrackObject, GetAnAlbumsTracksErrorBody]</code></summary>
+<summary><code>def get_an_albums_tracks(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None) -> ApiResult[PagingSimplifiedTrackObject, GetAnAlbumsTracksErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -9904,7 +10144,7 @@ Optional parameters can be used to limit the number of tracks returned.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_an_albums_tracks(id)
+result = client.tracks.with_raw_response.get_an_albums_tracks("4aawyAB9vmqN3uQ7FjRGTy", market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedTrackObject
@@ -9915,7 +10155,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_an_albums_tracks(id)
+result = await async_client.tracks.with_raw_response.get_an_albums_tracks(
+    "4aawyAB9vmqN3uQ7FjRGTy", market="ES", limit=10, offset=5
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSimplifiedTrackObject
@@ -9933,11 +10175,11 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -9971,7 +10213,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_an_artists_top_tracks(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]</code></summary>
+<summary><code>def get_an_artists_top_tracks(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -9994,7 +10236,7 @@ Get Spotify catalog information about an artist's top tracks by country.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_an_artists_top_tracks(id)
+result = client.tracks.with_raw_response.get_an_artists_top_tracks("0TnOYISbd1XYRBk9myaseg", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyTracks
@@ -10005,7 +10247,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_an_artists_top_tracks(id)
+result = await async_client.tracks.with_raw_response.get_an_artists_top_tracks("0TnOYISbd1XYRBk9myaseg", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyTracks
@@ -10023,9 +10265,9 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10059,7 +10301,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_audio_analysis(id: str, *, request_options: RequestOptionsOrDict | None = None) -> ApiResult[AudioAnalysisObject, GetAudioAnalysisErrorBody]</code></summary>
+<summary><code>def get_audio_analysis(id_: str, *, request_options: RequestOptionsOrDict | None = None) -> ApiResult[AudioAnalysisObject, GetAudioAnalysisErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -10082,7 +10324,7 @@ Get a low-level audio analysis for a track in the Spotify catalog. The audio ana
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_audio_analysis(id)
+result = client.tracks.with_raw_response.get_audio_analysis("11dFghVXANMlKmJXsNCbNl")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type AudioAnalysisObject
@@ -10093,7 +10335,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_audio_analysis(id)
+result = await async_client.tracks.with_raw_response.get_audio_analysis("11dFghVXANMlKmJXsNCbNl")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type AudioAnalysisObject
@@ -10111,8 +10353,8 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10146,7 +10388,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_audio_features(id: str, *, request_options: RequestOptionsOrDict | None = None) -> ApiResult[AudioFeaturesObject, GetAudioFeaturesErrorBody]</code></summary>
+<summary><code>def get_audio_features(id_: str, *, request_options: RequestOptionsOrDict | None = None) -> ApiResult[AudioFeaturesObject, GetAudioFeaturesErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -10170,7 +10412,7 @@ Spotify ID.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_audio_features(id)
+result = client.tracks.with_raw_response.get_audio_features("11dFghVXANMlKmJXsNCbNl")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type AudioFeaturesObject
@@ -10181,7 +10423,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_audio_features(id)
+result = await async_client.tracks.with_raw_response.get_audio_features("11dFghVXANMlKmJXsNCbNl")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type AudioFeaturesObject
@@ -10199,8 +10441,8 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10257,7 +10499,13 @@ Get full details of the items of a playlist owned by a Spotify user.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_playlists_tracks(playlist_id)
+result = client.tracks.with_raw_response.get_playlists_tracks(
+    "3cEYpjA9oz9GiPac4AsH4n",
+    market="ES",
+    fields="items(added_by.id,track(name,href,album(name,href)))",
+    limit=10,
+    offset=5,
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistTrackObject
@@ -10268,7 +10516,13 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_playlists_tracks(playlist_id)
+result = await async_client.tracks.with_raw_response.get_playlists_tracks(
+    "3cEYpjA9oz9GiPac4AsH4n",
+    market="ES",
+    fields="items(added_by.id,track(name,href,album(name,href)))",
+    limit=10,
+    offset=5,
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistTrackObject
@@ -10292,7 +10546,7 @@ match result:
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
 | <code>additional_types</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10351,7 +10605,13 @@ For artists and tracks that are very new or obscure there might not be enough da
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_recommendations()
+result = client.tracks.with_raw_response.get_recommendations(
+    limit=10,
+    market="ES",
+    seed_artists="4NHQUGzhtTLFvgF5SZesLK",
+    seed_genres="classical,country",
+    seed_tracks="0c6xIDDpzE81m2q797ordA",
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type RecommendationsObject
@@ -10362,7 +10622,13 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_recommendations()
+result = await async_client.tracks.with_raw_response.get_recommendations(
+    limit=10,
+    market="ES",
+    seed_artists="4NHQUGzhtTLFvgF5SZesLK",
+    seed_genres="classical,country",
+    seed_tracks="0c6xIDDpzE81m2q797ordA",
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type RecommendationsObject
@@ -10427,7 +10693,7 @@ match result:
 | <code>min_valence</code> | <code>float \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>max_valence</code> | <code>float \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>target_valence</code> | <code>float \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10484,7 +10750,9 @@ Get audio features for multiple tracks based on their Spotify IDs.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_several_audio_features(ids)
+result = client.tracks.with_raw_response.get_several_audio_features(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyAudioFeatures
@@ -10495,7 +10763,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_several_audio_features(ids)
+result = await async_client.tracks.with_raw_response.get_several_audio_features(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyAudioFeatures
@@ -10514,7 +10784,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10571,7 +10841,9 @@ Get Spotify catalog information for multiple tracks based on their Spotify IDs.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_several_tracks(ids)
+result = client.tracks.with_raw_response.get_several_tracks(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyTracks
@@ -10582,7 +10854,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_several_tracks(ids)
+result = await async_client.tracks.with_raw_response.get_several_tracks(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B", market="ES"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type ManyTracks
@@ -10602,7 +10876,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10636,7 +10910,7 @@ Mapped in first-match order -- an earlier row wins over a later range that also 
 </details>
 
 <details>
-<summary><code>def get_track(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[TrackObject, GetTrackErrorBody]</code></summary>
+<summary><code>def get_track(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None) -> ApiResult[TrackObject, GetTrackErrorBody]</code></summary>
 
 <dl>
 <dd>
@@ -10660,7 +10934,7 @@ unique Spotify ID.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_track(id)
+result = client.tracks.with_raw_response.get_track("11dFghVXANMlKmJXsNCbNl", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type TrackObject
@@ -10671,7 +10945,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_track(id)
+result = await async_client.tracks.with_raw_response.get_track("11dFghVXANMlKmJXsNCbNl", market="ES")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type TrackObject
@@ -10689,9 +10963,9 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>id</code> | <code>str</code> | Value sent with the request. |
+| <code>id_</code> | <code>str</code> | Value sent with the request. |
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10748,7 +11022,7 @@ Get a list of the songs saved in the current Spotify user's 'Your Music' library
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_users_saved_tracks()
+result = client.tracks.with_raw_response.get_users_saved_tracks(market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedTrackObject
@@ -10759,7 +11033,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_users_saved_tracks()
+result = await async_client.tracks.with_raw_response.get_users_saved_tracks(market="ES", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingSavedTrackObject
@@ -10780,7 +11054,7 @@ match result:
 | <code>market</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10837,7 +11111,7 @@ Get the current user's top tracks based on calculated affinity.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.get_users_top_tracks()
+result = client.tracks.with_raw_response.get_users_top_tracks(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingTrackObject
@@ -10848,7 +11122,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.get_users_top_tracks()
+result = await async_client.tracks.with_raw_response.get_users_top_tracks(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingTrackObject
@@ -10869,7 +11143,7 @@ match result:
 | <code>time_range</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>"medium_term"</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -10926,7 +11200,7 @@ Remove one or more items from a user's playlist.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.remove_tracks_playlist(playlist_id)
+result = client.tracks.with_raw_response.remove_tracks_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -10937,7 +11211,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.remove_tracks_playlist(playlist_id)
+result = await async_client.tracks.with_raw_response.remove_tracks_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -10957,7 +11231,7 @@ match result:
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[PlaylistsTracksRequest2](spotify_web_api/models/playlists_tracks_request2.py) \| [PlaylistsTracksRequest2Dict](spotify_web_api/models/playlists_tracks_request2.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11014,7 +11288,9 @@ Remove one or more tracks from the current user's 'Your Music' library.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.remove_tracks_user(ids)
+result = client.tracks.with_raw_response.remove_tracks_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -11025,7 +11301,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.remove_tracks_user(ids)
+result = await async_client.tracks.with_raw_response.remove_tracks_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -11045,7 +11323,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[RemoveTracksRequest](spotify_web_api/models/remove_tracks_request.py) \| [RemoveTracksRequestDict](spotify_web_api/models/remove_tracks_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11108,7 +11386,7 @@ These operations can't be applied together in a single request.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.reorder_or_replace_playlists_tracks(playlist_id)
+result = client.tracks.with_raw_response.reorder_or_replace_playlists_tracks("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -11119,7 +11397,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.reorder_or_replace_playlists_tracks(playlist_id)
+result = await async_client.tracks.with_raw_response.reorder_or_replace_playlists_tracks("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PlaylistSnapshotId
@@ -11140,7 +11418,7 @@ match result:
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>uris</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>body</code> | <code>[PlaylistsTracksRequest1](spotify_web_api/models/playlists_tracks_request1.py) \| [PlaylistsTracksRequest1Dict](spotify_web_api/models/playlists_tracks_request1.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11197,7 +11475,9 @@ Save one or more tracks to the current user's 'Your Music' library.
 **Sync**
 
 ```python
-result = client.tracks.with_raw_response.save_tracks_user(ids)
+result = client.tracks.with_raw_response.save_tracks_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -11208,7 +11488,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.tracks.with_raw_response.save_tracks_user(ids)
+result = await async_client.tracks.with_raw_response.save_tracks_user(
+    "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -11228,7 +11510,7 @@ match result:
 | --- | --- | --- |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[SaveTracksRequest](spotify_web_api/models/save_tracks_request.py) \| [SaveTracksRequestDict](spotify_web_api/models/save_tracks_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11289,7 +11571,9 @@ Check to see if the current user is following one or more artists or other Spoti
 **Sync**
 
 ```python
-result = client.users.with_raw_response.check_current_user_follows(type_, ids)
+result = client.users.with_raw_response.check_current_user_follows(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -11300,7 +11584,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.check_current_user_follows(type_, ids)
+result = await async_client.users.with_raw_response.check_current_user_follows(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -11320,7 +11606,7 @@ match result:
 | --- | --- | --- |
 | <code>type_</code> | <code>[ItemType3OrStr](spotify_web_api/models/enums/item_type3.py)</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11377,7 +11663,9 @@ Check to see if one or more Spotify users are following a specified playlist.
 **Sync**
 
 ```python
-result = client.users.with_raw_response.check_if_user_follows_playlist(playlist_id, ids)
+result = client.users.with_raw_response.check_if_user_follows_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n", "jmperezperez,thelinmichael,wizzler"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -11388,7 +11676,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.check_if_user_follows_playlist(playlist_id, ids)
+result = await async_client.users.with_raw_response.check_if_user_follows_playlist(
+    "3cEYpjA9oz9GiPac4AsH4n", "jmperezperez,thelinmichael,wizzler"
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type list[bool]
@@ -11408,7 +11698,7 @@ match result:
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11465,7 +11755,9 @@ Add the current user as a follower of one or more artists or other Spotify users
 **Sync**
 
 ```python
-result = client.users.with_raw_response.follow_artists_users(type_, ids)
+result = client.users.with_raw_response.follow_artists_users(
+    ItemType2.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -11476,7 +11768,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.follow_artists_users(type_, ids)
+result = await async_client.users.with_raw_response.follow_artists_users(
+    ItemType2.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -11497,7 +11791,7 @@ match result:
 | <code>type_</code> | <code>[ItemType2OrStr](spotify_web_api/models/enums/item_type2.py)</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[FollowArtistsOrUsersRequest](spotify_web_api/models/follow_artists_or_users_request.py) \| [FollowArtistsOrUsersRequestDict](spotify_web_api/models/follow_artists_or_users_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11554,7 +11848,7 @@ Add the current user as a follower of a playlist.
 **Sync**
 
 ```python
-result = client.users.with_raw_response.follow_playlist(playlist_id)
+result = client.users.with_raw_response.follow_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -11565,7 +11859,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.follow_playlist(playlist_id)
+result = await async_client.users.with_raw_response.follow_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -11585,7 +11879,7 @@ match result:
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[PlaylistsFollowersRequest](spotify_web_api/models/playlists_followers_request.py) \| [PlaylistsFollowersRequestDict](spotify_web_api/models/playlists_followers_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11672,7 +11966,7 @@ match result:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11729,7 +12023,7 @@ Get the current user's followed artists.
 **Sync**
 
 ```python
-result = client.users.with_raw_response.get_followed(type_)
+result = client.users.with_raw_response.get_followed(ItemType1.ARTIST, after="0I2XqVXqHScXjHhk6AYYRe", limit=10)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CursorPagedArtists
@@ -11740,7 +12034,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.get_followed(type_)
+result = await async_client.users.with_raw_response.get_followed(
+    ItemType1.ARTIST, after="0I2XqVXqHScXjHhk6AYYRe", limit=10
+)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type CursorPagedArtists
@@ -11761,7 +12057,7 @@ match result:
 | <code>type_</code> | <code>[ItemType1OrStr](spotify_web_api/models/enums/item_type1.py)</code> | Value sent with the request. |
 | <code>after</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>None</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11818,7 +12114,7 @@ Get a list of the playlists owned or followed by a Spotify user.
 **Sync**
 
 ```python
-result = client.users.with_raw_response.get_list_users_playlists(user_id)
+result = client.users.with_raw_response.get_list_users_playlists("smedjan", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistObject
@@ -11829,7 +12125,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.get_list_users_playlists(user_id)
+result = await async_client.users.with_raw_response.get_list_users_playlists("smedjan", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingPlaylistObject
@@ -11850,7 +12146,7 @@ match result:
 | <code>user_id</code> | <code>str</code> | Value sent with the request. |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11907,7 +12203,7 @@ Get public profile information about a Spotify user.
 **Sync**
 
 ```python
-result = client.users.with_raw_response.get_users_profile(user_id)
+result = client.users.with_raw_response.get_users_profile("smedjan")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PublicUserObject
@@ -11918,7 +12214,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.get_users_profile(user_id)
+result = await async_client.users.with_raw_response.get_users_profile("smedjan")
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PublicUserObject
@@ -11937,7 +12233,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>user_id</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -11994,7 +12290,7 @@ Get the current user's top artists based on calculated affinity.
 **Sync**
 
 ```python
-result = client.users.with_raw_response.get_users_top_artists()
+result = client.users.with_raw_response.get_users_top_artists(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistObject
@@ -12005,7 +12301,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.get_users_top_artists()
+result = await async_client.users.with_raw_response.get_users_top_artists(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingArtistObject
@@ -12026,7 +12322,7 @@ match result:
 | <code>time_range</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>"medium_term"</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -12083,7 +12379,7 @@ Get the current user's top tracks based on calculated affinity.
 **Sync**
 
 ```python
-result = client.users.with_raw_response.get_users_top_tracks()
+result = client.users.with_raw_response.get_users_top_tracks(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingTrackObject
@@ -12094,7 +12390,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.get_users_top_tracks()
+result = await async_client.users.with_raw_response.get_users_top_tracks(time_range="medium_term", limit=10, offset=5)
 match result:
     case Success(payload=payload):
         ...  # TODO: Handle 'payload' of type PagingTrackObject
@@ -12115,7 +12411,7 @@ match result:
 | <code>time_range</code> | <code>str \| None</code> | Value sent with the request.<br>**Default**: <code>"medium_term"</code> |
 | <code>limit</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>20</code> |
 | <code>offset</code> | <code>int \| None</code> | Value sent with the request.<br>**Default**: <code>0</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -12172,7 +12468,9 @@ Remove the current user as a follower of one or more artists or other Spotify us
 **Sync**
 
 ```python
-result = client.users.with_raw_response.unfollow_artists_users(type_, ids)
+result = client.users.with_raw_response.unfollow_artists_users(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -12183,7 +12481,9 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.unfollow_artists_users(type_, ids)
+result = await async_client.users.with_raw_response.unfollow_artists_users(
+    ItemType3.ARTIST, "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6"
+)
 match result:
     case Success():
         ...  # 2xx, no content
@@ -12204,7 +12504,7 @@ match result:
 | <code>type_</code> | <code>[ItemType3OrStr](spotify_web_api/models/enums/item_type3.py)</code> | Value sent with the request. |
 | <code>ids</code> | <code>str</code> | Value sent with the request. |
 | <code>body</code> | <code>[UnfollowArtistsOrUsersRequest](spotify_web_api/models/unfollow_artists_or_users_request.py) \| [UnfollowArtistsOrUsersRequestDict](spotify_web_api/models/unfollow_artists_or_users_request.py) \| None</code> | The request body.<br>**Default**: <code>None</code> |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>
@@ -12261,7 +12561,7 @@ Remove the current user as a follower of a playlist.
 **Sync**
 
 ```python
-result = client.users.with_raw_response.unfollow_playlist(playlist_id)
+result = client.users.with_raw_response.unfollow_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -12272,7 +12572,7 @@ match result:
 **Async**
 
 ```python
-result = await async_client.users.with_raw_response.unfollow_playlist(playlist_id)
+result = await async_client.users.with_raw_response.unfollow_playlist("3cEYpjA9oz9GiPac4AsH4n")
 match result:
     case Success():
         ...  # 2xx, no content
@@ -12291,7 +12591,7 @@ match result:
 | Name | Type | Description |
 | --- | --- | --- |
 | <code>playlist_id</code> | <code>str</code> | Value sent with the request. |
-| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout or extra headers. |
+| <code>request_options</code> | <code>[RequestOptionsOrDict](spotify_web_api/core/request_options.py) \| None</code> | Per-call overrides for this one request, such as a timeout, extra headers, or its retry count and statuses. |
 
 </dd>
 </dl>

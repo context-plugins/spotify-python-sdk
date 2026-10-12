@@ -35,4 +35,4 @@ class CategoriesDict(TypedDict):
     offset: int
     previous: str | None
     total: int
-    items: list[CategoryObject | CategoryObjectDict]
+    items: list[CategoryObjectDict]

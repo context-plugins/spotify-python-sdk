@@ -64,17 +64,17 @@ class SimplifiedTrackObject(SdkBaseModel):
 
 
 class SimplifiedTrackObjectDict(TypedDict):
-    artists: NotRequired[list[SimplifiedArtistObject | SimplifiedArtistObjectDict]]
+    artists: NotRequired[list[SimplifiedArtistObjectDict]]
     available_markets: NotRequired[list[str]]
     disc_number: NotRequired[int]
     duration_ms: NotRequired[int]
     explicit: NotRequired[bool]
-    external_urls: NotRequired[ExternalUrlObject | ExternalUrlObjectDict]
+    external_urls: NotRequired[ExternalUrlObjectDict]
     href: NotRequired[str]
     id: NotRequired[str]
     is_playable: NotRequired[bool]
-    linked_from: NotRequired[LinkedTrackObject | LinkedTrackObjectDict]
-    restrictions: NotRequired[TrackRestrictionObject | TrackRestrictionObjectDict]
+    linked_from: NotRequired[LinkedTrackObjectDict]
+    restrictions: NotRequired[TrackRestrictionObjectDict]
     name: NotRequired[str]
     preview_url: NotRequired[str | None]
     track_number: NotRequired[int]

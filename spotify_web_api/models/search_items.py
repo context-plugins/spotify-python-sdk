@@ -23,10 +23,10 @@ class SearchItems(SdkBaseModel):
 
 
 class SearchItemsDict(TypedDict):
-    tracks: NotRequired[PagingTrackObject | PagingTrackObjectDict]
-    artists: NotRequired[PagingArtistObject | PagingArtistObjectDict]
-    albums: NotRequired[PagingSimplifiedAlbumObject | PagingSimplifiedAlbumObjectDict]
-    playlists: NotRequired[PagingPlaylistObject | PagingPlaylistObjectDict]
-    shows: NotRequired[PagingSimplifiedShowObject | PagingSimplifiedShowObjectDict]
-    episodes: NotRequired[PagingSimplifiedEpisodeObject | PagingSimplifiedEpisodeObjectDict]
-    audiobooks: NotRequired[PagingSimplifiedAudiobookObject | PagingSimplifiedAudiobookObjectDict]
+    tracks: NotRequired[PagingTrackObjectDict]
+    artists: NotRequired[PagingArtistObjectDict]
+    albums: NotRequired[PagingSimplifiedAlbumObjectDict]
+    playlists: NotRequired[PagingPlaylistObjectDict]
+    shows: NotRequired[PagingSimplifiedShowObjectDict]
+    episodes: NotRequired[PagingSimplifiedEpisodeObjectDict]
+    audiobooks: NotRequired[PagingSimplifiedAudiobookObjectDict]

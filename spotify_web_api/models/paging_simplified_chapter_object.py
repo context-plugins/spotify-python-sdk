@@ -35,4 +35,4 @@ class PagingSimplifiedChapterObjectDict(TypedDict):
     offset: int
     previous: str | None
     total: int
-    items: list[ChapterBase | ChapterBaseDict]
+    items: list[ChapterBaseDict]

@@ -318,7 +318,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 - **Auth**: `oauth_2_0`
 - **Signature**: `def upload_custom_playlist_cover(playlist_id: str, body: Any, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`, `body`
-- **Params**: `playlist_id` — path · `body` — JSON body
+- **Params**: `playlist_id` — path · `body` — text body
 - **Returns (parsed)**: `None`
 - **Returns (raw)**: `ApiResult[None, UploadCustomPlaylistCoverErrorBody]`
 - **Error**: `UploadCustomPlaylistCoverErrorBody` — **Case A (typed)**

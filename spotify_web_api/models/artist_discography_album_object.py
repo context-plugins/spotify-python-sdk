@@ -59,15 +59,15 @@ class ArtistDiscographyAlbumObjectDict(TypedDict):
     album_type: AlbumTypeOrStr
     total_tracks: int
     available_markets: NotRequired[list[str]]
-    external_urls: ExternalUrlObject | ExternalUrlObjectDict
+    external_urls: ExternalUrlObjectDict
     href: str
     id: str
-    images: list[ImageObject | ImageObjectDict]
+    images: list[ImageObjectDict]
     name: str
     release_date: str
     release_date_precision: ReleaseDatePrecisionOrStr
-    restrictions: NotRequired[AlbumRestrictionObject | AlbumRestrictionObjectDict]
+    restrictions: NotRequired[AlbumRestrictionObjectDict]
     type_: Type2OrStr
     uri: str
-    artists: list[SimplifiedArtistObject | SimplifiedArtistObjectDict]
+    artists: list[SimplifiedArtistObjectDict]
     album_group: NotRequired[AlbumGroupOrStr]

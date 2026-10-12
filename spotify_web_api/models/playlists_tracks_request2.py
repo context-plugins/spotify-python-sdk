@@ -20,5 +20,5 @@ class PlaylistsTracksRequest2(SdkBaseModel):
 
 
 class PlaylistsTracksRequest2Dict(TypedDict):
-    tracks: list[Track1 | Track1Dict]
+    tracks: list[Track1Dict]
     snapshot_id: NotRequired[str]

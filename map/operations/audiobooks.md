@@ -29,9 +29,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /audiobooks/{id}`
 - **Auth**: `oauth_2_0`
-- **Signature**: `def get_an_audiobook(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query
+- **Signature**: `def get_an_audiobook(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query
 - **Returns (parsed)**: `AudiobookObject`
 - **Returns (raw)**: `ApiResult[AudiobookObject, GetAnAudiobookErrorBody]`
 - **Error**: `GetAnAudiobookErrorBody` — **Case A (typed)**
@@ -51,9 +51,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /audiobooks/{id}/chapters`
 - **Auth**: `oauth_2_0`
-- **Signature**: `def get_audiobook_chapters(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query · `limit` — query · `offset` — query
+- **Signature**: `def get_audiobook_chapters(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSimplifiedChapterObject`
 - **Returns (raw)**: `ApiResult[PagingSimplifiedChapterObject, GetAudiobookChaptersErrorBody]`
 - **Error**: `GetAudiobookChaptersErrorBody` — **Case A (typed)**

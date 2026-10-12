@@ -29,8 +29,8 @@ class PlaylistOwnerObject(SdkBaseModel):
 
 
 class PlaylistOwnerObjectDict(TypedDict):
-    external_urls: NotRequired[ExternalUrlObject | ExternalUrlObjectDict]
-    followers: NotRequired[FollowersObject | FollowersObjectDict]
+    external_urls: NotRequired[ExternalUrlObjectDict]
+    followers: NotRequired[FollowersObjectDict]
     href: NotRequired[str]
     id: NotRequired[str]
     type_: NotRequired[Type4OrStr]

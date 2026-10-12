@@ -29,9 +29,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /albums/{id}`
 - **Auth**: `oauth_2_0` OR `oauth_2_0_client_credentials`
-- **Signature**: `def get_an_album(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query
+- **Signature**: `def get_an_album(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query
 - **Returns (parsed)**: `AlbumObject`
 - **Returns (raw)**: `ApiResult[AlbumObject, GetAnAlbumErrorBody]`
 - **Error**: `GetAnAlbumErrorBody` — **Case A (typed)**
@@ -49,9 +49,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /albums/{id}/tracks`
 - **Auth**: `oauth_2_0` OR `oauth_2_0_client_credentials`
-- **Signature**: `def get_an_albums_tracks(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query · `limit` — query · `offset` — query
+- **Signature**: `def get_an_albums_tracks(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSimplifiedTrackObject`
 - **Returns (raw)**: `ApiResult[PagingSimplifiedTrackObject, GetAnAlbumsTracksErrorBody]`
 - **Error**: `GetAnAlbumsTracksErrorBody` — **Case A (typed)**
@@ -69,9 +69,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /artists/{id}/albums`
 - **Auth**: `oauth_2_0` OR `oauth_2_0_client_credentials`
-- **Signature**: `def get_an_artists_albums(id: str, *, include_groups: str | None = None, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `include_groups` — query · `market` — query · `limit` — query · `offset` — query
+- **Signature**: `def get_an_artists_albums(id_: str, *, include_groups: str | None = None, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `include_groups` — query · `market` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingArtistDiscographyAlbumObject`
 - **Returns (raw)**: `ApiResult[PagingArtistDiscographyAlbumObject, GetAnArtistsAlbumsErrorBody]`
 - **Error**: `GetAnArtistsAlbumsErrorBody` — **Case A (typed)**

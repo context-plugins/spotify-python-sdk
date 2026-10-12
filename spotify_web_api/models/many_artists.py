@@ -11,4 +11,4 @@ class ManyArtists(SdkBaseModel):
 
 
 class ManyArtistsDict(TypedDict):
-    artists: list[ArtistObject | ArtistObjectDict]
+    artists: list[ArtistObjectDict]

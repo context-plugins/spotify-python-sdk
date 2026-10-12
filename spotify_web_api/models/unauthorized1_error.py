@@ -11,4 +11,4 @@ class Unauthorized1Error(SdkBaseModel):
 
 
 class Unauthorized1ErrorDict(TypedDict):
-    error: ErrorObject | ErrorObjectDict
+    error: ErrorObjectDict

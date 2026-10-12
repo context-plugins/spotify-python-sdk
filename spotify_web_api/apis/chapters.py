@@ -1,7 +1,17 @@
 from __future__ import annotations
 
 from ..auth import AsyncAuthSchemes, AuthSchemes
-from ..core import ApiResult, AsyncRawClient, RawClient, RequestOptionsOrDict, SecuredRawResponse, json_decoder, param
+from ..core import (
+    ApiResult,
+    AsyncRawClient,
+    RawClient,
+    RequestOptionsOrDict,
+    SecuredRawResponse,
+    async_json_decoder,
+    json_decoder,
+    param,
+    unwrap,
+)
 from ..errors.get_a_chapter_error import GetAChapterErrorBody, get_a_chapter_error_mapper
 from ..errors.get_audiobook_chapters_error import GetAudiobookChaptersErrorBody, get_audiobook_chapters_error_mapper
 from ..errors.get_several_chapters_error import GetSeveralChaptersErrorBody, get_several_chapters_error_mapper
@@ -16,15 +26,16 @@ class Chapters:
         self._with_raw_response = ChaptersWithRawResponse(client, server, auth)
 
     def get_a_chapter(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ChapterObject:
         """Get Spotify catalog information for a single audiobook chapter. Chapters are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A Chapter
@@ -34,11 +45,11 @@ class Chapters:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_a_chapter(id, market=market, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_a_chapter(id_, market=market, request_options=request_options))
 
     def get_audiobook_chapters(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -49,11 +60,12 @@ class Chapters:
         UK, Canada, Ireland, New Zealand and Australia markets.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of chapters
@@ -63,9 +75,11 @@ class Chapters:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_audiobook_chapters(
-            id, market=market, limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_audiobook_chapters(
+                id_, market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     def get_several_chapters(
         self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -76,7 +90,8 @@ class Chapters:
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of chapters
@@ -86,9 +101,7 @@ class Chapters:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_several_chapters(
-            ids, market=market, request_options=request_options
-        ).unwrap()
+        return unwrap(self._with_raw_response.get_several_chapters(ids, market=market, request_options=request_options))
 
     @property
     def with_raw_response(self) -> ChaptersWithRawResponse:
@@ -100,15 +113,16 @@ class AsyncChapters:
         self._with_raw_response = AsyncChaptersWithRawResponse(client, server, auth)
 
     async def get_a_chapter(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ChapterObject:
         """Get Spotify catalog information for a single audiobook chapter. Chapters are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A Chapter
@@ -118,13 +132,11 @@ class AsyncChapters:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
-            await self._with_raw_response.get_a_chapter(id, market=market, request_options=request_options)
-        ).unwrap()
+        return unwrap(await self._with_raw_response.get_a_chapter(id_, market=market, request_options=request_options))
 
     async def get_audiobook_chapters(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -135,11 +147,12 @@ class AsyncChapters:
         UK, Canada, Ireland, New Zealand and Australia markets.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of chapters
@@ -149,11 +162,11 @@ class AsyncChapters:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_audiobook_chapters(
-                id, market=market, limit=limit, offset=offset, request_options=request_options
-            )
-        ).unwrap()
+                id_, market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     async def get_several_chapters(
         self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -164,7 +177,8 @@ class AsyncChapters:
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of chapters
@@ -174,9 +188,9 @@ class AsyncChapters:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_several_chapters(ids, market=market, request_options=request_options)
-        ).unwrap()
+        )
 
     @property
     def with_raw_response(self) -> AsyncChaptersWithRawResponse:
@@ -185,22 +199,23 @@ class AsyncChapters:
 
 class ChaptersWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
     def get_a_chapter(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[ChapterObject, GetAChapterErrorBody]:
         """Get Spotify catalog information for a single audiobook chapter. Chapters are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/chapters/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
             decoder=json_decoder[ChapterObject],
@@ -210,7 +225,7 @@ class ChaptersWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
 
     def get_audiobook_chapters(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -221,18 +236,19 @@ class ChaptersWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
         UK, Canada, Ireland, New Zealand and Australia markets.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/audiobooks/{id}/chapters"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("market", market),
                 param[int | None]("limit", limit),
@@ -253,7 +269,8 @@ class ChaptersWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -270,32 +287,33 @@ class ChaptersWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
 
 class AsyncChaptersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def get_a_chapter(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[ChapterObject, GetAChapterErrorBody]:
         """Get Spotify catalog information for a single audiobook chapter. Chapters are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/chapters/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[ChapterObject],
+            decoder=async_json_decoder[ChapterObject],
             error_mapper=get_a_chapter_error_mapper,
             request_options=request_options,
         )
 
     async def get_audiobook_chapters(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -306,25 +324,26 @@ class AsyncChaptersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         UK, Canada, Ireland, New Zealand and Australia markets.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/audiobooks/{id}/chapters"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("market", market),
                 param[int | None]("limit", limit),
                 param[int | None]("offset", offset),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagingSimplifiedChapterObject],
+            decoder=async_json_decoder[PagingSimplifiedChapterObject],
             error_mapper=get_audiobook_chapters_error_mapper,
             request_options=request_options,
         )
@@ -338,7 +357,8 @@ class AsyncChaptersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -347,7 +367,7 @@ class AsyncChaptersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
             url_template=self._server.default("/chapters"),
             query_params=[param[str]("ids", ids), param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[ManyChapters],
+            decoder=async_json_decoder[ManyChapters],
             error_mapper=get_several_chapters_error_mapper,
             request_options=request_options,
         )

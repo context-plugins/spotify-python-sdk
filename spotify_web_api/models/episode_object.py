@@ -79,10 +79,10 @@ class EpisodeObjectDict(TypedDict):
     html_description: str
     duration_ms: int
     explicit: bool
-    external_urls: ExternalUrlObject | ExternalUrlObjectDict
+    external_urls: ExternalUrlObjectDict
     href: str
     id: str
-    images: list[ImageObject | ImageObjectDict]
+    images: list[ImageObjectDict]
     is_externally_hosted: bool
     is_playable: bool
     language: NotRequired[str]
@@ -90,8 +90,8 @@ class EpisodeObjectDict(TypedDict):
     name: str
     release_date: str
     release_date_precision: ReleaseDatePrecisionOrStr
-    resume_point: NotRequired[ResumePointObject | ResumePointObjectDict]
+    resume_point: NotRequired[ResumePointObjectDict]
     type_: Type5OrStr
     uri: str
-    restrictions: NotRequired[TrackRestrictionObject | TrackRestrictionObjectDict]
-    show: ShowBase | ShowBaseDict
+    restrictions: NotRequired[TrackRestrictionObjectDict]
+    show: ShowBaseDict

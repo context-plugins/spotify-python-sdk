@@ -23,5 +23,5 @@ class ContextObject(SdkBaseModel):
 class ContextObjectDict(TypedDict):
     type_: NotRequired[str]
     href: NotRequired[str]
-    external_urls: NotRequired[ExternalUrlObject | ExternalUrlObjectDict]
+    external_urls: NotRequired[ExternalUrlObjectDict]
     uri: NotRequired[str]

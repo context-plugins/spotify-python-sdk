@@ -11,4 +11,4 @@ class TooManyRequests1Error(SdkBaseModel):
 
 
 class TooManyRequests1ErrorDict(TypedDict):
-    error: ErrorObject | ErrorObjectDict
+    error: ErrorObjectDict

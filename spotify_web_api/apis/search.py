@@ -9,8 +9,10 @@ from ..core import (
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
+    async_json_decoder,
     json_decoder,
     param,
+    unwrap,
 )
 from ..errors.search_error import SearchErrorBody, search_error_mapper
 from ..models.enums.include_external import IncludeExternalOrStr
@@ -45,7 +47,8 @@ class Search:
             limit: Value sent with the request.
             offset: Value sent with the request.
             include_external: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Search response
@@ -55,15 +58,17 @@ class Search:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.search(
-            q,
-            type_,
-            market=market,
-            limit=limit,
-            offset=offset,
-            include_external=include_external,
-            request_options=request_options,
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.search(
+                q,
+                type_,
+                market=market,
+                limit=limit,
+                offset=offset,
+                include_external=include_external,
+                request_options=request_options,
+            ),
+        )
 
     @property
     def with_raw_response(self) -> SearchWithRawResponse:
@@ -96,7 +101,8 @@ class AsyncSearch:
             limit: Value sent with the request.
             offset: Value sent with the request.
             include_external: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Search response
@@ -106,7 +112,7 @@ class AsyncSearch:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.search(
                 q,
                 type_,
@@ -115,8 +121,8 @@ class AsyncSearch:
                 offset=offset,
                 include_external=include_external,
                 request_options=request_options,
-            )
-        ).unwrap()
+            ),
+        )
 
     @property
     def with_raw_response(self) -> AsyncSearchWithRawResponse:
@@ -146,7 +152,8 @@ class SearchWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
             limit: Value sent with the request.
             offset: Value sent with the request.
             include_external: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -191,7 +198,8 @@ class AsyncSearchWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             limit: Value sent with the request.
             offset: Value sent with the request.
             include_external: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -207,7 +215,7 @@ class AsyncSearchWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
                 param[IncludeExternalOrStr | None]("include_external", include_external),
             ],
             auth_scheme=AsyncAnySchemes(self._auth.oauth_2_0, self._auth.oauth_2_0_client_credentials),
-            decoder=json_decoder[SearchItems],
+            decoder=async_json_decoder[SearchItems],
             error_mapper=search_error_mapper,
             request_options=request_options,
         )

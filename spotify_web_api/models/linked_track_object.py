@@ -25,7 +25,7 @@ class LinkedTrackObject(SdkBaseModel):
 
 
 class LinkedTrackObjectDict(TypedDict):
-    external_urls: NotRequired[ExternalUrlObject | ExternalUrlObjectDict]
+    external_urls: NotRequired[ExternalUrlObjectDict]
     href: NotRequired[str]
     id: NotRequired[str]
     type_: NotRequired[str]

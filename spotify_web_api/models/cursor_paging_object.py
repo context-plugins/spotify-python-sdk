@@ -25,5 +25,5 @@ class CursorPagingObjectDict(TypedDict):
     href: NotRequired[str]
     limit: NotRequired[int]
     next: NotRequired[str]
-    cursors: NotRequired[CursorObject | CursorObjectDict]
+    cursors: NotRequired[CursorObjectDict]
     total: NotRequired[int]

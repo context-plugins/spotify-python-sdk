@@ -34,10 +34,10 @@ class AudioAnalysisObject(SdkBaseModel):
 
 
 class AudioAnalysisObjectDict(TypedDict):
-    meta: NotRequired[Meta | MetaDict]
-    track: NotRequired[Track | TrackDict]
-    bars: NotRequired[list[TimeIntervalObject | TimeIntervalObjectDict]]
-    beats: NotRequired[list[TimeIntervalObject | TimeIntervalObjectDict]]
-    sections: NotRequired[list[SectionObject | SectionObjectDict]]
-    segments: NotRequired[list[SegmentObject | SegmentObjectDict]]
-    tatums: NotRequired[list[TimeIntervalObject | TimeIntervalObjectDict]]
+    meta: NotRequired[MetaDict]
+    track: NotRequired[TrackDict]
+    bars: NotRequired[list[TimeIntervalObjectDict]]
+    beats: NotRequired[list[TimeIntervalObjectDict]]
+    sections: NotRequired[list[SectionObjectDict]]
+    segments: NotRequired[list[SegmentObjectDict]]
+    tatums: NotRequired[list[TimeIntervalObjectDict]]

@@ -37,13 +37,13 @@ class CurrentlyPlayingContextObject(SdkBaseModel):
 
 
 class CurrentlyPlayingContextObjectDict(TypedDict):
-    device: NotRequired[DeviceObject | DeviceObjectDict]
+    device: NotRequired[DeviceObjectDict]
     repeat_state: NotRequired[str]
     shuffle_state: NotRequired[bool]
-    context: NotRequired[ContextObject | ContextObjectDict]
+    context: NotRequired[ContextObjectDict]
     timestamp: NotRequired[int]
     progress_ms: NotRequired[int]
     is_playing: NotRequired[bool]
-    item: NotRequired[Item | ItemDict]
+    item: NotRequired[ItemDict]
     currently_playing_type: NotRequired[str]
-    actions: NotRequired[DisallowsObject | DisallowsObjectDict]
+    actions: NotRequired[DisallowsObjectDict]

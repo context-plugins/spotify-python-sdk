@@ -76,23 +76,23 @@ class AudiobookObject(SdkBaseModel):
 
 
 class AudiobookObjectDict(TypedDict):
-    authors: list[AuthorObject | AuthorObjectDict]
+    authors: list[AuthorObjectDict]
     available_markets: list[str]
-    copyrights: list[CopyrightObject | CopyrightObjectDict]
+    copyrights: list[CopyrightObjectDict]
     description: str
     html_description: str
     edition: NotRequired[str]
     explicit: bool
-    external_urls: ExternalUrlObject | ExternalUrlObjectDict
+    external_urls: ExternalUrlObjectDict
     href: str
     id: str
-    images: list[ImageObject | ImageObjectDict]
+    images: list[ImageObjectDict]
     languages: list[str]
     media_type: str
     name: str
-    narrators: list[NarratorObject | NarratorObjectDict]
+    narrators: list[NarratorObjectDict]
     publisher: str
     type_: Type9OrStr
     uri: str
     total_chapters: int
-    chapters: PagingSimplifiedChapterObject | PagingSimplifiedChapterObjectDict
+    chapters: PagingSimplifiedChapterObjectDict

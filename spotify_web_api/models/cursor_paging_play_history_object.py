@@ -28,6 +28,6 @@ class CursorPagingPlayHistoryObjectDict(TypedDict):
     href: NotRequired[str]
     limit: NotRequired[int]
     next: NotRequired[str]
-    cursors: NotRequired[CursorObject | CursorObjectDict]
+    cursors: NotRequired[CursorObjectDict]
     total: NotRequired[int]
-    items: NotRequired[list[PlayHistoryObject | PlayHistoryObjectDict]]
+    items: NotRequired[list[PlayHistoryObjectDict]]

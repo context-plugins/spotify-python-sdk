@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Final, TypeAlias
 
-from ..core import ErrorMapper, HttpResponse, RawError, decode_json
+from ..core import ErrorMapper, RawError, decode_json
 from ..models.forbidden1 import Forbidden1
 from ..models.too_many_requests1 import TooManyRequests1
 from ..models.unauthorized1 import Unauthorized1
@@ -13,16 +13,16 @@ GetAnArtistsRelatedArtistsErrorBody: TypeAlias = Unauthorized1 | Forbidden1 | To
 
 @dataclass(frozen=True, slots=True)
 class _GetAnArtistsRelatedArtistsError:
-    def map(self, response: HttpResponse) -> GetAnArtistsRelatedArtistsErrorBody:
-        match response.status_code:
+    def map(self, status_code: int, content: bytes) -> GetAnArtistsRelatedArtistsErrorBody:
+        match status_code:
             case 401:
-                return decode_json[Unauthorized1](response)
+                return decode_json[Unauthorized1](content)
             case 403:
-                return decode_json[Forbidden1](response)
+                return decode_json[Forbidden1](content)
             case 429:
-                return decode_json[TooManyRequests1](response)
+                return decode_json[TooManyRequests1](content)
             case _:
-                return RawError(response)
+                return RawError(status_code, content)
 
 
 get_an_artists_related_artists_error_mapper: Final[

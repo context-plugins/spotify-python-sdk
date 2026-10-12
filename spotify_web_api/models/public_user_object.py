@@ -34,10 +34,10 @@ class PublicUserObject(SdkBaseModel):
 
 class PublicUserObjectDict(TypedDict):
     display_name: NotRequired[str | None]
-    external_urls: NotRequired[ExternalUrlObject | ExternalUrlObjectDict]
-    followers: NotRequired[FollowersObject | FollowersObjectDict]
+    external_urls: NotRequired[ExternalUrlObjectDict]
+    followers: NotRequired[FollowersObjectDict]
     href: NotRequired[str]
     id: NotRequired[str]
-    images: NotRequired[list[ImageObject | ImageObjectDict]]
+    images: NotRequired[list[ImageObjectDict]]
     type_: NotRequired[Type4OrStr]
     uri: NotRequired[str]

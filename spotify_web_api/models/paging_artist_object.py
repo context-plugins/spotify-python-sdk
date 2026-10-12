@@ -35,4 +35,4 @@ class PagingArtistObjectDict(TypedDict):
     offset: int
     previous: str | None
     total: int
-    items: list[ArtistObject | ArtistObjectDict]
+    items: list[ArtistObjectDict]

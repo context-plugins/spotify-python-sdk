@@ -11,4 +11,4 @@ class Forbidden1(SdkBaseModel):
 
 
 class Forbidden1Dict(TypedDict):
-    error: ErrorObject | ErrorObjectDict
+    error: ErrorObjectDict

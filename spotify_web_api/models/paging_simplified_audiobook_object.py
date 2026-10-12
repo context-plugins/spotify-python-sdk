@@ -35,4 +35,4 @@ class PagingSimplifiedAudiobookObjectDict(TypedDict):
     offset: int
     previous: str | None
     total: int
-    items: list[AudiobookBase | AudiobookBaseDict]
+    items: list[AudiobookBaseDict]

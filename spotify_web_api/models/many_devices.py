@@ -11,4 +11,4 @@ class ManyDevices(SdkBaseModel):
 
 
 class ManyDevicesDict(TypedDict):
-    devices: list[DeviceObject | DeviceObjectDict]
+    devices: list[DeviceObjectDict]

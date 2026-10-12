@@ -23,6 +23,6 @@ class CategoryObject(SdkBaseModel):
 
 class CategoryObjectDict(TypedDict):
     href: str
-    icons: list[ImageObject | ImageObjectDict]
+    icons: list[ImageObjectDict]
     id: str
     name: str

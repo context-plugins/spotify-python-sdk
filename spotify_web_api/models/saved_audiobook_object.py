@@ -17,4 +17,4 @@ class SavedAudiobookObject(SdkBaseModel):
 
 class SavedAudiobookObjectDict(TypedDict):
     added_at: NotRequired[RFC3339DateTime]
-    audiobook: NotRequired[AudiobookObject | AudiobookObjectDict]
+    audiobook: NotRequired[AudiobookObjectDict]

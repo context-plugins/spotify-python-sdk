@@ -11,4 +11,4 @@ class ManyEpisodes(SdkBaseModel):
 
 
 class ManyEpisodesDict(TypedDict):
-    episodes: list[EpisodeObject | EpisodeObjectDict]
+    episodes: list[EpisodeObjectDict]

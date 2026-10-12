@@ -1,7 +1,16 @@
 from __future__ import annotations
 
 from ..auth import AsyncAuthSchemes, AuthSchemes
-from ..core import ApiResult, AsyncRawClient, RawClient, RequestOptionsOrDict, SecuredRawResponse, json_decoder
+from ..core import (
+    ApiResult,
+    AsyncRawClient,
+    RawClient,
+    RequestOptionsOrDict,
+    SecuredRawResponse,
+    async_json_decoder,
+    json_decoder,
+    unwrap,
+)
 from ..errors.get_available_markets_error import GetAvailableMarketsErrorBody, get_available_markets_error_mapper
 from ..models.markets import Markets
 from ..server.server import Server
@@ -15,7 +24,8 @@ class MarketsApi:
         """Get the list of markets where Spotify is available.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A markets object with an array of country codes
@@ -25,7 +35,7 @@ class MarketsApi:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_available_markets(request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_available_markets(request_options=request_options))
 
     @property
     def with_raw_response(self) -> MarketsApiWithRawResponse:
@@ -40,7 +50,8 @@ class AsyncMarketsApi:
         """Get the list of markets where Spotify is available.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A markets object with an array of country codes
@@ -50,7 +61,7 @@ class AsyncMarketsApi:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.get_available_markets(request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.get_available_markets(request_options=request_options))
 
     @property
     def with_raw_response(self) -> AsyncMarketsApiWithRawResponse:
@@ -64,7 +75,8 @@ class MarketsApiWithRawResponse(SecuredRawResponse[RawClient, Server, AuthScheme
         """Get the list of markets where Spotify is available.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -85,7 +97,8 @@ class AsyncMarketsApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, 
         """Get the list of markets where Spotify is available.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -93,7 +106,7 @@ class AsyncMarketsApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, 
             http_method="GET",
             url_template=self._server.default("/markets"),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[Markets],
+            decoder=async_json_decoder[Markets],
             error_mapper=get_available_markets_error_mapper,
             request_options=request_options,
         )

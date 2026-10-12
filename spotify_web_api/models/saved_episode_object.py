@@ -16,4 +16,4 @@ class SavedEpisodeObject(SdkBaseModel):
 
 class SavedEpisodeObjectDict(TypedDict):
     added_at: NotRequired[RFC3339DateTime]
-    episode: NotRequired[EpisodeObject | EpisodeObjectDict]
+    episode: NotRequired[EpisodeObjectDict]

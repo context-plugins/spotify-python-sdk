@@ -9,10 +9,13 @@ from ..core import (
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
+    async_empty_response,
+    async_json_decoder,
     empty_response,
     json_body,
     json_decoder,
     param,
+    unwrap,
 )
 from ..errors.add_to_queue_error import AddToQueueErrorBody, add_to_queue_error_mapper
 from ..errors.get_a_users_available_devices_error import (
@@ -82,7 +85,8 @@ class Player:
         Args:
             uri: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command received
@@ -92,14 +96,15 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.add_to_queue(uri, device_id=device_id, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.add_to_queue(uri, device_id=device_id, request_options=request_options))
 
     def get_a_users_available_devices(self, *, request_options: RequestOptionsOrDict | None = None) -> ManyDevices:
         """Get information about a user’s available Spotify Connect devices. Some device models are not supported and
         will not be listed in the API response.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of devices
@@ -109,7 +114,7 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_a_users_available_devices(request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_a_users_available_devices(request_options=request_options))
 
     def get_information_about_the_users_current_playback(
         self,
@@ -124,7 +129,8 @@ class Player:
         Args:
             market: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Information about playback
@@ -134,15 +140,18 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_information_about_the_users_current_playback(
-            market=market, additional_types=additional_types, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_information_about_the_users_current_playback(
+                market=market, additional_types=additional_types, request_options=request_options
+            ),
+        )
 
     def get_queue(self, *, request_options: RequestOptionsOrDict | None = None) -> QueueObject:
         """Get the list of objects that make up the user's queue.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Information about the queue
@@ -152,7 +161,7 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_queue(request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_queue(request_options=request_options))
 
     def get_recently_played(
         self,
@@ -169,7 +178,8 @@ class Player:
             limit: Value sent with the request.
             after: Value sent with the request.
             before: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A paged set of tracks
@@ -179,9 +189,11 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_recently_played(
-            limit=limit, after=after, before=before, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_recently_played(
+                limit=limit, after=after, before=before, request_options=request_options
+            ),
+        )
 
     def get_the_users_currently_playing_track(
         self,
@@ -195,7 +207,8 @@ class Player:
         Args:
             market: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Information about the currently playing track
@@ -205,9 +218,11 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_the_users_currently_playing_track(
-            market=market, additional_types=additional_types, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_the_users_currently_playing_track(
+                market=market, additional_types=additional_types, request_options=request_options
+            ),
+        )
 
     def pause_a_users_playback(
         self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -217,7 +232,8 @@ class Player:
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Playback paused
@@ -227,9 +243,9 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.pause_a_users_playback(
-            device_id=device_id, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.pause_a_users_playback(device_id=device_id, request_options=request_options)
+        )
 
     def seek_to_position_in_currently_playing_track(
         self, position_ms: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -240,7 +256,8 @@ class Player:
         Args:
             position_ms: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -250,9 +267,11 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.seek_to_position_in_currently_playing_track(
-            position_ms, device_id=device_id, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.seek_to_position_in_currently_playing_track(
+                position_ms, device_id=device_id, request_options=request_options
+            ),
+        )
 
     def set_repeat_mode_on_users_playback(
         self, state: str, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -263,7 +282,8 @@ class Player:
         Args:
             state: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -273,9 +293,11 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.set_repeat_mode_on_users_playback(
-            state, device_id=device_id, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.set_repeat_mode_on_users_playback(
+                state, device_id=device_id, request_options=request_options
+            ),
+        )
 
     def set_volume_for_users_playback(
         self, volume_percent: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -286,7 +308,8 @@ class Player:
         Args:
             volume_percent: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -296,9 +319,11 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.set_volume_for_users_playback(
-            volume_percent, device_id=device_id, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.set_volume_for_users_playback(
+                volume_percent, device_id=device_id, request_options=request_options
+            ),
+        )
 
     def skip_users_playback_to_next_track(
         self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -308,7 +333,8 @@ class Player:
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -318,9 +344,11 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.skip_users_playback_to_next_track(
-            device_id=device_id, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.skip_users_playback_to_next_track(
+                device_id=device_id, request_options=request_options
+            ),
+        )
 
     def skip_users_playback_to_previous_track(
         self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -330,7 +358,8 @@ class Player:
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -340,9 +369,11 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.skip_users_playback_to_previous_track(
-            device_id=device_id, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.skip_users_playback_to_previous_track(
+                device_id=device_id, request_options=request_options
+            ),
+        )
 
     def start_a_users_playback(
         self,
@@ -358,7 +389,8 @@ class Player:
         Args:
             device_id: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Playback started
@@ -368,9 +400,11 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.start_a_users_playback(
-            device_id=device_id, body=body, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.start_a_users_playback(
+                device_id=device_id, body=body, request_options=request_options
+            ),
+        )
 
     def toggle_shuffle_for_users_playback(
         self, state: bool, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -381,7 +415,8 @@ class Player:
         Args:
             state: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -391,9 +426,11 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.toggle_shuffle_for_users_playback(
-            state, device_id=device_id, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.toggle_shuffle_for_users_playback(
+                state, device_id=device_id, request_options=request_options
+            ),
+        )
 
     def transfer_a_users_playback(
         self,
@@ -406,7 +443,8 @@ class Player:
 
         Args:
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Playback transferred
@@ -416,7 +454,7 @@ class Player:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.transfer_a_users_playback(body=body, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.transfer_a_users_playback(body=body, request_options=request_options))
 
     @property
     def with_raw_response(self) -> PlayerWithRawResponse:
@@ -436,7 +474,8 @@ class AsyncPlayer:
         Args:
             uri: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command received
@@ -446,9 +485,9 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.add_to_queue(uri, device_id=device_id, request_options=request_options)
-        ).unwrap()
+        )
 
     async def get_a_users_available_devices(
         self, *, request_options: RequestOptionsOrDict | None = None
@@ -457,7 +496,8 @@ class AsyncPlayer:
         will not be listed in the API response.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of devices
@@ -467,7 +507,7 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.get_a_users_available_devices(request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.get_a_users_available_devices(request_options=request_options))
 
     async def get_information_about_the_users_current_playback(
         self,
@@ -482,7 +522,8 @@ class AsyncPlayer:
         Args:
             market: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Information about playback
@@ -492,17 +533,18 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_information_about_the_users_current_playback(
                 market=market, additional_types=additional_types, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def get_queue(self, *, request_options: RequestOptionsOrDict | None = None) -> QueueObject:
         """Get the list of objects that make up the user's queue.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Information about the queue
@@ -512,7 +554,7 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.get_queue(request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.get_queue(request_options=request_options))
 
     async def get_recently_played(
         self,
@@ -529,7 +571,8 @@ class AsyncPlayer:
             limit: Value sent with the request.
             after: Value sent with the request.
             before: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A paged set of tracks
@@ -539,11 +582,11 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_recently_played(
                 limit=limit, after=after, before=before, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def get_the_users_currently_playing_track(
         self,
@@ -557,7 +600,8 @@ class AsyncPlayer:
         Args:
             market: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Information about the currently playing track
@@ -567,11 +611,11 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_the_users_currently_playing_track(
                 market=market, additional_types=additional_types, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def pause_a_users_playback(
         self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -581,7 +625,8 @@ class AsyncPlayer:
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Playback paused
@@ -591,9 +636,9 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.pause_a_users_playback(device_id=device_id, request_options=request_options)
-        ).unwrap()
+        )
 
     async def seek_to_position_in_currently_playing_track(
         self, position_ms: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -604,7 +649,8 @@ class AsyncPlayer:
         Args:
             position_ms: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -614,11 +660,11 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.seek_to_position_in_currently_playing_track(
                 position_ms, device_id=device_id, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def set_repeat_mode_on_users_playback(
         self, state: str, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -629,7 +675,8 @@ class AsyncPlayer:
         Args:
             state: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -639,11 +686,11 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.set_repeat_mode_on_users_playback(
                 state, device_id=device_id, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def set_volume_for_users_playback(
         self, volume_percent: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -654,7 +701,8 @@ class AsyncPlayer:
         Args:
             volume_percent: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -664,11 +712,11 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.set_volume_for_users_playback(
                 volume_percent, device_id=device_id, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def skip_users_playback_to_next_track(
         self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -678,7 +726,8 @@ class AsyncPlayer:
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -688,11 +737,11 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.skip_users_playback_to_next_track(
                 device_id=device_id, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def skip_users_playback_to_previous_track(
         self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -702,7 +751,8 @@ class AsyncPlayer:
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -712,11 +762,11 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.skip_users_playback_to_previous_track(
                 device_id=device_id, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def start_a_users_playback(
         self,
@@ -732,7 +782,8 @@ class AsyncPlayer:
         Args:
             device_id: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Playback started
@@ -742,11 +793,11 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.start_a_users_playback(
                 device_id=device_id, body=body, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def toggle_shuffle_for_users_playback(
         self, state: bool, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -757,7 +808,8 @@ class AsyncPlayer:
         Args:
             state: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Command sent
@@ -767,11 +819,11 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.toggle_shuffle_for_users_playback(
                 state, device_id=device_id, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def transfer_a_users_playback(
         self,
@@ -784,7 +836,8 @@ class AsyncPlayer:
 
         Args:
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Playback transferred
@@ -794,9 +847,9 @@ class AsyncPlayer:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.transfer_a_users_playback(body=body, request_options=request_options)
-        ).unwrap()
+        )
 
     @property
     def with_raw_response(self) -> AsyncPlayerWithRawResponse:
@@ -813,7 +866,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             uri: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -835,7 +889,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         will not be listed in the API response.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -861,7 +916,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             market: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -881,7 +937,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         """Get the list of objects that make up the user's queue.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -909,7 +966,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
             limit: Value sent with the request.
             after: Value sent with the request.
             before: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -939,7 +997,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             market: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -961,7 +1020,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -985,7 +1045,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             position_ms: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1009,7 +1070,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             state: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1033,7 +1095,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             volume_percent: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1056,7 +1119,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1079,7 +1143,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1108,7 +1173,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             device_id: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1133,7 +1199,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             state: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1159,7 +1226,8 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
         Args:
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1185,7 +1253,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             uri: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1195,7 +1264,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             query_params=[param[str]("uri", uri), param[str | None]("device_id", device_id)],
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=add_to_queue_error_mapper,
             request_options=request_options,
         )
@@ -1207,7 +1276,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         will not be listed in the API response.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1215,7 +1285,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             http_method="GET",
             url_template=self._server.default("/me/player/devices"),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[ManyDevices],
+            decoder=async_json_decoder[ManyDevices],
             error_mapper=get_a_users_available_devices_error_mapper,
             request_options=request_options,
         )
@@ -1233,7 +1303,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             market: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1242,7 +1313,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             url_template=self._server.default("/me/player"),
             query_params=[param[str | None]("market", market), param[str | None]("additional_types", additional_types)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[CurrentlyPlayingContextObject],
+            decoder=async_json_decoder[CurrentlyPlayingContextObject],
             error_mapper=get_information_about_the_users_current_playback_error_mapper,
             request_options=request_options,
         )
@@ -1253,7 +1324,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         """Get the list of objects that make up the user's queue.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1261,7 +1333,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             http_method="GET",
             url_template=self._server.default("/me/player/queue"),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[QueueObject],
+            decoder=async_json_decoder[QueueObject],
             error_mapper=get_queue_error_mapper,
             request_options=request_options,
         )
@@ -1281,7 +1353,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             limit: Value sent with the request.
             after: Value sent with the request.
             before: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1294,7 +1367,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
                 param[int | None]("before", before),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[CursorPagingPlayHistoryObject],
+            decoder=async_json_decoder[CursorPagingPlayHistoryObject],
             error_mapper=get_recently_played_error_mapper,
             request_options=request_options,
         )
@@ -1311,7 +1384,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             market: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1320,7 +1394,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             url_template=self._server.default("/me/player/currently-playing"),
             query_params=[param[str | None]("market", market), param[str | None]("additional_types", additional_types)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[CurrentlyPlayingObject],
+            decoder=async_json_decoder[CurrentlyPlayingObject],
             error_mapper=get_the_users_currently_playing_track_error_mapper,
             request_options=request_options,
         )
@@ -1333,7 +1407,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1343,7 +1418,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             query_params=[param[str | None]("device_id", device_id)],
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=pause_a_users_playback_error_mapper,
             request_options=request_options,
         )
@@ -1357,7 +1432,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             position_ms: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1367,7 +1443,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             query_params=[param[int]("position_ms", position_ms), param[str | None]("device_id", device_id)],
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=seek_to_position_in_currently_playing_track_error_mapper,
             request_options=request_options,
         )
@@ -1381,7 +1457,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             state: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1391,7 +1468,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             query_params=[param[str]("state", state), param[str | None]("device_id", device_id)],
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=set_repeat_mode_on_users_playback_error_mapper,
             request_options=request_options,
         )
@@ -1405,7 +1482,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             volume_percent: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1415,7 +1493,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             query_params=[param[int]("volume_percent", volume_percent), param[str | None]("device_id", device_id)],
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=set_volume_for_users_playback_error_mapper,
             request_options=request_options,
         )
@@ -1428,7 +1506,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1438,7 +1517,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             query_params=[param[str | None]("device_id", device_id)],
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=skip_users_playback_to_next_track_error_mapper,
             request_options=request_options,
         )
@@ -1451,7 +1530,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
 
         Args:
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1461,7 +1541,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             query_params=[param[str | None]("device_id", device_id)],
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=skip_users_playback_to_previous_track_error_mapper,
             request_options=request_options,
         )
@@ -1480,7 +1560,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             device_id: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1491,7 +1572,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[StartOrResumePlaybackRequest | StartOrResumePlaybackRequestDict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=start_a_users_playback_error_mapper,
             request_options=request_options,
         )
@@ -1505,7 +1586,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             state: Value sent with the request.
             device_id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1515,7 +1597,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             query_params=[param[bool]("state", state), param[str | None]("device_id", device_id)],
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=toggle_shuffle_for_users_playback_error_mapper,
             request_options=request_options,
         )
@@ -1531,7 +1613,8 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
 
         Args:
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1541,7 +1624,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[MePlayerRequest | MePlayerRequestDict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=transfer_a_users_playback_error_mapper,
             request_options=request_options,
         )

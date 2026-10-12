@@ -15,4 +15,4 @@ class PagingFeaturedPlaylistObject(SdkBaseModel):
 
 class PagingFeaturedPlaylistObjectDict(TypedDict):
     message: NotRequired[str]
-    playlists: NotRequired[PagingPlaylistObject | PagingPlaylistObjectDict]
+    playlists: NotRequired[PagingPlaylistObjectDict]

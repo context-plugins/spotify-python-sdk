@@ -16,5 +16,5 @@ class QueueObject(SdkBaseModel):
 
 
 class QueueObjectDict(TypedDict):
-    currently_playing: NotRequired[CurrentlyPlaying | CurrentlyPlayingDict]
-    queue: NotRequired[list[Queue | QueueDict]]
+    currently_playing: NotRequired[CurrentlyPlayingDict]
+    queue: NotRequired[list[QueueDict]]

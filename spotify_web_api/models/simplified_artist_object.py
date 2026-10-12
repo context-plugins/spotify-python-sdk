@@ -27,7 +27,7 @@ class SimplifiedArtistObject(SdkBaseModel):
 
 
 class SimplifiedArtistObjectDict(TypedDict):
-    external_urls: NotRequired[ExternalUrlObject | ExternalUrlObjectDict]
+    external_urls: NotRequired[ExternalUrlObjectDict]
     href: NotRequired[str]
     id: NotRequired[str]
     name: NotRequired[str]

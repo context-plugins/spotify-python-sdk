@@ -70,14 +70,14 @@ class ShowObject(SdkBaseModel):
 
 class ShowObjectDict(TypedDict):
     available_markets: list[str]
-    copyrights: list[CopyrightObject | CopyrightObjectDict]
+    copyrights: list[CopyrightObjectDict]
     description: str
     html_description: str
     explicit: bool
-    external_urls: ExternalUrlObject | ExternalUrlObjectDict
+    external_urls: ExternalUrlObjectDict
     href: str
     id: str
-    images: list[ImageObject | ImageObjectDict]
+    images: list[ImageObjectDict]
     is_externally_hosted: bool
     languages: list[str]
     media_type: str
@@ -86,4 +86,4 @@ class ShowObjectDict(TypedDict):
     type_: Type6OrStr
     uri: str
     total_episodes: int
-    episodes: PagingSimplifiedEpisodeObject | PagingSimplifiedEpisodeObjectDict
+    episodes: PagingSimplifiedEpisodeObjectDict

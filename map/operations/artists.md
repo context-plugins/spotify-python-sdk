@@ -52,9 +52,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /artists/{id}`
 - **Auth**: `oauth_2_0` OR `oauth_2_0_client_credentials`
-- **Signature**: `def get_an_artist(id: str, *, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path
+- **Signature**: `def get_an_artist(id_: str, *, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id`
 - **Returns (parsed)**: `ArtistObject`
 - **Returns (raw)**: `ApiResult[ArtistObject, GetAnArtistErrorBody]`
 - **Error**: `GetAnArtistErrorBody` — **Case A (typed)**
@@ -72,9 +72,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /artists/{id}/albums`
 - **Auth**: `oauth_2_0` OR `oauth_2_0_client_credentials`
-- **Signature**: `def get_an_artists_albums(id: str, *, include_groups: str | None = None, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `include_groups` — query · `market` — query · `limit` — query · `offset` — query
+- **Signature**: `def get_an_artists_albums(id_: str, *, include_groups: str | None = None, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `include_groups` — query · `market` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingArtistDiscographyAlbumObject`
 - **Returns (raw)**: `ApiResult[PagingArtistDiscographyAlbumObject, GetAnArtistsAlbumsErrorBody]`
 - **Error**: `GetAnArtistsAlbumsErrorBody` — **Case A (typed)**
@@ -92,9 +92,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /artists/{id}/related-artists`
 - **Auth**: `oauth_2_0`
-- **Signature**: `def get_an_artists_related_artists(id: str, *, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path
+- **Signature**: `def get_an_artists_related_artists(id_: str, *, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id`
 - **Returns (parsed)**: `ManyArtists`
 - **Returns (raw)**: `ApiResult[ManyArtists, GetAnArtistsRelatedArtistsErrorBody]`
 - **Error**: `GetAnArtistsRelatedArtistsErrorBody` — **Case A (typed)**
@@ -112,9 +112,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /artists/{id}/top-tracks`
 - **Auth**: `oauth_2_0`
-- **Signature**: `def get_an_artists_top_tracks(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query
+- **Signature**: `def get_an_artists_top_tracks(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query
 - **Returns (parsed)**: `ManyTracks`
 - **Returns (raw)**: `ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]`
 - **Error**: `GetAnArtistsTopTracksErrorBody` — **Case A (typed)**

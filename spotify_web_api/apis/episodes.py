@@ -9,10 +9,13 @@ from ..core import (
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
+    async_empty_response,
+    async_json_decoder,
     empty_response,
     json_body,
     json_decoder,
     param,
+    unwrap,
 )
 from ..errors.check_users_saved_episodes_error import (
     CheckUsersSavedEpisodesErrorBody,
@@ -50,7 +53,8 @@ class Episodes:
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Array of booleans
@@ -60,11 +64,11 @@ class Episodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.check_users_saved_episodes(ids, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.check_users_saved_episodes(ids, request_options=request_options))
 
     def get_a_shows_episodes(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -75,11 +79,12 @@ class Episodes:
         of episodes returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of episodes
@@ -89,19 +94,22 @@ class Episodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_a_shows_episodes(
-            id, market=market, limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_a_shows_episodes(
+                id_, market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     def get_an_episode(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> EpisodeObject:
         """Get Spotify catalog information for a single episode identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An episode
@@ -111,7 +119,7 @@ class Episodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_an_episode(id, market=market, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_an_episode(id_, market=market, request_options=request_options))
 
     def get_multiple_episodes(
         self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -121,7 +129,8 @@ class Episodes:
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of episodes
@@ -131,9 +140,9 @@ class Episodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_multiple_episodes(
-            ids, market=market, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_multiple_episodes(ids, market=market, request_options=request_options)
+        )
 
     def get_users_saved_episodes(
         self,
@@ -151,7 +160,8 @@ class Episodes:
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of episodes
@@ -161,9 +171,11 @@ class Episodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_users_saved_episodes(
-            market=market, limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_users_saved_episodes(
+                market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     def remove_episodes_user(
         self,
@@ -179,7 +191,8 @@ class Episodes:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Episode removed
@@ -189,7 +202,7 @@ class Episodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.remove_episodes_user(ids, body=body, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.remove_episodes_user(ids, body=body, request_options=request_options))
 
     def save_episodes_user(
         self,
@@ -205,7 +218,8 @@ class Episodes:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Episode saved
@@ -215,7 +229,7 @@ class Episodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.save_episodes_user(ids, body=body, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.save_episodes_user(ids, body=body, request_options=request_options))
 
     @property
     def with_raw_response(self) -> EpisodesWithRawResponse:
@@ -236,7 +250,8 @@ class AsyncEpisodes:
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Array of booleans
@@ -246,11 +261,11 @@ class AsyncEpisodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.check_users_saved_episodes(ids, request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.check_users_saved_episodes(ids, request_options=request_options))
 
     async def get_a_shows_episodes(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -261,11 +276,12 @@ class AsyncEpisodes:
         of episodes returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of episodes
@@ -275,21 +291,22 @@ class AsyncEpisodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_a_shows_episodes(
-                id, market=market, limit=limit, offset=offset, request_options=request_options
-            )
-        ).unwrap()
+                id_, market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     async def get_an_episode(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> EpisodeObject:
         """Get Spotify catalog information for a single episode identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An episode
@@ -299,9 +316,7 @@ class AsyncEpisodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
-            await self._with_raw_response.get_an_episode(id, market=market, request_options=request_options)
-        ).unwrap()
+        return unwrap(await self._with_raw_response.get_an_episode(id_, market=market, request_options=request_options))
 
     async def get_multiple_episodes(
         self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -311,7 +326,8 @@ class AsyncEpisodes:
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of episodes
@@ -321,9 +337,9 @@ class AsyncEpisodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_multiple_episodes(ids, market=market, request_options=request_options)
-        ).unwrap()
+        )
 
     async def get_users_saved_episodes(
         self,
@@ -341,7 +357,8 @@ class AsyncEpisodes:
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of episodes
@@ -351,11 +368,11 @@ class AsyncEpisodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_users_saved_episodes(
                 market=market, limit=limit, offset=offset, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def remove_episodes_user(
         self,
@@ -371,7 +388,8 @@ class AsyncEpisodes:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Episode removed
@@ -381,9 +399,9 @@ class AsyncEpisodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.remove_episodes_user(ids, body=body, request_options=request_options)
-        ).unwrap()
+        )
 
     async def save_episodes_user(
         self,
@@ -399,7 +417,8 @@ class AsyncEpisodes:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Episode saved
@@ -409,9 +428,7 @@ class AsyncEpisodes:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
-            await self._with_raw_response.save_episodes_user(ids, body=body, request_options=request_options)
-        ).unwrap()
+        return unwrap(await self._with_raw_response.save_episodes_user(ids, body=body, request_options=request_options))
 
     @property
     def with_raw_response(self) -> AsyncEpisodesWithRawResponse:
@@ -429,7 +446,8 @@ class EpisodesWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -445,7 +463,7 @@ class EpisodesWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
 
     def get_a_shows_episodes(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -456,18 +474,19 @@ class EpisodesWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
         of episodes returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/shows/{id}/episodes"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("market", market),
                 param[int | None]("limit", limit),
@@ -480,21 +499,22 @@ class EpisodesWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
         )
 
     def get_an_episode(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[EpisodeObject, GetAnEpisodeErrorBody]:
         """Get Spotify catalog information for a single episode identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/episodes/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
             decoder=json_decoder[EpisodeObject],
@@ -510,7 +530,8 @@ class EpisodesWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -540,7 +561,8 @@ class EpisodesWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -572,7 +594,8 @@ class EpisodesWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -602,7 +625,8 @@ class EpisodesWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -630,7 +654,8 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -639,14 +664,14 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
             url_template=self._server.default("/me/episodes/contains"),
             query_params=[param[str]("ids", ids)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[list[bool]],
+            decoder=async_json_decoder[list[bool]],
             error_mapper=check_users_saved_episodes_error_mapper,
             request_options=request_options,
         )
 
     async def get_a_shows_episodes(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -657,48 +682,50 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         of episodes returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/shows/{id}/episodes"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("market", market),
                 param[int | None]("limit", limit),
                 param[int | None]("offset", offset),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagingSimplifiedEpisodeObject],
+            decoder=async_json_decoder[PagingSimplifiedEpisodeObject],
             error_mapper=get_a_shows_episodes_error_mapper,
             request_options=request_options,
         )
 
     async def get_an_episode(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[EpisodeObject, GetAnEpisodeErrorBody]:
         """Get Spotify catalog information for a single episode identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/episodes/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[EpisodeObject],
+            decoder=async_json_decoder[EpisodeObject],
             error_mapper=get_an_episode_error_mapper,
             request_options=request_options,
         )
@@ -711,7 +738,8 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -720,7 +748,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
             url_template=self._server.default("/episodes"),
             query_params=[param[str]("ids", ids), param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[ManyEpisodes],
+            decoder=async_json_decoder[ManyEpisodes],
             error_mapper=get_multiple_episodes_error_mapper,
             request_options=request_options,
         )
@@ -741,7 +769,8 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -754,7 +783,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
                 param[int | None]("offset", offset),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagingSavedEpisodeObject],
+            decoder=async_json_decoder[PagingSavedEpisodeObject],
             error_mapper=get_users_saved_episodes_error_mapper,
             request_options=request_options,
         )
@@ -773,7 +802,8 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -784,7 +814,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[RemoveEpisodesRequest | RemoveEpisodesRequestDict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=remove_episodes_user_error_mapper,
             request_options=request_options,
         )
@@ -803,7 +833,8 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -814,7 +845,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[SaveEpisodesRequest | SaveEpisodesRequestDict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=save_episodes_user_error_mapper,
             request_options=request_options,
         )

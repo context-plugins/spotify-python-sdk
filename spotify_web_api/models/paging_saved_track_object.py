@@ -35,4 +35,4 @@ class PagingSavedTrackObjectDict(TypedDict):
     offset: int
     previous: str | None
     total: int
-    items: list[SavedTrackObject | SavedTrackObjectDict]
+    items: list[SavedTrackObjectDict]

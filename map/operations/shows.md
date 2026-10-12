@@ -29,9 +29,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /shows/{id}`
 - **Auth**: `oauth_2_0`
-- **Signature**: `def get_a_show(id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query
+- **Signature**: `def get_a_show(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query
 - **Returns (parsed)**: `ShowObject`
 - **Returns (raw)**: `ApiResult[ShowObject, GetAShowErrorBody]`
 - **Error**: `GetAShowErrorBody` — **Case A (typed)**
@@ -49,9 +49,9 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /shows/{id}/episodes`
 - **Auth**: `oauth_2_0`
-- **Signature**: `def get_a_shows_episodes(id: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
-  - required, positional: `id`
-- **Params**: `id` — path · `market` — query · `limit` — query · `offset` — query
+- **Signature**: `def get_a_shows_episodes(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
+  - required, positional: `id_`
+- **Params**: `id_` — path `id` · `market` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSimplifiedEpisodeObject`
 - **Returns (raw)**: `ApiResult[PagingSimplifiedEpisodeObject, GetAShowsEpisodesErrorBody]`
 - **Error**: `GetAShowsEpisodesErrorBody` — **Case A (typed)**

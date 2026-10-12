@@ -17,4 +17,4 @@ class SavedAlbumObject(SdkBaseModel):
 
 class SavedAlbumObjectDict(TypedDict):
     added_at: NotRequired[RFC3339DateTime]
-    album: NotRequired[AlbumObject | AlbumObjectDict]
+    album: NotRequired[AlbumObjectDict]

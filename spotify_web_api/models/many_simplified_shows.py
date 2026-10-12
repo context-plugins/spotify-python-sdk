@@ -11,4 +11,4 @@ class ManySimplifiedShows(SdkBaseModel):
 
 
 class ManySimplifiedShowsDict(TypedDict):
-    shows: list[ShowBase | ShowBaseDict]
+    shows: list[ShowBaseDict]

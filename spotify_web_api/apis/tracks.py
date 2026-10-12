@@ -11,10 +11,13 @@ from ..core import (
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
+    async_empty_response,
+    async_json_decoder,
     empty_response,
     json_body,
     json_decoder,
     param,
+    unwrap,
 )
 from ..errors.add_tracks_to_playlist_error import AddTracksToPlaylistErrorBody, add_tracks_to_playlist_error_mapper
 from ..errors.check_users_saved_tracks_error import (
@@ -84,7 +87,8 @@ class Tracks:
             position: Value sent with the request.
             uris: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A snapshot ID for the playlist
@@ -94,16 +98,19 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.add_tracks_to_playlist(
-            playlist_id, position=position, uris=uris, body=body, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.add_tracks_to_playlist(
+                playlist_id, position=position, uris=uris, body=body, request_options=request_options
+            ),
+        )
 
     def check_users_saved_tracks(self, ids: str, *, request_options: RequestOptionsOrDict | None = None) -> list[bool]:
         """Check if one or more tracks is already saved in the current Spotify user's 'Your Music' library.
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Array of booleans
@@ -113,11 +120,11 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.check_users_saved_tracks(ids, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.check_users_saved_tracks(ids, request_options=request_options))
 
     def get_an_albums_tracks(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -128,11 +135,12 @@ class Tracks:
         of tracks returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -142,19 +150,22 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_an_albums_tracks(
-            id, market=market, limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_an_albums_tracks(
+                id_, market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     def get_an_artists_top_tracks(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ManyTracks:
         """Get Spotify catalog information about an artist's top tracks by country.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of tracks
@@ -164,19 +175,20 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_an_artists_top_tracks(
-            id, market=market, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_an_artists_top_tracks(id_, market=market, request_options=request_options)
+        )
 
     def get_audio_analysis(
-        self, id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
     ) -> AudioAnalysisObject:
         """Get a low-level audio analysis for a track in the Spotify catalog. The audio analysis describes the track’s
         structure and musical content, including rhythm, pitch, and timbre.
 
         Args:
-            id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            id_: Value sent with the request.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Audio analysis for one track
@@ -186,16 +198,17 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_audio_analysis(id, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_audio_analysis(id_, request_options=request_options))
 
     def get_audio_features(
-        self, id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
     ) -> AudioFeaturesObject:
         """Get audio feature information for a single track identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            id_: Value sent with the request.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Audio features for one track
@@ -205,7 +218,7 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_audio_features(id, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_audio_features(id_, request_options=request_options))
 
     def get_playlists_tracks(
         self,
@@ -227,7 +240,8 @@ class Tracks:
             limit: Value sent with the request.
             offset: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -237,15 +251,17 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_playlists_tracks(
-            playlist_id,
-            market=market,
-            fields=fields,
-            limit=limit,
-            offset=offset,
-            additional_types=additional_types,
-            request_options=request_options,
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_playlists_tracks(
+                playlist_id,
+                market=market,
+                fields=fields,
+                limit=limit,
+                offset=offset,
+                additional_types=additional_types,
+                request_options=request_options,
+            ),
+        )
 
     def get_recommendations(
         self,
@@ -353,7 +369,8 @@ class Tracks:
             min_valence: Value sent with the request.
             max_valence: Value sent with the request.
             target_valence: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of recommendations
@@ -363,56 +380,58 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_recommendations(
-            limit=limit,
-            market=market,
-            seed_artists=seed_artists,
-            seed_genres=seed_genres,
-            seed_tracks=seed_tracks,
-            min_acousticness=min_acousticness,
-            max_acousticness=max_acousticness,
-            target_acousticness=target_acousticness,
-            min_danceability=min_danceability,
-            max_danceability=max_danceability,
-            target_danceability=target_danceability,
-            min_duration_ms=min_duration_ms,
-            max_duration_ms=max_duration_ms,
-            target_duration_ms=target_duration_ms,
-            min_energy=min_energy,
-            max_energy=max_energy,
-            target_energy=target_energy,
-            min_instrumentalness=min_instrumentalness,
-            max_instrumentalness=max_instrumentalness,
-            target_instrumentalness=target_instrumentalness,
-            min_key=min_key,
-            max_key=max_key,
-            target_key=target_key,
-            min_liveness=min_liveness,
-            max_liveness=max_liveness,
-            target_liveness=target_liveness,
-            min_loudness=min_loudness,
-            max_loudness=max_loudness,
-            target_loudness=target_loudness,
-            min_mode=min_mode,
-            max_mode=max_mode,
-            target_mode=target_mode,
-            min_popularity=min_popularity,
-            max_popularity=max_popularity,
-            target_popularity=target_popularity,
-            min_speechiness=min_speechiness,
-            max_speechiness=max_speechiness,
-            target_speechiness=target_speechiness,
-            min_tempo=min_tempo,
-            max_tempo=max_tempo,
-            target_tempo=target_tempo,
-            min_time_signature=min_time_signature,
-            max_time_signature=max_time_signature,
-            target_time_signature=target_time_signature,
-            min_valence=min_valence,
-            max_valence=max_valence,
-            target_valence=target_valence,
-            request_options=request_options,
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_recommendations(
+                limit=limit,
+                market=market,
+                seed_artists=seed_artists,
+                seed_genres=seed_genres,
+                seed_tracks=seed_tracks,
+                min_acousticness=min_acousticness,
+                max_acousticness=max_acousticness,
+                target_acousticness=target_acousticness,
+                min_danceability=min_danceability,
+                max_danceability=max_danceability,
+                target_danceability=target_danceability,
+                min_duration_ms=min_duration_ms,
+                max_duration_ms=max_duration_ms,
+                target_duration_ms=target_duration_ms,
+                min_energy=min_energy,
+                max_energy=max_energy,
+                target_energy=target_energy,
+                min_instrumentalness=min_instrumentalness,
+                max_instrumentalness=max_instrumentalness,
+                target_instrumentalness=target_instrumentalness,
+                min_key=min_key,
+                max_key=max_key,
+                target_key=target_key,
+                min_liveness=min_liveness,
+                max_liveness=max_liveness,
+                target_liveness=target_liveness,
+                min_loudness=min_loudness,
+                max_loudness=max_loudness,
+                target_loudness=target_loudness,
+                min_mode=min_mode,
+                max_mode=max_mode,
+                target_mode=target_mode,
+                min_popularity=min_popularity,
+                max_popularity=max_popularity,
+                target_popularity=target_popularity,
+                min_speechiness=min_speechiness,
+                max_speechiness=max_speechiness,
+                target_speechiness=target_speechiness,
+                min_tempo=min_tempo,
+                max_tempo=max_tempo,
+                target_tempo=target_tempo,
+                min_time_signature=min_time_signature,
+                max_time_signature=max_time_signature,
+                target_time_signature=target_time_signature,
+                min_valence=min_valence,
+                max_valence=max_valence,
+                target_valence=target_valence,
+                request_options=request_options,
+            ),
+        )
 
     def get_several_audio_features(
         self, ids: str, *, request_options: RequestOptionsOrDict | None = None
@@ -421,7 +440,8 @@ class Tracks:
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of audio features
@@ -431,7 +451,7 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_several_audio_features(ids, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_several_audio_features(ids, request_options=request_options))
 
     def get_several_tracks(
         self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -441,7 +461,8 @@ class Tracks:
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of tracks
@@ -451,17 +472,18 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_several_tracks(ids, market=market, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_several_tracks(ids, market=market, request_options=request_options))
 
     def get_track(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> TrackObject:
         """Get Spotify catalog information for a single track identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A track
@@ -471,7 +493,7 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_track(id, market=market, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_track(id_, market=market, request_options=request_options))
 
     def get_users_saved_tracks(
         self,
@@ -487,7 +509,8 @@ class Tracks:
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -497,9 +520,11 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_users_saved_tracks(
-            market=market, limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_users_saved_tracks(
+                market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     def get_users_top_tracks(
         self,
@@ -515,7 +540,8 @@ class Tracks:
             time_range: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -525,9 +551,11 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_users_top_tracks(
-            time_range=time_range, limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_users_top_tracks(
+                time_range=time_range, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     def remove_tracks_playlist(
         self,
@@ -541,7 +569,8 @@ class Tracks:
         Args:
             playlist_id: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A snapshot ID for the playlist
@@ -551,9 +580,9 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.remove_tracks_playlist(
-            playlist_id, body=body, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.remove_tracks_playlist(playlist_id, body=body, request_options=request_options)
+        )
 
     def remove_tracks_user(
         self,
@@ -567,7 +596,8 @@ class Tracks:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Track removed
@@ -577,7 +607,7 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.remove_tracks_user(ids, body=body, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.remove_tracks_user(ids, body=body, request_options=request_options))
 
     def reorder_or_replace_playlists_tracks(
         self,
@@ -598,7 +628,8 @@ class Tracks:
             playlist_id: Value sent with the request.
             uris: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A snapshot ID for the playlist
@@ -608,9 +639,11 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.reorder_or_replace_playlists_tracks(
-            playlist_id, uris=uris, body=body, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.reorder_or_replace_playlists_tracks(
+                playlist_id, uris=uris, body=body, request_options=request_options
+            ),
+        )
 
     def save_tracks_user(
         self,
@@ -624,7 +657,8 @@ class Tracks:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Track saved
@@ -634,7 +668,7 @@ class Tracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.save_tracks_user(ids, body=body, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.save_tracks_user(ids, body=body, request_options=request_options))
 
     @property
     def with_raw_response(self) -> TracksWithRawResponse:
@@ -661,7 +695,8 @@ class AsyncTracks:
             position: Value sent with the request.
             uris: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A snapshot ID for the playlist
@@ -671,11 +706,11 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.add_tracks_to_playlist(
                 playlist_id, position=position, uris=uris, body=body, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def check_users_saved_tracks(
         self, ids: str, *, request_options: RequestOptionsOrDict | None = None
@@ -684,7 +719,8 @@ class AsyncTracks:
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Array of booleans
@@ -694,11 +730,11 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.check_users_saved_tracks(ids, request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.check_users_saved_tracks(ids, request_options=request_options))
 
     async def get_an_albums_tracks(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -709,11 +745,12 @@ class AsyncTracks:
         of tracks returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -723,21 +760,22 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_an_albums_tracks(
-                id, market=market, limit=limit, offset=offset, request_options=request_options
-            )
-        ).unwrap()
+                id_, market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     async def get_an_artists_top_tracks(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ManyTracks:
         """Get Spotify catalog information about an artist's top tracks by country.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of tracks
@@ -747,19 +785,20 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
-            await self._with_raw_response.get_an_artists_top_tracks(id, market=market, request_options=request_options)
-        ).unwrap()
+        return unwrap(
+            await self._with_raw_response.get_an_artists_top_tracks(id_, market=market, request_options=request_options)
+        )
 
     async def get_audio_analysis(
-        self, id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
     ) -> AudioAnalysisObject:
         """Get a low-level audio analysis for a track in the Spotify catalog. The audio analysis describes the track’s
         structure and musical content, including rhythm, pitch, and timbre.
 
         Args:
-            id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            id_: Value sent with the request.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Audio analysis for one track
@@ -769,16 +808,17 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.get_audio_analysis(id, request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.get_audio_analysis(id_, request_options=request_options))
 
     async def get_audio_features(
-        self, id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
     ) -> AudioFeaturesObject:
         """Get audio feature information for a single track identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            id_: Value sent with the request.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Audio features for one track
@@ -788,7 +828,7 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.get_audio_features(id, request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.get_audio_features(id_, request_options=request_options))
 
     async def get_playlists_tracks(
         self,
@@ -810,7 +850,8 @@ class AsyncTracks:
             limit: Value sent with the request.
             offset: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -820,7 +861,7 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_playlists_tracks(
                 playlist_id,
                 market=market,
@@ -829,8 +870,8 @@ class AsyncTracks:
                 offset=offset,
                 additional_types=additional_types,
                 request_options=request_options,
-            )
-        ).unwrap()
+            ),
+        )
 
     async def get_recommendations(
         self,
@@ -938,7 +979,8 @@ class AsyncTracks:
             min_valence: Value sent with the request.
             max_valence: Value sent with the request.
             target_valence: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of recommendations
@@ -948,7 +990,7 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_recommendations(
                 limit=limit,
                 market=market,
@@ -998,8 +1040,8 @@ class AsyncTracks:
                 max_valence=max_valence,
                 target_valence=target_valence,
                 request_options=request_options,
-            )
-        ).unwrap()
+            ),
+        )
 
     async def get_several_audio_features(
         self, ids: str, *, request_options: RequestOptionsOrDict | None = None
@@ -1008,7 +1050,8 @@ class AsyncTracks:
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of audio features
@@ -1018,7 +1061,7 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.get_several_audio_features(ids, request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.get_several_audio_features(ids, request_options=request_options))
 
     async def get_several_tracks(
         self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -1028,7 +1071,8 @@ class AsyncTracks:
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of tracks
@@ -1038,19 +1082,20 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_several_tracks(ids, market=market, request_options=request_options)
-        ).unwrap()
+        )
 
     async def get_track(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> TrackObject:
         """Get Spotify catalog information for a single track identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A track
@@ -1060,7 +1105,7 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.get_track(id, market=market, request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.get_track(id_, market=market, request_options=request_options))
 
     async def get_users_saved_tracks(
         self,
@@ -1076,7 +1121,8 @@ class AsyncTracks:
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -1086,11 +1132,11 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_users_saved_tracks(
                 market=market, limit=limit, offset=offset, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def get_users_top_tracks(
         self,
@@ -1106,7 +1152,8 @@ class AsyncTracks:
             time_range: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -1116,11 +1163,11 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_users_top_tracks(
                 time_range=time_range, limit=limit, offset=offset, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def remove_tracks_playlist(
         self,
@@ -1134,7 +1181,8 @@ class AsyncTracks:
         Args:
             playlist_id: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A snapshot ID for the playlist
@@ -1144,11 +1192,11 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.remove_tracks_playlist(
                 playlist_id, body=body, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def remove_tracks_user(
         self,
@@ -1162,7 +1210,8 @@ class AsyncTracks:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Track removed
@@ -1172,9 +1221,7 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
-            await self._with_raw_response.remove_tracks_user(ids, body=body, request_options=request_options)
-        ).unwrap()
+        return unwrap(await self._with_raw_response.remove_tracks_user(ids, body=body, request_options=request_options))
 
     async def reorder_or_replace_playlists_tracks(
         self,
@@ -1195,7 +1242,8 @@ class AsyncTracks:
             playlist_id: Value sent with the request.
             uris: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A snapshot ID for the playlist
@@ -1205,11 +1253,11 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.reorder_or_replace_playlists_tracks(
                 playlist_id, uris=uris, body=body, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def save_tracks_user(
         self,
@@ -1223,7 +1271,8 @@ class AsyncTracks:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Track saved
@@ -1233,9 +1282,7 @@ class AsyncTracks:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
-            await self._with_raw_response.save_tracks_user(ids, body=body, request_options=request_options)
-        ).unwrap()
+        return unwrap(await self._with_raw_response.save_tracks_user(ids, body=body, request_options=request_options))
 
     @property
     def with_raw_response(self) -> AsyncTracksWithRawResponse:
@@ -1259,7 +1306,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
             position: Value sent with the request.
             uris: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1283,7 +1331,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1299,7 +1348,7 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
     def get_an_albums_tracks(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -1310,18 +1359,19 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         of tracks returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/albums/{id}/tracks"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("market", market),
                 param[int | None]("limit", limit),
@@ -1334,21 +1384,22 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         )
 
     def get_an_artists_top_tracks(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]:
         """Get Spotify catalog information about an artist's top tracks by country.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/artists/{id}/top-tracks"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
             decoder=json_decoder[ManyTracks],
@@ -1357,21 +1408,22 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         )
 
     def get_audio_analysis(
-        self, id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[AudioAnalysisObject, GetAudioAnalysisErrorBody]:
         """Get a low-level audio analysis for a track in the Spotify catalog. The audio analysis describes the track’s
         structure and musical content, including rhythm, pitch, and timbre.
 
         Args:
-            id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            id_: Value sent with the request.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/audio-analysis/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             auth_scheme=self._auth.oauth_2_0,
             decoder=json_decoder[AudioAnalysisObject],
             error_mapper=get_audio_analysis_error_mapper,
@@ -1379,20 +1431,21 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         )
 
     def get_audio_features(
-        self, id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[AudioFeaturesObject, GetAudioFeaturesErrorBody]:
         """Get audio feature information for a single track identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            id_: Value sent with the request.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/audio-features/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             auth_scheme=self._auth.oauth_2_0,
             decoder=json_decoder[AudioFeaturesObject],
             error_mapper=get_audio_features_error_mapper,
@@ -1419,7 +1472,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
             limit: Value sent with the request.
             offset: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1546,7 +1600,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
             min_valence: Value sent with the request.
             max_valence: Value sent with the request.
             target_valence: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1615,7 +1670,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1637,7 +1693,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1652,21 +1709,22 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         )
 
     def get_track(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[TrackObject, GetTrackErrorBody]:
         """Get Spotify catalog information for a single track identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/tracks/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=AnySchemes(self._auth.oauth_2_0, self._auth.oauth_2_0_client_credentials),
             decoder=json_decoder[TrackObject],
@@ -1688,7 +1746,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1720,7 +1779,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
             time_range: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1750,7 +1810,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             playlist_id: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1778,7 +1839,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1813,7 +1875,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
             playlist_id: Value sent with the request.
             uris: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1842,7 +1905,8 @@ class TracksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1876,7 +1940,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             position: Value sent with the request.
             uris: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1888,7 +1953,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[PlaylistsTracksRequest | PlaylistsTracksRequestDict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PlaylistSnapshotId],
+            decoder=async_json_decoder[PlaylistSnapshotId],
             error_mapper=add_tracks_to_playlist_error_mapper,
             request_options=request_options,
         )
@@ -1900,7 +1965,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1909,14 +1975,14 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             url_template=self._server.default("/me/tracks/contains"),
             query_params=[param[str]("ids", ids)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[list[bool]],
+            decoder=async_json_decoder[list[bool]],
             error_mapper=check_users_saved_tracks_error_mapper,
             request_options=request_options,
         )
 
     async def get_an_albums_tracks(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -1927,91 +1993,95 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         of tracks returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/albums/{id}/tracks"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("market", market),
                 param[int | None]("limit", limit),
                 param[int | None]("offset", offset),
             ],
             auth_scheme=AsyncAnySchemes(self._auth.oauth_2_0, self._auth.oauth_2_0_client_credentials),
-            decoder=json_decoder[PagingSimplifiedTrackObject],
+            decoder=async_json_decoder[PagingSimplifiedTrackObject],
             error_mapper=get_an_albums_tracks_error_mapper,
             request_options=request_options,
         )
 
     async def get_an_artists_top_tracks(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]:
         """Get Spotify catalog information about an artist's top tracks by country.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/artists/{id}/top-tracks"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[ManyTracks],
+            decoder=async_json_decoder[ManyTracks],
             error_mapper=get_an_artists_top_tracks_error_mapper,
             request_options=request_options,
         )
 
     async def get_audio_analysis(
-        self, id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[AudioAnalysisObject, GetAudioAnalysisErrorBody]:
         """Get a low-level audio analysis for a track in the Spotify catalog. The audio analysis describes the track’s
         structure and musical content, including rhythm, pitch, and timbre.
 
         Args:
-            id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            id_: Value sent with the request.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/audio-analysis/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[AudioAnalysisObject],
+            decoder=async_json_decoder[AudioAnalysisObject],
             error_mapper=get_audio_analysis_error_mapper,
             request_options=request_options,
         )
 
     async def get_audio_features(
-        self, id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[AudioFeaturesObject, GetAudioFeaturesErrorBody]:
         """Get audio feature information for a single track identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            id_: Value sent with the request.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/audio-features/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[AudioFeaturesObject],
+            decoder=async_json_decoder[AudioFeaturesObject],
             error_mapper=get_audio_features_error_mapper,
             request_options=request_options,
         )
@@ -2036,7 +2106,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             limit: Value sent with the request.
             offset: Value sent with the request.
             additional_types: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2052,7 +2123,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
                 param[str | None]("additional_types", additional_types),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagingPlaylistTrackObject],
+            decoder=async_json_decoder[PagingPlaylistTrackObject],
             error_mapper=get_playlists_tracks_error_mapper,
             request_options=request_options,
         )
@@ -2163,7 +2234,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             min_valence: Value sent with the request.
             max_valence: Value sent with the request.
             target_valence: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2220,7 +2292,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
                 param[float | None]("target_valence", target_valence),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[RecommendationsObject],
+            decoder=async_json_decoder[RecommendationsObject],
             error_mapper=get_recommendations_error_mapper,
             request_options=request_options,
         )
@@ -2232,7 +2304,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2241,7 +2314,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             url_template=self._server.default("/audio-features"),
             query_params=[param[str]("ids", ids)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[ManyAudioFeatures],
+            decoder=async_json_decoder[ManyAudioFeatures],
             error_mapper=get_several_audio_features_error_mapper,
             request_options=request_options,
         )
@@ -2254,7 +2327,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2263,30 +2337,31 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             url_template=self._server.default("/tracks"),
             query_params=[param[str]("ids", ids), param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[ManyTracks],
+            decoder=async_json_decoder[ManyTracks],
             error_mapper=get_several_tracks_error_mapper,
             request_options=request_options,
         )
 
     async def get_track(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[TrackObject, GetTrackErrorBody]:
         """Get Spotify catalog information for a single track identified by its unique Spotify ID.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/tracks/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=AsyncAnySchemes(self._auth.oauth_2_0, self._auth.oauth_2_0_client_credentials),
-            decoder=json_decoder[TrackObject],
+            decoder=async_json_decoder[TrackObject],
             error_mapper=get_track_error_mapper,
             request_options=request_options,
         )
@@ -2305,7 +2380,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2318,7 +2394,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
                 param[int | None]("offset", offset),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagingSavedTrackObject],
+            decoder=async_json_decoder[PagingSavedTrackObject],
             error_mapper=get_users_saved_tracks_error_mapper,
             request_options=request_options,
         )
@@ -2337,7 +2413,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             time_range: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2350,7 +2427,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
                 param[int | None]("offset", offset),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagingTrackObject],
+            decoder=async_json_decoder[PagingTrackObject],
             error_mapper=get_users_top_tracks_error_mapper,
             request_options=request_options,
         )
@@ -2367,7 +2444,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             playlist_id: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2378,7 +2456,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[PlaylistsTracksRequest2 | PlaylistsTracksRequest2Dict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PlaylistSnapshotId],
+            decoder=async_json_decoder[PlaylistSnapshotId],
             error_mapper=remove_tracks_playlist_error_mapper,
             request_options=request_options,
         )
@@ -2395,7 +2473,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2406,7 +2485,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[RemoveTracksRequest | RemoveTracksRequestDict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=remove_tracks_user_error_mapper,
             request_options=request_options,
         )
@@ -2430,7 +2509,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             playlist_id: Value sent with the request.
             uris: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2442,7 +2522,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[PlaylistsTracksRequest1 | PlaylistsTracksRequest1Dict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PlaylistSnapshotId],
+            decoder=async_json_decoder[PlaylistSnapshotId],
             error_mapper=reorder_or_replace_playlists_tracks_error_mapper,
             request_options=request_options,
         )
@@ -2459,7 +2539,8 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -2470,7 +2551,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[SaveTracksRequest | SaveTracksRequestDict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=save_tracks_user_error_mapper,
             request_options=request_options,
         )

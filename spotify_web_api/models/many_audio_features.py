@@ -11,4 +11,4 @@ class ManyAudioFeatures(SdkBaseModel):
 
 
 class ManyAudioFeaturesDict(TypedDict):
-    audio_features: list[AudioFeaturesObject | AudioFeaturesObjectDict]
+    audio_features: list[AudioFeaturesObjectDict]

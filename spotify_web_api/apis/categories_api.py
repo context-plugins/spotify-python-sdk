@@ -1,7 +1,17 @@
 from __future__ import annotations
 
 from ..auth import AsyncAuthSchemes, AuthSchemes
-from ..core import ApiResult, AsyncRawClient, RawClient, RequestOptionsOrDict, SecuredRawResponse, json_decoder, param
+from ..core import (
+    ApiResult,
+    AsyncRawClient,
+    RawClient,
+    RequestOptionsOrDict,
+    SecuredRawResponse,
+    async_json_decoder,
+    json_decoder,
+    param,
+    unwrap,
+)
 from ..errors.get_a_categories_playlists_error import (
     GetACategoriesPlaylistsErrorBody,
     get_a_categories_playlists_error_mapper,
@@ -32,7 +42,8 @@ class CategoriesApi:
             category_id: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A paged set of playlists
@@ -42,9 +53,11 @@ class CategoriesApi:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_a_categories_playlists(
-            category_id, limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_a_categories_playlists(
+                category_id, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     def get_a_category(
         self, category_id: str, *, locale: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -54,7 +67,8 @@ class CategoriesApi:
         Args:
             category_id: Value sent with the request.
             locale: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A category
@@ -64,9 +78,9 @@ class CategoriesApi:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_a_category(
-            category_id, locale=locale, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_a_category(category_id, locale=locale, request_options=request_options)
+        )
 
     def get_categories(
         self,
@@ -82,7 +96,8 @@ class CategoriesApi:
             locale: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A paged set of categories
@@ -92,9 +107,11 @@ class CategoriesApi:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_categories(
-            locale=locale, limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_categories(
+                locale=locale, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     @property
     def with_raw_response(self) -> CategoriesApiWithRawResponse:
@@ -119,7 +136,8 @@ class AsyncCategoriesApi:
             category_id: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A paged set of playlists
@@ -129,11 +147,11 @@ class AsyncCategoriesApi:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_a_categories_playlists(
                 category_id, limit=limit, offset=offset, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def get_a_category(
         self, category_id: str, *, locale: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -143,7 +161,8 @@ class AsyncCategoriesApi:
         Args:
             category_id: Value sent with the request.
             locale: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A category
@@ -153,9 +172,9 @@ class AsyncCategoriesApi:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_a_category(category_id, locale=locale, request_options=request_options)
-        ).unwrap()
+        )
 
     async def get_categories(
         self,
@@ -171,7 +190,8 @@ class AsyncCategoriesApi:
             locale: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A paged set of categories
@@ -181,11 +201,11 @@ class AsyncCategoriesApi:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_categories(
                 locale=locale, limit=limit, offset=offset, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     @property
     def with_raw_response(self) -> AsyncCategoriesApiWithRawResponse:
@@ -207,7 +227,8 @@ class CategoriesApiWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSch
             category_id: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -230,7 +251,8 @@ class CategoriesApiWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSch
         Args:
             category_id: Value sent with the request.
             locale: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -259,7 +281,8 @@ class CategoriesApiWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSch
             locale: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -293,7 +316,8 @@ class AsyncCategoriesApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Serve
             category_id: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -303,7 +327,7 @@ class AsyncCategoriesApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Serve
             path_params=[param[str]("category_id", category_id)],
             query_params=[param[int | None]("limit", limit), param[int | None]("offset", offset)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagingFeaturedPlaylistObject],
+            decoder=async_json_decoder[PagingFeaturedPlaylistObject],
             error_mapper=get_a_categories_playlists_error_mapper,
             request_options=request_options,
         )
@@ -316,7 +340,8 @@ class AsyncCategoriesApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Serve
         Args:
             category_id: Value sent with the request.
             locale: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -326,7 +351,7 @@ class AsyncCategoriesApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Serve
             path_params=[param[str]("category_id", category_id)],
             query_params=[param[str | None]("locale", locale)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[CategoryObject],
+            decoder=async_json_decoder[CategoryObject],
             error_mapper=get_a_category_error_mapper,
             request_options=request_options,
         )
@@ -345,7 +370,8 @@ class AsyncCategoriesApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Serve
             locale: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -358,7 +384,7 @@ class AsyncCategoriesApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Serve
                 param[int | None]("offset", offset),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagedCategories],
+            decoder=async_json_decoder[PagedCategories],
             error_mapper=get_categories_error_mapper,
             request_options=request_options,
         )

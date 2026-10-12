@@ -23,6 +23,6 @@ class PlaylistTrackObject(SdkBaseModel):
 
 class PlaylistTrackObjectDict(TypedDict):
     added_at: NotRequired[RFC3339DateTime]
-    added_by: NotRequired[PlaylistUserObject | PlaylistUserObjectDict]
+    added_by: NotRequired[PlaylistUserObjectDict]
     is_local: NotRequired[bool]
-    track: NotRequired[Track11 | Track11Dict]
+    track: NotRequired[Track11Dict]

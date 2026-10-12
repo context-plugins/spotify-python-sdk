@@ -40,12 +40,12 @@ class ArtistObject(SdkBaseModel):
 
 
 class ArtistObjectDict(TypedDict):
-    external_urls: NotRequired[ExternalUrlObject | ExternalUrlObjectDict]
-    followers: NotRequired[FollowersObject | FollowersObjectDict]
+    external_urls: NotRequired[ExternalUrlObjectDict]
+    followers: NotRequired[FollowersObjectDict]
     genres: NotRequired[list[str]]
     href: NotRequired[str]
     id: NotRequired[str]
-    images: NotRequired[list[ImageObject | ImageObjectDict]]
+    images: NotRequired[list[ImageObjectDict]]
     name: NotRequired[str]
     popularity: NotRequired[int]
     type_: NotRequired[TypeOrStr]

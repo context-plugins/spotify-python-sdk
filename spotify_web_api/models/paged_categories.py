@@ -11,4 +11,4 @@ class PagedCategories(SdkBaseModel):
 
 
 class PagedCategoriesDict(TypedDict):
-    categories: Categories | CategoriesDict
+    categories: CategoriesDict

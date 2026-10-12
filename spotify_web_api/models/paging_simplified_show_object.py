@@ -35,4 +35,4 @@ class PagingSimplifiedShowObjectDict(TypedDict):
     offset: int
     previous: str | None
     total: int
-    items: list[ShowBase | ShowBaseDict]
+    items: list[ShowBaseDict]

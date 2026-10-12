@@ -11,4 +11,4 @@ class ManyAudiobooks(SdkBaseModel):
 
 
 class ManyAudiobooksDict(TypedDict):
-    audiobooks: list[AudiobookObject | AudiobookObjectDict]
+    audiobooks: list[AudiobookObjectDict]

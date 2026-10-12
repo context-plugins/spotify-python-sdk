@@ -16,6 +16,6 @@ class PlayHistoryObject(SdkBaseModel):
 
 
 class PlayHistoryObjectDict(TypedDict):
-    track: NotRequired[TrackObject | TrackObjectDict]
+    track: NotRequired[TrackObjectDict]
     played_at: NotRequired[RFC3339DateTime]
-    context: NotRequired[ContextObject | ContextObjectDict]
+    context: NotRequired[ContextObjectDict]

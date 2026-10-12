@@ -14,4 +14,4 @@ class CursorPagedArtists(SdkBaseModel):
 
 
 class CursorPagedArtistsDict(TypedDict):
-    artists: CursorPagingSimplifiedArtistObject | CursorPagingSimplifiedArtistObjectDict
+    artists: CursorPagingSimplifiedArtistObjectDict

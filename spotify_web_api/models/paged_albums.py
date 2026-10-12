@@ -11,4 +11,4 @@ class PagedAlbums(SdkBaseModel):
 
 
 class PagedAlbumsDict(TypedDict):
-    albums: PagingSimplifiedAlbumObject | PagingSimplifiedAlbumObjectDict
+    albums: PagingSimplifiedAlbumObjectDict

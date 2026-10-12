@@ -28,6 +28,6 @@ class CursorPagingSimplifiedArtistObjectDict(TypedDict):
     href: NotRequired[str]
     limit: NotRequired[int]
     next: NotRequired[str]
-    cursors: NotRequired[CursorObject | CursorObjectDict]
+    cursors: NotRequired[CursorObjectDict]
     total: NotRequired[int]
-    items: NotRequired[list[ArtistObject | ArtistObjectDict]]
+    items: NotRequired[list[ArtistObjectDict]]

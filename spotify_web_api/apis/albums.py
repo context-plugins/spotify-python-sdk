@@ -11,10 +11,13 @@ from ..core import (
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
+    async_empty_response,
+    async_json_decoder,
     empty_response,
     json_body,
     json_decoder,
     param,
+    unwrap,
 )
 from ..errors.check_users_saved_albums_error import (
     CheckUsersSavedAlbumsErrorBody,
@@ -48,7 +51,8 @@ class Albums:
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Array of booleans
@@ -58,17 +62,18 @@ class Albums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.check_users_saved_albums(ids, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.check_users_saved_albums(ids, request_options=request_options))
 
     def get_an_album(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> AlbumObject:
         """Get Spotify catalog information for a single album.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An album
@@ -78,11 +83,11 @@ class Albums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_an_album(id, market=market, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_an_album(id_, market=market, request_options=request_options))
 
     def get_an_albums_tracks(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -93,11 +98,12 @@ class Albums:
         of tracks returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -107,13 +113,15 @@ class Albums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_an_albums_tracks(
-            id, market=market, limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_an_albums_tracks(
+                id_, market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     def get_an_artists_albums(
         self,
-        id: str,
+        id_: str,
         *,
         include_groups: str | None = None,
         market: str | None = None,
@@ -124,12 +132,13 @@ class Albums:
         """Get Spotify catalog information about an artist's albums.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             include_groups: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of albums
@@ -139,14 +148,16 @@ class Albums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_an_artists_albums(
-            id,
-            include_groups=include_groups,
-            market=market,
-            limit=limit,
-            offset=offset,
-            request_options=request_options,
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_an_artists_albums(
+                id_,
+                include_groups=include_groups,
+                market=market,
+                limit=limit,
+                offset=offset,
+                request_options=request_options,
+            ),
+        )
 
     def get_multiple_albums(
         self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -156,7 +167,8 @@ class Albums:
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of albums
@@ -166,7 +178,7 @@ class Albums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_multiple_albums(ids, market=market, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_multiple_albums(ids, market=market, request_options=request_options))
 
     def get_new_releases(
         self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
@@ -177,7 +189,8 @@ class Albums:
         Args:
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A paged set of albums
@@ -187,9 +200,9 @@ class Albums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_new_releases(
-            limit=limit, offset=offset, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_new_releases(limit=limit, offset=offset, request_options=request_options)
+        )
 
     def get_users_saved_albums(
         self,
@@ -205,7 +218,8 @@ class Albums:
             limit: Value sent with the request.
             offset: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of albums
@@ -215,9 +229,11 @@ class Albums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_users_saved_albums(
-            limit=limit, offset=offset, market=market, request_options=request_options
-        ).unwrap()
+        return unwrap(
+            self._with_raw_response.get_users_saved_albums(
+                limit=limit, offset=offset, market=market, request_options=request_options
+            ),
+        )
 
     def remove_albums_user(
         self,
@@ -231,7 +247,8 @@ class Albums:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Album(s) have been removed from the library
@@ -241,7 +258,7 @@ class Albums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.remove_albums_user(ids, body=body, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.remove_albums_user(ids, body=body, request_options=request_options))
 
     def save_albums_user(
         self,
@@ -255,7 +272,8 @@ class Albums:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             The album is saved
@@ -265,7 +283,7 @@ class Albums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.save_albums_user(ids, body=body, request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.save_albums_user(ids, body=body, request_options=request_options))
 
     @property
     def with_raw_response(self) -> AlbumsWithRawResponse:
@@ -283,7 +301,8 @@ class AsyncAlbums:
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Array of booleans
@@ -293,17 +312,18 @@ class AsyncAlbums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.check_users_saved_albums(ids, request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.check_users_saved_albums(ids, request_options=request_options))
 
     async def get_an_album(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> AlbumObject:
         """Get Spotify catalog information for a single album.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An album
@@ -313,11 +333,11 @@ class AsyncAlbums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.get_an_album(id, market=market, request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.get_an_album(id_, market=market, request_options=request_options))
 
     async def get_an_albums_tracks(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -328,11 +348,12 @@ class AsyncAlbums:
         of tracks returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of tracks
@@ -342,15 +363,15 @@ class AsyncAlbums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_an_albums_tracks(
-                id, market=market, limit=limit, offset=offset, request_options=request_options
-            )
-        ).unwrap()
+                id_, market=market, limit=limit, offset=offset, request_options=request_options
+            ),
+        )
 
     async def get_an_artists_albums(
         self,
-        id: str,
+        id_: str,
         *,
         include_groups: str | None = None,
         market: str | None = None,
@@ -361,12 +382,13 @@ class AsyncAlbums:
         """Get Spotify catalog information about an artist's albums.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             include_groups: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of albums
@@ -376,16 +398,16 @@ class AsyncAlbums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_an_artists_albums(
-                id,
+                id_,
                 include_groups=include_groups,
                 market=market,
                 limit=limit,
                 offset=offset,
                 request_options=request_options,
-            )
-        ).unwrap()
+            ),
+        )
 
     async def get_multiple_albums(
         self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
@@ -395,7 +417,8 @@ class AsyncAlbums:
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of albums
@@ -405,9 +428,9 @@ class AsyncAlbums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_multiple_albums(ids, market=market, request_options=request_options)
-        ).unwrap()
+        )
 
     async def get_new_releases(
         self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
@@ -418,7 +441,8 @@ class AsyncAlbums:
         Args:
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A paged set of albums
@@ -428,9 +452,9 @@ class AsyncAlbums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_new_releases(limit=limit, offset=offset, request_options=request_options)
-        ).unwrap()
+        )
 
     async def get_users_saved_albums(
         self,
@@ -446,7 +470,8 @@ class AsyncAlbums:
             limit: Value sent with the request.
             offset: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Pages of albums
@@ -456,11 +481,11 @@ class AsyncAlbums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
+        return unwrap(
             await self._with_raw_response.get_users_saved_albums(
                 limit=limit, offset=offset, market=market, request_options=request_options
-            )
-        ).unwrap()
+            ),
+        )
 
     async def remove_albums_user(
         self,
@@ -474,7 +499,8 @@ class AsyncAlbums:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             Album(s) have been removed from the library
@@ -484,9 +510,7 @@ class AsyncAlbums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
-            await self._with_raw_response.remove_albums_user(ids, body=body, request_options=request_options)
-        ).unwrap()
+        return unwrap(await self._with_raw_response.remove_albums_user(ids, body=body, request_options=request_options))
 
     async def save_albums_user(
         self,
@@ -500,7 +524,8 @@ class AsyncAlbums:
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             The album is saved
@@ -510,9 +535,7 @@ class AsyncAlbums:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (
-            await self._with_raw_response.save_albums_user(ids, body=body, request_options=request_options)
-        ).unwrap()
+        return unwrap(await self._with_raw_response.save_albums_user(ids, body=body, request_options=request_options))
 
     @property
     def with_raw_response(self) -> AsyncAlbumsWithRawResponse:
@@ -527,7 +550,8 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -542,21 +566,22 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         )
 
     def get_an_album(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[AlbumObject, GetAnAlbumErrorBody]:
         """Get Spotify catalog information for a single album.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/albums/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=AnySchemes(self._auth.oauth_2_0, self._auth.oauth_2_0_client_credentials),
             decoder=json_decoder[AlbumObject],
@@ -566,7 +591,7 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
     def get_an_albums_tracks(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -577,18 +602,19 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         of tracks returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/albums/{id}/tracks"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("market", market),
                 param[int | None]("limit", limit),
@@ -602,7 +628,7 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
     def get_an_artists_albums(
         self,
-        id: str,
+        id_: str,
         *,
         include_groups: str | None = None,
         market: str | None = None,
@@ -613,19 +639,20 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         """Get Spotify catalog information about an artist's albums.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             include_groups: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return self._client.execute(
             http_method="GET",
             url_template=self._server.default("/artists/{id}/albums"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("include_groups", include_groups),
                 param[str | None]("market", market),
@@ -646,7 +673,8 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -669,7 +697,8 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -697,7 +726,8 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
             limit: Value sent with the request.
             offset: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -727,7 +757,8 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -755,7 +786,8 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -780,7 +812,8 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
 
         Args:
             ids: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -789,37 +822,38 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             url_template=self._server.default("/me/albums/contains"),
             query_params=[param[str]("ids", ids)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[list[bool]],
+            decoder=async_json_decoder[list[bool]],
             error_mapper=check_users_saved_albums_error_mapper,
             request_options=request_options,
         )
 
     async def get_an_album(
-        self, id: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
     ) -> ApiResult[AlbumObject, GetAnAlbumErrorBody]:
         """Get Spotify catalog information for a single album.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/albums/{id}"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[param[str | None]("market", market)],
             auth_scheme=AsyncAnySchemes(self._auth.oauth_2_0, self._auth.oauth_2_0_client_credentials),
-            decoder=json_decoder[AlbumObject],
+            decoder=async_json_decoder[AlbumObject],
             error_mapper=get_an_album_error_mapper,
             request_options=request_options,
         )
 
     async def get_an_albums_tracks(
         self,
-        id: str,
+        id_: str,
         *,
         market: str | None = None,
         limit: int | None = 20,
@@ -830,32 +864,33 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         of tracks returned.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/albums/{id}/tracks"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("market", market),
                 param[int | None]("limit", limit),
                 param[int | None]("offset", offset),
             ],
             auth_scheme=AsyncAnySchemes(self._auth.oauth_2_0, self._auth.oauth_2_0_client_credentials),
-            decoder=json_decoder[PagingSimplifiedTrackObject],
+            decoder=async_json_decoder[PagingSimplifiedTrackObject],
             error_mapper=get_an_albums_tracks_error_mapper,
             request_options=request_options,
         )
 
     async def get_an_artists_albums(
         self,
-        id: str,
+        id_: str,
         *,
         include_groups: str | None = None,
         market: str | None = None,
@@ -866,19 +901,20 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         """Get Spotify catalog information about an artist's albums.
 
         Args:
-            id: Value sent with the request.
+            id_: Value sent with the request.
             include_groups: Value sent with the request.
             market: Value sent with the request.
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
         return await self._client.execute(
             http_method="GET",
             url_template=self._server.default("/artists/{id}/albums"),
-            path_params=[param[str]("id", id)],
+            path_params=[param[str]("id", id_)],
             query_params=[
                 param[str | None]("include_groups", include_groups),
                 param[str | None]("market", market),
@@ -886,7 +922,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
                 param[int | None]("offset", offset),
             ],
             auth_scheme=AsyncAnySchemes(self._auth.oauth_2_0, self._auth.oauth_2_0_client_credentials),
-            decoder=json_decoder[PagingArtistDiscographyAlbumObject],
+            decoder=async_json_decoder[PagingArtistDiscographyAlbumObject],
             error_mapper=get_an_artists_albums_error_mapper,
             request_options=request_options,
         )
@@ -899,7 +935,8 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             ids: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -908,7 +945,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             url_template=self._server.default("/albums"),
             query_params=[param[str]("ids", ids), param[str | None]("market", market)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[ManyAlbums],
+            decoder=async_json_decoder[ManyAlbums],
             error_mapper=get_multiple_albums_error_mapper,
             request_options=request_options,
         )
@@ -922,7 +959,8 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             limit: Value sent with the request.
             offset: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -931,7 +969,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             url_template=self._server.default("/browse/new-releases"),
             query_params=[param[int | None]("limit", limit), param[int | None]("offset", offset)],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagedAlbums],
+            decoder=async_json_decoder[PagedAlbums],
             error_mapper=get_new_releases_error_mapper,
             request_options=request_options,
         )
@@ -950,7 +988,8 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             limit: Value sent with the request.
             offset: Value sent with the request.
             market: Value sent with the request.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -963,7 +1002,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
                 param[str | None]("market", market),
             ],
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[PagingSavedAlbumObject],
+            decoder=async_json_decoder[PagingSavedAlbumObject],
             error_mapper=get_users_saved_albums_error_mapper,
             request_options=request_options,
         )
@@ -980,7 +1019,8 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -991,7 +1031,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[RemoveAlbumsRequest | RemoveAlbumsRequestDict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=remove_albums_user_error_mapper,
             request_options=request_options,
         )
@@ -1008,7 +1048,8 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         Args:
             ids: Value sent with the request.
             body: The request body.
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -1019,7 +1060,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             headers=[param[UUID]("Idempotency-Key", uuid4())],
             body=json_body[SaveAlbumsRequest | SaveAlbumsRequestDict | None](body),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=empty_response,
+            decoder=async_empty_response,
             error_mapper=save_albums_user_error_mapper,
             request_options=request_options,
         )

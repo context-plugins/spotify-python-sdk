@@ -17,4 +17,4 @@ class SavedTrackObject(SdkBaseModel):
 
 class SavedTrackObjectDict(TypedDict):
     added_at: NotRequired[RFC3339DateTime]
-    track: NotRequired[TrackObject | TrackObjectDict]
+    track: NotRequired[TrackObjectDict]

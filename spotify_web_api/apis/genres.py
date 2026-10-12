@@ -1,7 +1,16 @@
 from __future__ import annotations
 
 from ..auth import AsyncAuthSchemes, AuthSchemes
-from ..core import ApiResult, AsyncRawClient, RawClient, RequestOptionsOrDict, SecuredRawResponse, json_decoder
+from ..core import (
+    ApiResult,
+    AsyncRawClient,
+    RawClient,
+    RequestOptionsOrDict,
+    SecuredRawResponse,
+    async_json_decoder,
+    json_decoder,
+    unwrap,
+)
 from ..errors.get_recommendation_genres_error import (
     GetRecommendationGenresErrorBody,
     get_recommendation_genres_error_mapper,
@@ -19,7 +28,8 @@ class Genres:
         <https://developer.spotify.com/documentation/web-api/reference/get-recommendations>`__.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of genres
@@ -29,7 +39,7 @@ class Genres:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return self._with_raw_response.get_recommendation_genres(request_options=request_options).unwrap()
+        return unwrap(self._with_raw_response.get_recommendation_genres(request_options=request_options))
 
     @property
     def with_raw_response(self) -> GenresWithRawResponse:
@@ -45,7 +55,8 @@ class AsyncGenres:
         <https://developer.spotify.com/documentation/web-api/reference/get-recommendations>`__.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             A set of genres
@@ -55,7 +66,7 @@ class AsyncGenres:
                 You should re-authenticate the user. Bad OAuth request (wrong consumer key, bad nonce, expired
                 timestamp...). Unfortunately, re-authenticating the user won't help here. The app has exceeded its rate
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
-        return (await self._with_raw_response.get_recommendation_genres(request_options=request_options)).unwrap()
+        return unwrap(await self._with_raw_response.get_recommendation_genres(request_options=request_options))
 
     @property
     def with_raw_response(self) -> AsyncGenresWithRawResponse:
@@ -70,7 +81,8 @@ class GenresWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
         <https://developer.spotify.com/documentation/web-api/reference/get-recommendations>`__.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -92,7 +104,8 @@ class AsyncGenresWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         <https://developer.spotify.com/documentation/web-api/reference/get-recommendations>`__.
 
         Args:
-            request_options: Per-call overrides for this one request, such as a timeout or extra headers.
+            request_options: Per-call overrides for this one request, such as a timeout, extra headers, or its retry
+                count and statuses.
 
         Returns:
             An ``ApiResult`` holding the deserialized response or the error body."""
@@ -100,7 +113,7 @@ class AsyncGenresWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
             http_method="GET",
             url_template=self._server.default("/recommendations/available-genre-seeds"),
             auth_scheme=self._auth.oauth_2_0,
-            decoder=json_decoder[ManyGenres],
+            decoder=async_json_decoder[ManyGenres],
             error_mapper=get_recommendation_genres_error_mapper,
             request_options=request_options,
         )

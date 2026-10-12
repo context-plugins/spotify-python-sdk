@@ -11,4 +11,4 @@ class ManyChapters(SdkBaseModel):
 
 
 class ManyChaptersDict(TypedDict):
-    chapters: list[ChapterObject | ChapterObjectDict]
+    chapters: list[ChapterObjectDict]

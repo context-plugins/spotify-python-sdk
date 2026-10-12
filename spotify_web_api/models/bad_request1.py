@@ -11,4 +11,4 @@ class BadRequest1(SdkBaseModel):
 
 
 class BadRequest1Dict(TypedDict):
-    error: ErrorObject | ErrorObjectDict
+    error: ErrorObjectDict

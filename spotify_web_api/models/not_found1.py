@@ -11,4 +11,4 @@ class NotFound1(SdkBaseModel):
 
 
 class NotFound1Dict(TypedDict):
-    error: ErrorObject | ErrorObjectDict
+    error: ErrorObjectDict

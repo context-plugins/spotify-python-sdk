@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Final, TypeAlias
 
-from ..core import ErrorMapper, HttpResponse, RawError, decode_json
+from ..core import ErrorMapper, RawError, decode_json
 from ..models.forbidden1 import Forbidden1
 from ..models.too_many_requests1 import TooManyRequests1
 from ..models.unauthorized1 import Unauthorized1
@@ -13,16 +13,16 @@ GetAvailableMarketsErrorBody: TypeAlias = Unauthorized1 | Forbidden1 | TooManyRe
 
 @dataclass(frozen=True, slots=True)
 class _GetAvailableMarketsError:
-    def map(self, response: HttpResponse) -> GetAvailableMarketsErrorBody:
-        match response.status_code:
+    def map(self, status_code: int, content: bytes) -> GetAvailableMarketsErrorBody:
+        match status_code:
             case 401:
-                return decode_json[Unauthorized1](response)
+                return decode_json[Unauthorized1](content)
             case 403:
-                return decode_json[Forbidden1](response)
+                return decode_json[Forbidden1](content)
             case 429:
-                return decode_json[TooManyRequests1](response)
+                return decode_json[TooManyRequests1](content)
             case _:
-                return RawError(response)
+                return RawError(status_code, content)
 
 
 get_available_markets_error_mapper: Final[ErrorMapper[GetAvailableMarketsErrorBody]] = _GetAvailableMarketsError()

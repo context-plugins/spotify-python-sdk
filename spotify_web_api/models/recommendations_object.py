@@ -16,5 +16,5 @@ class RecommendationsObject(SdkBaseModel):
 
 
 class RecommendationsObjectDict(TypedDict):
-    seeds: list[RecommendationSeedObject | RecommendationSeedObjectDict]
-    tracks: list[TrackObject | TrackObjectDict]
+    seeds: list[RecommendationSeedObjectDict]
+    tracks: list[TrackObjectDict]

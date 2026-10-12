@@ -79,16 +79,16 @@ class ChapterBaseDict(TypedDict):
     html_description: str
     duration_ms: int
     explicit: bool
-    external_urls: ExternalUrlObject | ExternalUrlObjectDict
+    external_urls: ExternalUrlObjectDict
     href: str
     id: str
-    images: list[ImageObject | ImageObjectDict]
+    images: list[ImageObjectDict]
     is_playable: bool
     languages: list[str]
     name: str
     release_date: str
     release_date_precision: ReleaseDatePrecisionOrStr
-    resume_point: NotRequired[ResumePointObject | ResumePointObjectDict]
+    resume_point: NotRequired[ResumePointObjectDict]
     type_: Type5OrStr
     uri: str
-    restrictions: NotRequired[ChapterRestrictionObject | ChapterRestrictionObjectDict]
+    restrictions: NotRequired[ChapterRestrictionObjectDict]

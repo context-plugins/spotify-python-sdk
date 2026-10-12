@@ -11,4 +11,4 @@ class ManyAlbums(SdkBaseModel):
 
 
 class ManyAlbumsDict(TypedDict):
-    albums: list[AlbumObject | AlbumObjectDict]
+    albums: list[AlbumObjectDict]

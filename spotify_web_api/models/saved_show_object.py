@@ -17,4 +17,4 @@ class SavedShowObject(SdkBaseModel):
 
 class SavedShowObjectDict(TypedDict):
     added_at: NotRequired[RFC3339DateTime]
-    show: NotRequired[ShowBase | ShowBaseDict]
+    show: NotRequired[ShowBaseDict]

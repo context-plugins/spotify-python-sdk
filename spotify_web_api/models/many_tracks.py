@@ -11,4 +11,4 @@ class ManyTracks(SdkBaseModel):
 
 
 class ManyTracksDict(TypedDict):
-    tracks: list[TrackObject | TrackObjectDict]
+    tracks: list[TrackObjectDict]
