@@ -1,7 +1,7 @@
 """The streamed download's payload: a response body not yet read, owning its connection.
 
-``FileResponse`` and ``AsyncFileResponse`` are the only non-frozen classes in the runtime, and
-deliberately so: everything else is an inert value, these own a resource with a lifecycle. Every
+``FileResponse`` and ``AsyncFileResponse`` are not frozen, and deliberately so: unlike the runtime's
+inert values, they own a resource with a lifecycle. Every
 consuming path -- ``read``, ``save_to``, a drained ``iter_bytes``, a ``with`` block, ``close`` --
 releases the connection; abandoning a partial manual iteration is the one leak, reported by
 ``__del__`` (a ``ResourceWarning``, the io/socket idiom) and reaped by the client's own close.
@@ -21,7 +21,8 @@ from pathlib import Path
 from typing_extensions import Self
 
 from ._internal.content_disposition import content_disposition_filename, safe_filename
-from ._internal.urls import strip_query
+from ._internal.redaction import redact_url
+from ._internal.urls import safe_url
 from .transport import AsyncHttpResponse, HttpResponse
 
 _CHUNK_SIZE = 65_536
@@ -46,7 +47,7 @@ class FileResponse:
     held with it. Single-use: once closed, reading again raises rather than yielding nothing. One
     consumer per response: ``read()`` after a partially-driven ``iter_bytes()`` raises the
     underlying single-pass error. The per-call ``timeout`` applies to each read of a streamed
-    body, so a stalled download raises rather than hanging.
+    body, so a stalled download raises ``SdkConnectionError`` rather than hanging.
 
     ``headers`` is the full response head -- ``ETag``, ``Last-Modified`` and friends cost nothing
     to expose since the head has already arrived; ``media_type``, ``content_length`` and
@@ -54,7 +55,17 @@ class FileResponse:
     suggestion from ``Content-Disposition`` and is sanitised before it can name a path -- see
     :meth:`save_to`."""
 
-    __slots__ = ("_closed", "_response", "_url", "content_length", "filename", "headers", "media_type")
+    __slots__ = (
+        "_closed",
+        "_method",
+        "_response",
+        "_safe_url",
+        "_url",
+        "content_length",
+        "filename",
+        "headers",
+        "media_type",
+    )
 
     def __init__(self, response: HttpResponse) -> None:
         # Total by design: this runs between the head arriving and the raw client returning, so a
@@ -63,10 +74,15 @@ class FileResponse:
         self._closed = False
         # Captured here rather than read off the response in __del__, which can run at interpreter
         # shutdown where a property call into the transport may find its objects already torn down --
-        # and a finalizer that raises reports nothing. Stripped of its query string because this
-        # string's only reader is the abandonment warning, and a query-placed api key would
-        # otherwise reach stderr and the logs with it.
-        self._url = strip_query(response.url)
+        # and a finalizer that raises reports nothing. Rendered through ``redact_url`` with its
+        # defaults, unknown query values ``REDACTED``, because this string's only reader is the
+        # abandonment warning, and a query-placed api key would otherwise reach stderr and the logs
+        # with it.
+        self._url = redact_url(response.url)
+        # The call, as every result and exception names it: a transport returns the URL the request asked
+        # for, and ``safe_url`` cuts that to the path, which is exactly the result's ``url``.
+        self._method = response.method
+        self._safe_url = safe_url(response.url)
         self.headers: Mapping[str, str] = response.headers
         self.media_type = self.headers.get("content-type")
         length = self.headers.get("content-length")
@@ -87,7 +103,9 @@ class FileResponse:
             The body's chunks, in order.
 
         Raises:
-            ValueError: If ``chunk_size`` is not positive."""
+            ValueError: If ``chunk_size`` is not positive, or the response is already closed.
+            SdkConnectionError: From the iteration, if the transport could not deliver the body, a read
+                that timed out included. The library's exception is the cause."""
         # Checked here, not in the generator: a closed response must raise at the call, the way a
         # closed file does -- not at the first next().
         self._ensure_open()
@@ -104,6 +122,8 @@ class FileResponse:
             # reaps. The warning is the remedy's pointer, not the remedy.
             raise
         except BaseException:
+            # A body the transport could not deliver arrives as the family's exception already naming the
+            # call -- closed here with everything else, and passed as it is.
             self.close()
             raise
         self.close()
@@ -112,7 +132,12 @@ class FileResponse:
         """Buffer the whole body and close. For a payload that fits in memory.
 
         Returns:
-            The complete body."""
+            The complete body.
+
+        Raises:
+            ValueError: If the response is already closed.
+            SdkConnectionError: If the transport could not deliver the body -- its leaf
+                ``SdkTimeoutError`` for a read that timed out. The library's exception is the cause."""
         self._ensure_open()
         try:
             return self._response.read()
@@ -139,7 +164,10 @@ class FileResponse:
             The path written.
 
         Raises:
-            ValueError: If ``destination`` is a directory and the server sent no usable filename."""
+            ValueError: If ``destination`` is a directory and the server sent no usable filename, or
+                the response is already closed.
+            SdkConnectionError: If the transport could not deliver the body; the partial file is
+                unlinked first."""
         # First: a second save_to must raise before it can touch the filesystem -- without this, a
         # doomed call would create, truncate and unlink the .part before iter_bytes refuses.
         self._ensure_open()
@@ -206,7 +234,17 @@ class AsyncFileResponse:
     ``loop.shutdown_asyncgens()``, where the ``ResourceWarning`` still fires but later and less
     usefully, and ``aclose`` must run on the loop that created the response."""
 
-    __slots__ = ("_closed", "_response", "_url", "content_length", "filename", "headers", "media_type")
+    __slots__ = (
+        "_closed",
+        "_method",
+        "_response",
+        "_safe_url",
+        "_url",
+        "content_length",
+        "filename",
+        "headers",
+        "media_type",
+    )
 
     def __init__(self, response: AsyncHttpResponse) -> None:
         # Total by design, exactly as the sync twin's: a raise here would leak the connection.
@@ -214,10 +252,15 @@ class AsyncFileResponse:
         self._closed = False
         # Captured here rather than read off the response in __del__, which can run at interpreter
         # shutdown where a property call into the transport may find its objects already torn down --
-        # and a finalizer that raises reports nothing. Stripped of its query string because this
-        # string's only reader is the abandonment warning, and a query-placed api key would
-        # otherwise reach stderr and the logs with it.
-        self._url = strip_query(response.url)
+        # and a finalizer that raises reports nothing. Rendered through ``redact_url`` with its
+        # defaults, unknown query values ``REDACTED``, because this string's only reader is the
+        # abandonment warning, and a query-placed api key would otherwise reach stderr and the logs
+        # with it.
+        self._url = redact_url(response.url)
+        # The call, as every result and exception names it: a transport returns the URL the request asked
+        # for, and ``safe_url`` cuts that to the path, which is exactly the result's ``url``.
+        self._method = response.method
+        self._safe_url = safe_url(response.url)
         self.headers: Mapping[str, str] = response.headers
         self.media_type = self.headers.get("content-type")
         length = self.headers.get("content-length")
@@ -234,7 +277,9 @@ class AsyncFileResponse:
             The body's chunks, in order.
 
         Raises:
-            ValueError: If ``chunk_size`` is not positive."""
+            ValueError: If ``chunk_size`` is not positive, or the response is already closed.
+            SdkConnectionError: From the iteration, if the transport could not deliver the body, a read
+                that timed out included. The library's exception is the cause."""
         self._ensure_open()
         if chunk_size <= 0:
             raise ValueError(f"chunk_size must be a positive number of bytes -- got {chunk_size}")
@@ -256,7 +301,12 @@ class AsyncFileResponse:
         """Buffer the whole body and close. For a payload that fits in memory.
 
         Returns:
-            The complete body."""
+            The complete body.
+
+        Raises:
+            ValueError: If the response is already closed.
+            SdkConnectionError: If the transport could not deliver the body -- its leaf
+                ``SdkTimeoutError`` for a read that timed out. The library's exception is the cause."""
         self._ensure_open()
         try:
             return await self._response.aread()
@@ -276,7 +326,10 @@ class AsyncFileResponse:
             The path written.
 
         Raises:
-            ValueError: If ``destination`` is a directory and the server sent no usable filename."""
+            ValueError: If ``destination`` is a directory and the server sent no usable filename, or
+                the response is already closed.
+            SdkConnectionError: If the transport could not deliver the body; the partial file is
+                unlinked first."""
         self._ensure_open()  # first, as in the sync twin: raise before touching the filesystem
         target = Path(destination)
         if await asyncio.to_thread(target.is_dir):

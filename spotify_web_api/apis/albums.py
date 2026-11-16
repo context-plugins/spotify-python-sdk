@@ -8,6 +8,7 @@ from ..core import (
     ApiResult,
     AsyncAnySchemes,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -295,7 +296,7 @@ class AsyncAlbums:
         self._with_raw_response = AsyncAlbumsWithRawResponse(client, server, auth)
 
     async def check_users_saved_albums(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more albums is already saved in the current Spotify user's 'Your Music' library.
 
@@ -315,7 +316,7 @@ class AsyncAlbums:
         return unwrap(await self._with_raw_response.check_users_saved_albums(ids, request_options=request_options))
 
     async def get_an_album(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> AlbumObject:
         """Get Spotify catalog information for a single album.
 
@@ -342,7 +343,7 @@ class AsyncAlbums:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSimplifiedTrackObject:
         """Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number
         of tracks returned.
@@ -377,7 +378,7 @@ class AsyncAlbums:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingArtistDiscographyAlbumObject:
         """Get Spotify catalog information about an artist's albums.
 
@@ -410,7 +411,7 @@ class AsyncAlbums:
         )
 
     async def get_multiple_albums(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyAlbums:
         """Get Spotify catalog information for multiple albums identified by their Spotify IDs.
 
@@ -433,7 +434,11 @@ class AsyncAlbums:
         )
 
     async def get_new_releases(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagedAlbums:
         """Get a list of new album releases featured in Spotify (shown, for example, on a Spotify player’s “Browse”
         tab).
@@ -462,7 +467,7 @@ class AsyncAlbums:
         limit: int | None = 20,
         offset: int | None = 0,
         market: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedAlbumObject:
         """Get a list of the albums saved in the current Spotify user's 'Your Music' library.
 
@@ -492,7 +497,7 @@ class AsyncAlbums:
         ids: str,
         *,
         body: RemoveAlbumsRequest | RemoveAlbumsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Remove one or more albums from the current user's 'Your Music' library.
 
@@ -517,7 +522,7 @@ class AsyncAlbums:
         ids: str,
         *,
         body: SaveAlbumsRequest | SaveAlbumsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Save one or more albums to the current user's 'Your Music' library.
 
@@ -806,7 +811,7 @@ class AlbumsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
 class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def check_users_saved_albums(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedAlbumsErrorBody]:
         """Check if one or more albums is already saved in the current Spotify user's 'Your Music' library.
 
@@ -828,7 +833,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_an_album(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[AlbumObject, GetAnAlbumErrorBody]:
         """Get Spotify catalog information for a single album.
 
@@ -858,7 +863,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSimplifiedTrackObject, GetAnAlbumsTracksErrorBody]:
         """Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number
         of tracks returned.
@@ -896,7 +901,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingArtistDiscographyAlbumObject, GetAnArtistsAlbumsErrorBody]:
         """Get Spotify catalog information about an artist's albums.
 
@@ -928,7 +933,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_multiple_albums(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyAlbums, GetMultipleAlbumsErrorBody]:
         """Get Spotify catalog information for multiple albums identified by their Spotify IDs.
 
@@ -951,7 +956,11 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_new_releases(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagedAlbums, GetNewReleasesErrorBody]:
         """Get a list of new album releases featured in Spotify (shown, for example, on a Spotify player’s “Browse”
         tab).
@@ -980,7 +989,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         limit: int | None = 20,
         offset: int | None = 0,
         market: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedAlbumObject, GetUsersSavedAlbumsErrorBody]:
         """Get a list of the albums saved in the current Spotify user's 'Your Music' library.
 
@@ -1012,7 +1021,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         ids: str,
         *,
         body: RemoveAlbumsRequest | RemoveAlbumsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, RemoveAlbumsUserErrorBody]:
         """Remove one or more albums from the current user's 'Your Music' library.
 
@@ -1041,7 +1050,7 @@ class AsyncAlbumsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         ids: str,
         *,
         body: SaveAlbumsRequest | SaveAlbumsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SaveAlbumsUserErrorBody]:
         """Save one or more albums to the current user's 'Your Music' library.
 

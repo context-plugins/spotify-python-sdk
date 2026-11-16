@@ -4,12 +4,13 @@
 
 Accessor: `client.player` · Source: `spotify_web_api/apis/player.py` · 15 operations
 
-Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameters (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
+Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameter names, the async ones typing `request_options` as `AsyncRequestOptionsOrDict` (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
 
 ### client.player.add_to_queue
 
 - **Route**: `POST /me/player/queue`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def add_to_queue(uri: str, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `uri`
 - **Params**: `uri` — query · `device_id` — query
@@ -29,6 +30,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/player/devices`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_a_users_available_devices(*, request_options: RequestOptionsOrDict | None = None)`
 - **Returns (parsed)**: `ManyDevices`
 - **Returns (raw)**: `ApiResult[ManyDevices, GetAUsersAvailableDevicesErrorBody]`
@@ -47,6 +49,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/player`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_information_about_the_users_current_playback(*, market: str | None = None, additional_types: str | None = None, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `market` — query · `additional_types` — query
 - **Returns (parsed)**: `CurrentlyPlayingContextObject`
@@ -66,6 +69,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/player/queue`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_queue(*, request_options: RequestOptionsOrDict | None = None)`
 - **Returns (parsed)**: `QueueObject`
 - **Returns (raw)**: `ApiResult[QueueObject, GetQueueErrorBody]`
@@ -84,6 +88,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/player/recently-played`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_recently_played(*, limit: int | None = 20, after: int | None = None, before: int | None = None, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `limit` — query · `after` — query · `before` — query
 - **Returns (parsed)**: `CursorPagingPlayHistoryObject`
@@ -103,6 +108,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/player/currently-playing`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_the_users_currently_playing_track(*, market: str | None = None, additional_types: str | None = None, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `market` — query · `additional_types` — query
 - **Returns (parsed)**: `CurrentlyPlayingObject`
@@ -122,6 +128,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/player/pause`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def pause_a_users_playback(*, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `device_id` — query
 - **Returns (parsed)**: `None`
@@ -140,6 +147,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/player/seek`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def seek_to_position_in_currently_playing_track(position_ms: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `position_ms`
 - **Params**: `position_ms` — query · `device_id` — query
@@ -159,6 +167,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/player/repeat`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def set_repeat_mode_on_users_playback(state: str, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `state`
 - **Params**: `state` — query · `device_id` — query
@@ -178,6 +187,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/player/volume`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def set_volume_for_users_playback(volume_percent: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `volume_percent`
 - **Params**: `volume_percent` — query · `device_id` — query
@@ -197,6 +207,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `POST /me/player/next`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def skip_users_playback_to_next_track(*, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `device_id` — query
 - **Returns (parsed)**: `None`
@@ -215,6 +226,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `POST /me/player/previous`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def skip_users_playback_to_previous_track(*, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `device_id` — query
 - **Returns (parsed)**: `None`
@@ -233,6 +245,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/player/play`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def start_a_users_playback(*, device_id: str | None = None, body: StartOrResumePlaybackRequest | StartOrResumePlaybackRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `device_id` — query · `body` — JSON body
 - **Returns (parsed)**: `None`
@@ -253,6 +266,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/player/shuffle`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def toggle_shuffle_for_users_playback(state: bool, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `state`
 - **Params**: `state` — query · `device_id` — query
@@ -272,6 +286,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/player`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def transfer_a_users_playback(*, body: MePlayerRequest | MePlayerRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `body` — JSON body
 - **Returns (parsed)**: `None`

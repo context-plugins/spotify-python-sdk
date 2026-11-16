@@ -6,6 +6,7 @@ from ..core import (
     ApiResult,
     AsyncAnySchemes,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -88,7 +89,7 @@ class AsyncSearch:
         limit: int | None = 20,
         offset: int | None = 0,
         include_external: IncludeExternalOrStr | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> SearchItems:
         """Get Spotify catalog information about albums, artists, playlists, tracks, shows, episodes or audiobooks that
         match a keyword string. Audiobooks are only available within the US, UK, Canada, Ireland, New Zealand and
@@ -185,7 +186,7 @@ class AsyncSearchWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         limit: int | None = 20,
         offset: int | None = 0,
         include_external: IncludeExternalOrStr | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[SearchItems, SearchErrorBody]:
         """Get Spotify catalog information about albums, artists, playlists, tracks, shows, episodes or audiobooks that
         match a keyword string. Audiobooks are only available within the US, UK, Canada, Ireland, New Zealand and

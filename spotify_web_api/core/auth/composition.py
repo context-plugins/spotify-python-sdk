@@ -4,13 +4,15 @@
 against that one instance -- never "applying it did not raise", so a *blank* credential is configured
 and is sent. :class:`AllSchemes` and :class:`AnySchemes`, with their async twins, are OpenAPI's AND and
 OR requirements. Neither withholds a request over a partial set: the SDK never refuses to send because
-a credential is missing, the server decides.
+a credential is missing, the server decides. An OR group whose every configured member raised raises
+:class:`AnySchemesError` with each failure, which ``execute`` wraps in ``AuthSchemeError`` naming the call.
 
 All four composites carry ``invalidate``, which makes a composite itself revocable so nesting
 propagates."""
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Final
 
@@ -47,7 +49,7 @@ class _NoAuth:
 no_auth: Final[AuthScheme] = _NoAuth()
 """What the client writes when a credential is absent, and ``execute``'s default.
 
-An endpoint whose operation declares no ``security`` omits ``auth=`` entirely and takes this. The SDK
+An endpoint whose operation declares no ``security`` omits ``auth_scheme=`` entirely and takes this. The SDK
 never refuses to send a request because a credential is missing -- the server decides."""
 
 
@@ -104,12 +106,39 @@ class AllSchemes:
             invalidate(scheme)
 
 
-class AnySchemes:
-    """OR-composition: the first *configured* member applies.
+class AnySchemesError(Exception):
+    """Every configured member of an OR group raised: each failure, in the order the members were tried.
 
-    Selection is on credential presence, never on "applying it did not fail" -- an unconfigured member
-    listed ahead of a configured one must not win and send the request unauthenticated. With nothing
-    configured the request goes out unauthenticated, as a single unconfigured scheme would."""
+    What :class:`AnySchemes` and :class:`AsyncAnySchemes` raise, and never what a caller catches. A scheme
+    is applied without the request, so the group cannot name the call; ``execute`` wraps this in
+    ``AuthSchemeError`` naming it, with these failures as its ``scheme_failures`` and this as its cause,
+    under the message ``could not be authenticated: no configured scheme succeeded``. An OR group nested
+    in another is one of the outer group's failures, never flattened."""
+
+    def __init__(self, scheme_failures: Sequence[Exception]) -> None:
+        super().__init__("no configured scheme succeeded")
+        self.scheme_failures: tuple[Exception, ...] = tuple(scheme_failures)
+        """What each configured member raised, in the order they were tried; never empty."""
+
+    def __reduce__(self) -> tuple[type[AnySchemesError], tuple[tuple[Exception, ...]]]:
+        # BaseException's own reduce replays ``args`` -- the message -- into ``scheme_failures``.
+        return type(self), (self.scheme_failures,)
+
+
+class AnySchemes:
+    """OR-composition: the first *configured* member that applies wins.
+
+    The candidates are chosen on credential presence, never on "applying it did not fail" -- an
+    unconfigured member is never tried, so one listed ahead of a configured one cannot win and send the
+    request unauthenticated. Among the candidates, one that raises yields to the next; when every one
+    raised, :class:`AnySchemesError` carries each failure, the first as its cause. A failure a later
+    member recovers from is absorbed: the call goes ahead on that member's credential. A token request
+    that fails logs its own lines, a WARNING where it was refused and an ERROR where it got no response,
+    and those lines are the signal that a fallback credential is in use. A scheme is applied outside the
+    call's log scope, so the group adds no line of its own; a caller who wants one naming the scheme, or
+    one for a scheme that makes no request, wraps that scheme. A caller's cancellation is not an
+    ``Exception`` and is never collected. With nothing configured the request goes out unauthenticated, as
+    a single unconfigured scheme would."""
 
     __slots__ = ("_schemes",)
 
@@ -117,9 +146,16 @@ class AnySchemes:
         self._schemes = schemes
 
     def apply(self) -> AuthParams:
+        failures: list[Exception] = []
         for scheme in self._schemes:
-            if is_configured(scheme):
+            if not is_configured(scheme):
+                continue
+            try:
                 return scheme.apply()
+            except Exception as error:
+                failures.append(error)
+        if failures:
+            raise AnySchemesError(failures) from failures[0]
         return AuthParams()
 
     def invalidate(self) -> None:
@@ -154,9 +190,10 @@ class AsyncAllSchemes:
 
 
 class AsyncAnySchemes:
-    """:class:`AnySchemes` for the asynchronous client: the chosen member may await its credential.
+    """:class:`AnySchemes` for the asynchronous client: a candidate may await its credential.
 
-    Selection still happens without I/O, so only the one member that wins is ever resolved."""
+    The candidates are still chosen without I/O, so no unconfigured member is ever resolved, and none
+    after the one that wins. A failure a later member recovers from is dropped, as it is there."""
 
     __slots__ = ("_schemes",)
 
@@ -164,9 +201,16 @@ class AsyncAnySchemes:
         self._schemes = schemes
 
     async def apply(self) -> AuthParams:
+        failures: list[Exception] = []
         for scheme in self._schemes:
-            if is_configured(scheme):
+            if not is_configured(scheme):
+                continue
+            try:
                 return await resolve_auth(scheme)
+            except Exception as error:
+                failures.append(error)
+        if failures:
+            raise AnySchemesError(failures) from failures[0]
         return AuthParams()
 
     def invalidate(self) -> None:

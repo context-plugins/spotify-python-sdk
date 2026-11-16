@@ -11,6 +11,7 @@ reaches this package -- so importing ``.schemes`` from this file would close tha
 from .composition import (
     AllSchemes,
     AnySchemes,
+    AnySchemesError,
     AsyncAllSchemes,
     AsyncAnySchemes,
     invalidate,
@@ -20,13 +21,10 @@ from .composition import (
 )
 from .models import (
     AuthParams,
-    OAuthError,
-    OAuthProviderError,
     OAuthToken,
     OAuthTokenRefreshable,
     client_secret_basic,
     client_secret_post,
-    oauth_error_response,
 )
 from .protocols import (
     AsyncAuthScheme,
@@ -54,6 +52,7 @@ __all__ = [
     "AnySchemes",
     "AsyncAllSchemes",
     "AsyncAnySchemes",
+    "AnySchemesError",
     # Managed OAuth 2.0 -- the token source seam
     "TokenSource",
     "AsyncTokenSource",
@@ -62,9 +61,6 @@ __all__ = [
     # Managed OAuth 2.0 -- the provider's vocabulary
     "OAuthToken",
     "OAuthTokenRefreshable",
-    "OAuthProviderError",
-    "OAuthError",
-    "oauth_error_response",
     "client_secret_basic",
     "client_secret_post",
 ]

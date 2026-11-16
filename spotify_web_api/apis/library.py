@@ -6,6 +6,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -850,7 +851,7 @@ class AsyncLibrary:
         playlist_id: str,
         *,
         body: PlaylistsRequest | PlaylistsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Change a playlist's name and public/private state. (The user must, of course, own the playlist.)
 
@@ -875,7 +876,7 @@ class AsyncLibrary:
         )
 
     async def check_current_user_follows(
-        self, type_: ItemType3OrStr, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, type_: ItemType3OrStr, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check to see if the current user is following one or more artists or other Spotify users.
 
@@ -898,7 +899,7 @@ class AsyncLibrary:
         )
 
     async def check_users_saved_albums(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more albums is already saved in the current Spotify user's 'Your Music' library.
 
@@ -918,7 +919,7 @@ class AsyncLibrary:
         return unwrap(await self._with_raw_response.check_users_saved_albums(ids, request_options=request_options))
 
     async def check_users_saved_audiobooks(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more audiobooks are already saved in the current Spotify user's library.
 
@@ -938,7 +939,7 @@ class AsyncLibrary:
         return unwrap(await self._with_raw_response.check_users_saved_audiobooks(ids, request_options=request_options))
 
     async def check_users_saved_episodes(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more episodes is already saved in the current Spotify user's 'Your Episodes' library.<br/>
         This API endpoint is in __beta__ and could change without warning. Please share any feedback that you have, or
@@ -961,7 +962,7 @@ class AsyncLibrary:
         return unwrap(await self._with_raw_response.check_users_saved_episodes(ids, request_options=request_options))
 
     async def check_users_saved_shows(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more shows is already saved in the current Spotify user's library.
 
@@ -981,7 +982,7 @@ class AsyncLibrary:
         return unwrap(await self._with_raw_response.check_users_saved_shows(ids, request_options=request_options))
 
     async def check_users_saved_tracks(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more tracks is already saved in the current Spotify user's 'Your Music' library.
 
@@ -1005,7 +1006,7 @@ class AsyncLibrary:
         user_id: str,
         *,
         body: UsersPlaylistsRequest | UsersPlaylistsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PlaylistObject:
         """Create a playlist for a Spotify user. (The playlist will be empty until you `add tracks
         <https://developer.spotify.com/documentation/web-api/reference/add-tracks-to-playlist>`__.) Each user is
@@ -1035,7 +1036,7 @@ class AsyncLibrary:
         ids: str,
         *,
         body: FollowArtistsOrUsersRequest | FollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Add the current user as a follower of one or more artists or other Spotify users.
 
@@ -1059,7 +1060,11 @@ class AsyncLibrary:
         )
 
     async def get_a_list_of_current_users_playlists(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingPlaylistObject:
         """Get a list of the playlists owned or followed by the current Spotify user.
 
@@ -1089,7 +1094,7 @@ class AsyncLibrary:
         *,
         after: str | None = None,
         limit: int | None = 20,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> CursorPagedArtists:
         """Get the current user's followed artists.
 
@@ -1118,7 +1123,7 @@ class AsyncLibrary:
         limit: int | None = 20,
         offset: int | None = 0,
         market: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedAlbumObject:
         """Get a list of the albums saved in the current Spotify user's 'Your Music' library.
 
@@ -1144,7 +1149,11 @@ class AsyncLibrary:
         )
 
     async def get_users_saved_audiobooks(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedAudiobookObject:
         """Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
 
@@ -1174,7 +1183,7 @@ class AsyncLibrary:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedEpisodeObject:
         """Get a list of the episodes saved in the current Spotify user's library.<br/> This API endpoint is in __beta__
         and could change without warning. Please share any feedback that you have, or issues that you discover, in our
@@ -1202,7 +1211,11 @@ class AsyncLibrary:
         )
 
     async def get_users_saved_shows(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedShowObject:
         """Get a list of shows saved in the current Spotify user's library. Optional parameters can be used to limit the
         number of shows returned.
@@ -1233,7 +1246,7 @@ class AsyncLibrary:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedTrackObject:
         """Get a list of the songs saved in the current Spotify user's 'Your Music' library.
 
@@ -1264,7 +1277,7 @@ class AsyncLibrary:
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingArtistObject:
         """Get the current user's top artists based on calculated affinity.
 
@@ -1295,7 +1308,7 @@ class AsyncLibrary:
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingTrackObject:
         """Get the current user's top tracks based on calculated affinity.
 
@@ -1325,7 +1338,7 @@ class AsyncLibrary:
         ids: str,
         *,
         body: RemoveAlbumsRequest | RemoveAlbumsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Remove one or more albums from the current user's 'Your Music' library.
 
@@ -1345,7 +1358,9 @@ class AsyncLibrary:
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
         return unwrap(await self._with_raw_response.remove_albums_user(ids, body=body, request_options=request_options))
 
-    async def remove_audiobooks_user(self, ids: str, *, request_options: RequestOptionsOrDict | None = None) -> None:
+    async def remove_audiobooks_user(
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
+    ) -> None:
         """Remove one or more audiobooks from the Spotify user's library.
 
         Args:
@@ -1368,7 +1383,7 @@ class AsyncLibrary:
         ids: str,
         *,
         body: RemoveEpisodesRequest | RemoveEpisodesRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Remove one or more episodes from the current user's library.<br/> This API endpoint is in __beta__ and could
         change without warning. Please share any feedback that you have, or issues that you discover, in our `developer
@@ -1398,7 +1413,7 @@ class AsyncLibrary:
         *,
         market: str | None = None,
         body: RemoveShowsRequest | RemoveShowsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Delete one or more shows from current Spotify user's library.
 
@@ -1428,7 +1443,7 @@ class AsyncLibrary:
         ids: str,
         *,
         body: RemoveTracksRequest | RemoveTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Remove one or more tracks from the current user's 'Your Music' library.
 
@@ -1453,7 +1468,7 @@ class AsyncLibrary:
         ids: str,
         *,
         body: SaveAlbumsRequest | SaveAlbumsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Save one or more albums to the current user's 'Your Music' library.
 
@@ -1473,7 +1488,7 @@ class AsyncLibrary:
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
         return unwrap(await self._with_raw_response.save_albums_user(ids, body=body, request_options=request_options))
 
-    async def save_audiobooks_user(self, ids: str, *, request_options: RequestOptionsOrDict | None = None) -> None:
+    async def save_audiobooks_user(self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None) -> None:
         """Save one or more audiobooks to the current Spotify user's library.
 
         Args:
@@ -1496,7 +1511,7 @@ class AsyncLibrary:
         ids: str,
         *,
         body: SaveEpisodesRequest | SaveEpisodesRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Save one or more episodes to the current user's library.<br/> This API endpoint is in __beta__ and could
         change without warning. Please share any feedback that you have, or issues that you discover, in our `developer
@@ -1523,7 +1538,7 @@ class AsyncLibrary:
         ids: str,
         *,
         body: SaveShowsRequest | SaveShowsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Save one or more shows to current Spotify user's library.
 
@@ -1548,7 +1563,7 @@ class AsyncLibrary:
         ids: str,
         *,
         body: SaveTracksRequest | SaveTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Save one or more tracks to the current user's 'Your Music' library.
 
@@ -1574,7 +1589,7 @@ class AsyncLibrary:
         ids: str,
         *,
         body: UnfollowArtistsOrUsersRequest | UnfollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Remove the current user as a follower of one or more artists or other Spotify users.
 
@@ -2422,7 +2437,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         playlist_id: str,
         *,
         body: PlaylistsRequest | PlaylistsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, ChangePlaylistDetailsErrorBody]:
         """Change a playlist's name and public/private state. (The user must, of course, own the playlist.)
 
@@ -2447,7 +2462,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def check_current_user_follows(
-        self, type_: ItemType3OrStr, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, type_: ItemType3OrStr, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckCurrentUserFollowsErrorBody]:
         """Check to see if the current user is following one or more artists or other Spotify users.
 
@@ -2470,7 +2485,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def check_users_saved_albums(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedAlbumsErrorBody]:
         """Check if one or more albums is already saved in the current Spotify user's 'Your Music' library.
 
@@ -2492,7 +2507,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def check_users_saved_audiobooks(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedAudiobooksErrorBody]:
         """Check if one or more audiobooks are already saved in the current Spotify user's library.
 
@@ -2514,7 +2529,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def check_users_saved_episodes(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedEpisodesErrorBody]:
         """Check if one or more episodes is already saved in the current Spotify user's 'Your Episodes' library.<br/>
         This API endpoint is in __beta__ and could change without warning. Please share any feedback that you have, or
@@ -2539,7 +2554,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def check_users_saved_shows(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedShowsErrorBody]:
         """Check if one or more shows is already saved in the current Spotify user's library.
 
@@ -2561,7 +2576,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def check_users_saved_tracks(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedTracksErrorBody]:
         """Check if one or more tracks is already saved in the current Spotify user's 'Your Music' library.
 
@@ -2587,7 +2602,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         user_id: str,
         *,
         body: UsersPlaylistsRequest | UsersPlaylistsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PlaylistObject, CreatePlaylistErrorBody]:
         """Create a playlist for a Spotify user. (The playlist will be empty until you `add tracks
         <https://developer.spotify.com/documentation/web-api/reference/add-tracks-to-playlist>`__.) Each user is
@@ -2619,7 +2634,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: FollowArtistsOrUsersRequest | FollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, FollowArtistsUsersErrorBody]:
         """Add the current user as a follower of one or more artists or other Spotify users.
 
@@ -2645,7 +2660,11 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def get_a_list_of_current_users_playlists(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingPlaylistObject, GetAListOfCurrentUsersPlaylistsErrorBody]:
         """Get a list of the playlists owned or followed by the current Spotify user.
 
@@ -2673,7 +2692,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         *,
         after: str | None = None,
         limit: int | None = 20,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[CursorPagedArtists, GetFollowedErrorBody]:
         """Get the current user's followed artists.
 
@@ -2706,7 +2725,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         limit: int | None = 20,
         offset: int | None = 0,
         market: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedAlbumObject, GetUsersSavedAlbumsErrorBody]:
         """Get a list of the albums saved in the current Spotify user's 'Your Music' library.
 
@@ -2734,7 +2753,11 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def get_users_saved_audiobooks(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedAudiobookObject, GetUsersSavedAudiobooksErrorBody]:
         """Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
 
@@ -2762,7 +2785,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedEpisodeObject, GetUsersSavedEpisodesErrorBody]:
         """Get a list of the episodes saved in the current Spotify user's library.<br/> This API endpoint is in __beta__
         and could change without warning. Please share any feedback that you have, or issues that you discover, in our
@@ -2792,7 +2815,11 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def get_users_saved_shows(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedShowObject, GetUsersSavedShowsErrorBody]:
         """Get a list of shows saved in the current Spotify user's library. Optional parameters can be used to limit the
         number of shows returned.
@@ -2821,7 +2848,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedTrackObject, GetUsersSavedTracksErrorBody]:
         """Get a list of the songs saved in the current Spotify user's 'Your Music' library.
 
@@ -2854,7 +2881,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingArtistObject, GetUsersTopArtistsErrorBody]:
         """Get the current user's top artists based on calculated affinity.
 
@@ -2887,7 +2914,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingTrackObject, GetUsersTopTracksErrorBody]:
         """Get the current user's top tracks based on calculated affinity.
 
@@ -2919,7 +2946,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: RemoveAlbumsRequest | RemoveAlbumsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, RemoveAlbumsUserErrorBody]:
         """Remove one or more albums from the current user's 'Your Music' library.
 
@@ -2944,7 +2971,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def remove_audiobooks_user(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, RemoveAudiobooksUserErrorBody]:
         """Remove one or more audiobooks from the Spotify user's library.
 
@@ -2971,7 +2998,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: RemoveEpisodesRequest | RemoveEpisodesRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, RemoveEpisodesUserErrorBody]:
         """Remove one or more episodes from the current user's library.<br/> This API endpoint is in __beta__ and could
         change without warning. Please share any feedback that you have, or issues that you discover, in our `developer
@@ -3003,7 +3030,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         *,
         market: str | None = None,
         body: RemoveShowsRequest | RemoveShowsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, RemoveShowsUserErrorBody]:
         """Delete one or more shows from current Spotify user's library.
 
@@ -3033,7 +3060,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: RemoveTracksRequest | RemoveTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, RemoveTracksUserErrorBody]:
         """Remove one or more tracks from the current user's 'Your Music' library.
 
@@ -3062,7 +3089,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: SaveAlbumsRequest | SaveAlbumsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SaveAlbumsUserErrorBody]:
         """Save one or more albums to the current user's 'Your Music' library.
 
@@ -3087,7 +3114,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def save_audiobooks_user(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, SaveAudiobooksUserErrorBody]:
         """Save one or more audiobooks to the current Spotify user's library.
 
@@ -3114,7 +3141,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: SaveEpisodesRequest | SaveEpisodesRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SaveEpisodesUserErrorBody]:
         """Save one or more episodes to the current user's library.<br/> This API endpoint is in __beta__ and could
         change without warning. Please share any feedback that you have, or issues that you discover, in our `developer
@@ -3145,7 +3172,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: SaveShowsRequest | SaveShowsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SaveShowsUserErrorBody]:
         """Save one or more shows to current Spotify user's library.
 
@@ -3174,7 +3201,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: SaveTracksRequest | SaveTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SaveTracksUserErrorBody]:
         """Save one or more tracks to the current user's 'Your Music' library.
 
@@ -3204,7 +3231,7 @@ class AsyncLibraryWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: UnfollowArtistsOrUsersRequest | UnfollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, UnfollowArtistsUsersErrorBody]:
         """Remove the current user as a follower of one or more artists or other Spotify users.
 

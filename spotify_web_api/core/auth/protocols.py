@@ -88,7 +88,8 @@ class RefreshableTokenSource(TokenSource[CredentialsT_contra], Protocol[Credenti
 
     Extends rather than replaces: ``fetch`` still runs when there is nothing to refresh, and again
     when a refresh is refused. ``refresh`` returns ``None`` for a *provider* refusal rather than
-    raising; a transport failure still propagates, as does a success whose body will not decode."""
+    raising; a transport failure still propagates, as ``SdkConnectionError``, and so does a success whose
+    body will not decode, as ``ResponseDecodeError``."""
 
     def fetch(self, credentials: CredentialsT_contra) -> OAuthTokenRefreshable: ...
 

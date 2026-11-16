@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from functools import cached_property
 from types import TracebackType
 
@@ -33,37 +34,45 @@ from .core import (
     ClientCredentialsTokenSource,
     HttpClient,
     Httpx2Client,
+    LoggingOptionsOrDict,
     OAuth2RefreshableScheme,
     OAuth2Scheme,
     RawClient,
     RefreshableTokenSource,
     RetryOptionsOrDict,
+    SdkHook,
+    SdkHooksDict,
     TokenSource,
     client_secret_basic,
     no_auth,
     param,
 )
-from .server.environment import Environment
+from .server.server_config import ServerConfigOrDict
 
 
 class SpotifyWebApiClient(BaseSpotifyWebApiClient[RawClient]):
     def __init__(
         self,
         *,
-        environment: Environment = "production",
-        base_url: str | None = None,
+        server_config: ServerConfigOrDict | None = None,
         timeout: float = DEFAULT_TIMEOUT,
         retry_options: int | RetryOptionsOrDict | None = None,
+        logging_options: LoggingOptionsOrDict | None = None,
+        hooks: Sequence[SdkHook] | SdkHooksDict | None = None,
         custom_http_client: HttpClient | None = None,
         oauth_2_0: AuthorizationCodeCredentialsOrDict[Oauth20Scope] | None = None,
         oauth_2_0_token_source: RefreshableTokenSource[AuthorizationCodeCredentials[Oauth20Scope]] | None = None,
         oauth_2_0_client_credentials: ClientCredentialsOrDict | None = None,
         oauth_2_0_client_credentials_token_source: TokenSource[ClientCredentials] | None = None,
     ) -> None:
-        super().__init__(environment=environment, base_url=base_url, timeout=timeout, retry_options=retry_options)
+        super().__init__(
+            server_config=server_config, timeout=timeout, retry_options=retry_options, logging_options=logging_options
+        )
         self._raw_client = RawClient(
             http_client=custom_http_client if custom_http_client is not None else Httpx2Client(timeout=timeout),
             retry_options=self._retry_options,
+            logging_options=self._logging_options,
+            hooks=hooks if hooks is not None else [],
             global_headers=[
                 param[str]("User-Agent", "SpotifyWebApiClient/2024.3.3 Python"),
                 param[str]("X-APIMatic-Lang", "Python"),
@@ -82,9 +91,9 @@ class SpotifyWebApiClient(BaseSpotifyWebApiClient[RawClient]):
                         if oauth_2_0_token_source is not None
                         else AuthorizationCodeTokenSource[Oauth20Scope](
                             client=self._raw_client,
-                            authorization_url=self._server.default("/authorize"),
-                            token_url=self._server.default("/api/token"),
-                            refresh_url=self._server.default("/api/token"),
+                            authorization_url=self._server.auth_server("/authorize"),
+                            token_url=self._server.auth_server("/api/token"),
+                            refresh_url=self._server.auth_server("/api/token"),
                             placement=client_secret_basic,
                         )
                     ),
@@ -100,7 +109,7 @@ class SpotifyWebApiClient(BaseSpotifyWebApiClient[RawClient]):
                         if oauth_2_0_client_credentials_token_source is not None
                         else ClientCredentialsTokenSource(
                             client=self._raw_client,
-                            token_url=self._server.default("/api/token"),
+                            token_url=self._server.auth_server("/api/token"),
                             placement=client_secret_basic,
                         )
                     ),

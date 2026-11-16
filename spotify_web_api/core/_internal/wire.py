@@ -3,8 +3,8 @@
 Every request parameter -- query, form, path, header, or a base URL's server variable -- reaches
 the wire the same way: validated against the type the endpoint declared, dumped through that
 type's adapter, and turned into text. Only the *arrangement* differs, and that stays with each
-destination: :mod:`.form` explodes values into ``key[sub]`` pairs, :mod:`.urls` joins them into
-``/``-separated segments, :mod:`.headers` folds them into one field value.
+destination: :mod:`.flattening` explodes values into ``key[sub]`` pairs, :mod:`.urls` joins a path
+value's members with ``,`` into one segment, :mod:`.headers` folds them into one field value.
 
 That shared prefix lives here, which is why a ``datetime`` declared ``RFC1123DateTime`` renders as
 its GMT string at every destination without any of them knowing what a datetime is -- and why a
@@ -137,7 +137,7 @@ def to_text(value: object) -> str:
 
 
 def parse_json(content: bytes) -> Any:
-    """Parse a response body as JSON, normalising both ways it can fail.
+    """Parse a response body as JSON, normalising every way it can fail.
 
     Parsed from the bytes rather than from a decoded ``str``, so RFC 8259 encoding detection applies
     (UTF-8/16/32, BOM-tolerant) and an undecodable byte is a failure rather than a replacement
@@ -145,6 +145,10 @@ def parse_json(content: bytes) -> Any:
 
     ``json.JSONDecodeError`` and ``UnicodeDecodeError`` are both ``ValueError``s already, but they
     read as two unrelated faults; a caller who reached a body that will not parse is owed one answer.
+    ``RecursionError`` is not a ``ValueError`` at all: the parser recurses once per nesting level, so a
+    body nested past the interpreter's recursion limit would escape every arm that turns a decode
+    failure into ``ResponseDecodeError``, and reach the caller outside the ``SdkError`` family. So it is
+    refused here as one more ``ValueError``.
     The inverse of :func:`compact_json`, and here for the same reason -- one spelling, every caller.
 
     Args:
@@ -154,31 +158,37 @@ def parse_json(content: bytes) -> Any:
         Whatever the body parses to -- an object, array or scalar.
 
     Raises:
-        ValueError: If the body is not valid JSON, or is not decodable at all."""
+        ValueError: If the body is not valid JSON, is not decodable at all, or nests deeper than the
+            interpreter's recursion limit allows."""
     try:
         return json.loads(content)
     except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise ValueError("Response body is not valid JSON") from exc
+    except RecursionError as exc:
+        raise ValueError("Response body nests too deeply to parse") from exc
 
 
-def compact_json(value: object) -> str:
+def compact_json(value: object, *, ensure_ascii: bool = True) -> str:
     """JSON-encode a structured value with no insignificant whitespace.
 
-    ``ensure_ascii`` stays at its default: a header field value is ISO-8859-1 by RFC 9110 and the
-    transport rejects anything outside it, so escaping non-ASCII is the only encoding that
-    survives. ``allow_nan`` is turned off: at its default a non-finite float encodes as
-    ``Infinity`` or ``NaN`` -- a Python dialect no RFC 8259 parser accepts -- so the call would
-    fail server-side, far from the line that produced the value.
+    ``ensure_ascii`` defaults on: a header field value is ISO-8859-1 by RFC 9110 and the transport
+    rejects anything outside it, so a header, a path segment or a multipart text part keeps every
+    non-ASCII character escaped. A JSON *body* passes ``False`` and goes out as UTF-8 -- the bytes
+    httpx's own encoder produced before a body carried its own, so the wire did not change.
+    ``allow_nan`` is turned off: at its default a non-finite float encodes as ``Infinity`` or
+    ``NaN`` -- a Python dialect no RFC 8259 parser accepts -- so the call would fail server-side,
+    far from the line that produced the value.
 
     Args:
         value: The structured value to encode.
+        ensure_ascii: Whether non-ASCII characters are escaped; off for a body, on everywhere else.
 
     Returns:
-        Its JSON text, non-ASCII escaped and no insignificant whitespace.
+        Its JSON text with no insignificant whitespace.
 
     Raises:
         ValueError: If ``value`` holds a non-finite float, which has no RFC 8259 spelling."""
-    return json.dumps(value, separators=(",", ":"), allow_nan=False)
+    return json.dumps(value, separators=(",", ":"), ensure_ascii=ensure_ascii, allow_nan=False)
 
 
 def is_collection(value: object) -> TypeGuard[Iterable[object]]:

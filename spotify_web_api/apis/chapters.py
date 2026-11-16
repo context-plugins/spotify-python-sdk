@@ -4,6 +4,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -113,7 +114,7 @@ class AsyncChapters:
         self._with_raw_response = AsyncChaptersWithRawResponse(client, server, auth)
 
     async def get_a_chapter(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ChapterObject:
         """Get Spotify catalog information for a single audiobook chapter. Chapters are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
@@ -141,7 +142,7 @@ class AsyncChapters:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSimplifiedChapterObject:
         """Get Spotify catalog information about an audiobook's chapters. Audiobooks are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
@@ -169,7 +170,7 @@ class AsyncChapters:
         )
 
     async def get_several_chapters(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyChapters:
         """Get Spotify catalog information for several audiobook chapters identified by their Spotify IDs. Chapters are
         only available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
@@ -287,7 +288,7 @@ class ChaptersWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
 
 class AsyncChaptersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def get_a_chapter(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ChapterObject, GetAChapterErrorBody]:
         """Get Spotify catalog information for a single audiobook chapter. Chapters are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
@@ -318,7 +319,7 @@ class AsyncChaptersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSimplifiedChapterObject, GetAudiobookChaptersErrorBody]:
         """Get Spotify catalog information about an audiobook's chapters. Audiobooks are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
@@ -349,7 +350,7 @@ class AsyncChaptersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         )
 
     async def get_several_chapters(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyChapters, GetSeveralChaptersErrorBody]:
         """Get Spotify catalog information for several audiobook chapters identified by their Spotify IDs. Chapters are
         only available within the US, UK, Canada, Ireland, New Zealand and Australia markets.

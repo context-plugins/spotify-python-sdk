@@ -6,6 +6,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -214,7 +215,7 @@ class AsyncAudiobooks:
         self._with_raw_response = AsyncAudiobooksWithRawResponse(client, server, auth)
 
     async def check_users_saved_audiobooks(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more audiobooks are already saved in the current Spotify user's library.
 
@@ -234,7 +235,7 @@ class AsyncAudiobooks:
         return unwrap(await self._with_raw_response.check_users_saved_audiobooks(ids, request_options=request_options))
 
     async def get_an_audiobook(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> AudiobookObject:
         """Get Spotify catalog information for a single audiobook. Audiobooks are only available within the US, UK,
         Canada, Ireland, New Zealand and Australia markets.
@@ -266,7 +267,7 @@ class AsyncAudiobooks:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSimplifiedChapterObject:
         """Get Spotify catalog information about an audiobook's chapters. Audiobooks are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
@@ -294,7 +295,7 @@ class AsyncAudiobooks:
         )
 
     async def get_multiple_audiobooks(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyAudiobooks:
         """Get Spotify catalog information for several audiobooks identified by their Spotify IDs. Audiobooks are only
         available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
@@ -319,7 +320,11 @@ class AsyncAudiobooks:
         )
 
     async def get_users_saved_audiobooks(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedAudiobookObject:
         """Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
 
@@ -343,7 +348,9 @@ class AsyncAudiobooks:
             ),
         )
 
-    async def remove_audiobooks_user(self, ids: str, *, request_options: RequestOptionsOrDict | None = None) -> None:
+    async def remove_audiobooks_user(
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
+    ) -> None:
         """Remove one or more audiobooks from the Spotify user's library.
 
         Args:
@@ -361,7 +368,7 @@ class AsyncAudiobooks:
                 limits. ``error`` is ``Unauthorized1 | Forbidden1 | TooManyRequests1 | RawError``."""
         return unwrap(await self._with_raw_response.remove_audiobooks_user(ids, request_options=request_options))
 
-    async def save_audiobooks_user(self, ids: str, *, request_options: RequestOptionsOrDict | None = None) -> None:
+    async def save_audiobooks_user(self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None) -> None:
         """Save one or more audiobooks to the current Spotify user's library.
 
         Args:
@@ -565,7 +572,7 @@ class AudiobooksWithRawResponse(SecuredRawResponse[RawClient, Server, AuthScheme
 
 class AsyncAudiobooksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def check_users_saved_audiobooks(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedAudiobooksErrorBody]:
         """Check if one or more audiobooks are already saved in the current Spotify user's library.
 
@@ -587,7 +594,7 @@ class AsyncAudiobooksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, 
         )
 
     async def get_an_audiobook(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[AudiobookObject, GetAnAudiobookErrorBody]:
         """Get Spotify catalog information for a single audiobook. Audiobooks are only available within the US, UK,
         Canada, Ireland, New Zealand and Australia markets.
@@ -618,7 +625,7 @@ class AsyncAudiobooksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, 
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSimplifiedChapterObject, GetAudiobookChaptersErrorBody]:
         """Get Spotify catalog information about an audiobook's chapters. Audiobooks are only available within the US,
         UK, Canada, Ireland, New Zealand and Australia markets.
@@ -649,7 +656,7 @@ class AsyncAudiobooksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, 
         )
 
     async def get_multiple_audiobooks(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyAudiobooks, GetMultipleAudiobooksErrorBody]:
         """Get Spotify catalog information for several audiobooks identified by their Spotify IDs. Audiobooks are only
         available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
@@ -673,7 +680,11 @@ class AsyncAudiobooksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, 
         )
 
     async def get_users_saved_audiobooks(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedAudiobookObject, GetUsersSavedAudiobooksErrorBody]:
         """Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
 
@@ -696,7 +707,7 @@ class AsyncAudiobooksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, 
         )
 
     async def remove_audiobooks_user(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, RemoveAudiobooksUserErrorBody]:
         """Remove one or more audiobooks from the Spotify user's library.
 
@@ -719,7 +730,7 @@ class AsyncAudiobooksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, 
         )
 
     async def save_audiobooks_user(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, SaveAudiobooksUserErrorBody]:
         """Save one or more audiobooks to the current Spotify user's library.
 

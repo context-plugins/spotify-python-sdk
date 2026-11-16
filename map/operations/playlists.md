@@ -4,12 +4,13 @@
 
 Accessor: `client.playlists` · Source: `spotify_web_api/apis/playlists.py` · 16 operations
 
-Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameters (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
+Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameter names, the async ones typing `request_options` as `AsyncRequestOptionsOrDict` (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
 
 ### client.playlists.add_tracks_to_playlist
 
 - **Route**: `POST /playlists/{playlist_id}/tracks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def add_tracks_to_playlist(playlist_id: str, *, position: int | None = None, uris: str | None = None, body: PlaylistsTracksRequest | PlaylistsTracksRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path · `position` — query · `uris` — query · `body` — JSON body
@@ -32,6 +33,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /playlists/{playlist_id}`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def change_playlist_details(playlist_id: str, *, body: PlaylistsRequest | PlaylistsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path · `body` — JSON body
@@ -53,6 +55,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /playlists/{playlist_id}/followers/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_if_user_follows_playlist(playlist_id: str, ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`, `ids`
 - **Params**: `playlist_id` — path · `ids` — query
@@ -72,6 +75,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `POST /users/{user_id}/playlists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def create_playlist(user_id: str, *, body: UsersPlaylistsRequest | UsersPlaylistsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `user_id`
 - **Params**: `user_id` — path · `body` — JSON body
@@ -94,6 +98,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /playlists/{playlist_id}/followers`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def follow_playlist(playlist_id: str, *, body: PlaylistsFollowersRequest | PlaylistsFollowersRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path · `body` — JSON body
@@ -115,6 +120,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /browse/categories/{category_id}/playlists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_a_categories_playlists(category_id: str, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `category_id`
 - **Params**: `category_id` — path · `limit` — query · `offset` — query
@@ -135,6 +141,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/playlists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_a_list_of_current_users_playlists(*, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingPlaylistObject`
@@ -154,6 +161,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /browse/featured-playlists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_featured_playlists(*, locale: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `locale` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingFeaturedPlaylistObject`
@@ -173,6 +181,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /users/{user_id}/playlists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_list_users_playlists(user_id: str, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `user_id`
 - **Params**: `user_id` — path · `limit` — query · `offset` — query
@@ -193,6 +202,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /playlists/{playlist_id}`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_playlist(playlist_id: str, *, market: str | None = None, fields: str | None = None, additional_types: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path · `market` — query · `fields` — query · `additional_types` — query
@@ -213,6 +223,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /playlists/{playlist_id}/images`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_playlist_cover(playlist_id: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path
@@ -233,6 +244,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /playlists/{playlist_id}/tracks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_playlists_tracks(playlist_id: str, *, market: str | None = None, fields: str | None = None, limit: int | None = 20, offset: int | None = 0, additional_types: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path · `market` — query · `fields` — query · `limit` — query · `offset` — query · `additional_types` — query
@@ -253,6 +265,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /playlists/{playlist_id}/tracks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def remove_tracks_playlist(playlist_id: str, *, body: PlaylistsTracksRequest2 | PlaylistsTracksRequest2Dict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path · `body` — JSON body
@@ -275,6 +288,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /playlists/{playlist_id}/tracks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def reorder_or_replace_playlists_tracks(playlist_id: str, *, uris: str | None = None, body: PlaylistsTracksRequest1 | PlaylistsTracksRequest1Dict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path · `uris` — query · `body` — JSON body
@@ -297,6 +311,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /playlists/{playlist_id}/followers`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def unfollow_playlist(playlist_id: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path
@@ -316,6 +331,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /playlists/{playlist_id}/images`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def upload_custom_playlist_cover(playlist_id: str, body: Any, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`, `body`
 - **Params**: `playlist_id` — path · `body` — text body

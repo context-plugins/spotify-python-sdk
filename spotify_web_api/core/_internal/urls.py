@@ -1,22 +1,20 @@
 """Turning a :class:`UrlTemplate` plus parameters into a request URL.
 
-Six pure functions in four groups. :func:`resolve_params` combines the parameters an API applies
-to every request with the ones a single call declares; :func:`render_segments` turns each of those
-into the URL segments it contributes, reading its declared type; :func:`build_url` then renders the
-result, with server variables filling the base URL's placeholders, path parameters filling the
-path's, and query parameters flattened and encoded onto the end. Resolution stays separate from
+Six pure functions. :func:`resolve_params` combines the parameters an API applies to every request
+with the ones a single call declares; :func:`render_segments` turns each of those into the URL
+segments it contributes, reading its declared type; :func:`build_url` then renders the result, with
+server variables filling the base URL's placeholders, path parameters filling the path's, and query
+parameters flattened and encoded onto the end; :func:`safe_url` cuts a rendered URL to the call every
+result and exception names. Resolution stays separate from
 rendering so each can be tested on its own, and none of the six holds state -- there is nothing to
-configure, so there is nothing to construct.
-
-:func:`strip_query` is the one that unbuilds rather than builds: the form of a URL that may be
-printed. It lives here because it is a fact about a URL's shape, and it has more than one reader."""
+configure, so there is nothing to construct."""
 
 from __future__ import annotations
 
 import re
 from collections.abc import Mapping, Sequence
 from typing import Any, Final
-from urllib.parse import quote, urlencode
+from urllib.parse import quote, urlencode, urlsplit, urlunsplit
 
 from ..params import Param, UrlTemplate
 from .flattening import flatten
@@ -95,14 +93,20 @@ def render_segments(params: Sequence[Param[Any]] | None) -> dict[str, tuple[str,
     return rendered
 
 
-def encode_query(params: Sequence[Param[Any]] | None) -> str:
-    """Flatten ``params`` and percent-encode them into a query string (no leading ``?``).
+def urlencode_params(params: Sequence[Param[Any]] | None) -> str:
+    """Flatten ``params`` and percent-encode them as ``application/x-www-form-urlencoded`` pairs.
+
+    One encoder for both destinations that carry pairs -- a query string (:func:`build_url`, which
+    adds the ``?``) and a form body (``form_body``) -- so one parameter renders to the same bytes
+    wherever it goes. Pair order is the parameters' order, a repeated key once per value. Non-ASCII
+    text is UTF-8 encoded and then percent-encoded (``urlencode``'s default, and the WHATWG rule),
+    so the result is ASCII.
 
     Args:
-        params: The query parameters; ``None`` is treated as none at all.
+        params: The parameters to render; ``None`` is treated as none at all.
 
     Returns:
-        The encoded query string, empty when nothing was contributed.
+        The encoded pairs, empty when nothing was contributed.
 
     Raises:
         ValueError: If a parameter's value does not match its declared type."""
@@ -165,22 +169,26 @@ def build_url(
     # "users" would resolve to ".../users", silently dropping the version.
     url = f"{base.rstrip('/')}/{path.lstrip('/')}"
 
-    query = encode_query(query_params)
+    query = urlencode_params(query_params)
     return f"{url}?{query}" if query else url
 
 
-def strip_query(url: str) -> str:
-    """Return ``url`` without its query string -- the form of it that may be printed.
+def safe_url(url: str) -> str:
+    """The safe form of ``url``: ``scheme://host[:port]/path``, with the userinfo, the query and the fragment dropped.
 
-    A query-placed api key lives in that string, folded onto the URL by :func:`resolve_params` like
-    any other query parameter, so no diagnostic carries one: not a request's repr, not the warning
-    naming a response nobody closed. A string form rather than redaction -- the URL a request is
-    sent to is never altered, only what is said about it afterwards.
+    What every result and every member of the exception family carries as ``url`` (ADR-0072), so nothing a
+    parameter or a scheme places in the query can reach a message or a repr. ``execute`` applies it to the URL
+    :func:`build_url` rendered from the template and the endpoint's own parameters; a payload that outlives the
+    call -- a :class:`~..file_responses.FileResponse`, an :class:`~..event_streams.EventStream` -- applies it to
+    the response's URL, having no template to build from, and so names the call exactly as the result does.
 
     Args:
-        url: The URL to describe.
+        url: A request URL, as built or as a response reports it.
 
     Returns:
-        Everything before the first ``?``, or the whole of ``url`` when it has none."""
-    path, _, _ = url.partition("?")
-    return path
+        ``scheme://host[:port]/path``, or ``<unparseable url>`` where ``urlsplit`` refuses."""
+    try:
+        parts = urlsplit(url)
+    except ValueError:
+        return "<unparseable url>"
+    return urlunsplit(parts._replace(netloc=parts.netloc.rpartition("@")[2], query="", fragment=""))

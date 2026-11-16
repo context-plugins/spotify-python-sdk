@@ -7,6 +7,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -545,7 +546,7 @@ class AsyncPlaylists:
         position: int | None = None,
         uris: str | None = None,
         body: PlaylistsTracksRequest | PlaylistsTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PlaylistSnapshotId:
         """Add one or more items to a user's playlist.
 
@@ -576,7 +577,7 @@ class AsyncPlaylists:
         playlist_id: str,
         *,
         body: PlaylistsRequest | PlaylistsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Change a playlist's name and public/private state. (The user must, of course, own the playlist.)
 
@@ -601,7 +602,7 @@ class AsyncPlaylists:
         )
 
     async def check_if_user_follows_playlist(
-        self, playlist_id: str, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check to see if one or more Spotify users are following a specified playlist.
 
@@ -630,7 +631,7 @@ class AsyncPlaylists:
         user_id: str,
         *,
         body: UsersPlaylistsRequest | UsersPlaylistsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PlaylistObject:
         """Create a playlist for a Spotify user. (The playlist will be empty until you `add tracks
         <https://developer.spotify.com/documentation/web-api/reference/add-tracks-to-playlist>`__.) Each user is
@@ -659,7 +660,7 @@ class AsyncPlaylists:
         playlist_id: str,
         *,
         body: PlaylistsFollowersRequest | PlaylistsFollowersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Add the current user as a follower of a playlist.
 
@@ -687,7 +688,7 @@ class AsyncPlaylists:
         *,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingFeaturedPlaylistObject:
         """Get a list of Spotify playlists tagged with a particular category.
 
@@ -713,7 +714,11 @@ class AsyncPlaylists:
         )
 
     async def get_a_list_of_current_users_playlists(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingPlaylistObject:
         """Get a list of the playlists owned or followed by the current Spotify user.
 
@@ -743,7 +748,7 @@ class AsyncPlaylists:
         locale: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingFeaturedPlaylistObject:
         """Get a list of Spotify featured playlists (shown, for example, on a Spotify player's 'Browse' tab).
 
@@ -774,7 +779,7 @@ class AsyncPlaylists:
         *,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingPlaylistObject:
         """Get a list of the playlists owned or followed by a Spotify user.
 
@@ -806,7 +811,7 @@ class AsyncPlaylists:
         market: str | None = None,
         fields: str | None = None,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PlaylistObject:
         """Get a playlist owned by a Spotify user.
 
@@ -837,7 +842,7 @@ class AsyncPlaylists:
         )
 
     async def get_playlist_cover(
-        self, playlist_id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[ImageObject]:
         """Get the current image associated with a specific playlist.
 
@@ -865,7 +870,7 @@ class AsyncPlaylists:
         limit: int | None = 20,
         offset: int | None = 0,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingPlaylistTrackObject:
         """Get full details of the items of a playlist owned by a Spotify user.
 
@@ -904,7 +909,7 @@ class AsyncPlaylists:
         playlist_id: str,
         *,
         body: PlaylistsTracksRequest2 | PlaylistsTracksRequest2Dict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PlaylistSnapshotId:
         """Remove one or more items from a user's playlist.
 
@@ -934,7 +939,7 @@ class AsyncPlaylists:
         *,
         uris: str | None = None,
         body: PlaylistsTracksRequest1 | PlaylistsTracksRequest1Dict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PlaylistSnapshotId:
         """Either reorder or replace items in a playlist depending on the request's parameters. To reorder items,
         include ``range_start``, ``insert_before``, ``range_length`` and ``snapshot_id`` in the request's body. To
@@ -964,7 +969,9 @@ class AsyncPlaylists:
             ),
         )
 
-    async def unfollow_playlist(self, playlist_id: str, *, request_options: RequestOptionsOrDict | None = None) -> None:
+    async def unfollow_playlist(
+        self, playlist_id: str, *, request_options: AsyncRequestOptionsOrDict | None = None
+    ) -> None:
         """Remove the current user as a follower of a playlist.
 
         Args:
@@ -983,7 +990,7 @@ class AsyncPlaylists:
         return unwrap(await self._with_raw_response.unfollow_playlist(playlist_id, request_options=request_options))
 
     async def upload_custom_playlist_cover(
-        self, playlist_id: str, body: Any, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, body: Any, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> None:
         """Replace the image used to represent a specific playlist.
 
@@ -1499,7 +1506,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         position: int | None = None,
         uris: str | None = None,
         body: PlaylistsTracksRequest | PlaylistsTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PlaylistSnapshotId, AddTracksToPlaylistErrorBody]:
         """Add one or more items to a user's playlist.
 
@@ -1531,7 +1538,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         playlist_id: str,
         *,
         body: PlaylistsRequest | PlaylistsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, ChangePlaylistDetailsErrorBody]:
         """Change a playlist's name and public/private state. (The user must, of course, own the playlist.)
 
@@ -1556,7 +1563,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         )
 
     async def check_if_user_follows_playlist(
-        self, playlist_id: str, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckIfUserFollowsPlaylistErrorBody]:
         """Check to see if one or more Spotify users are following a specified playlist.
 
@@ -1584,7 +1591,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         user_id: str,
         *,
         body: UsersPlaylistsRequest | UsersPlaylistsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PlaylistObject, CreatePlaylistErrorBody]:
         """Create a playlist for a Spotify user. (The playlist will be empty until you `add tracks
         <https://developer.spotify.com/documentation/web-api/reference/add-tracks-to-playlist>`__.) Each user is
@@ -1615,7 +1622,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         playlist_id: str,
         *,
         body: PlaylistsFollowersRequest | PlaylistsFollowersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, FollowPlaylistErrorBody]:
         """Add the current user as a follower of a playlist.
 
@@ -1645,7 +1652,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         *,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingFeaturedPlaylistObject, GetACategoriesPlaylistsErrorBody]:
         """Get a list of Spotify playlists tagged with a particular category.
 
@@ -1670,7 +1677,11 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         )
 
     async def get_a_list_of_current_users_playlists(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingPlaylistObject, GetAListOfCurrentUsersPlaylistsErrorBody]:
         """Get a list of the playlists owned or followed by the current Spotify user.
 
@@ -1698,7 +1709,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         locale: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingFeaturedPlaylistObject, GetFeaturedPlaylistsErrorBody]:
         """Get a list of Spotify featured playlists (shown, for example, on a Spotify player's 'Browse' tab).
 
@@ -1731,7 +1742,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         *,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingPlaylistObject, GetListUsersPlaylistsErrorBody]:
         """Get a list of the playlists owned or followed by a Spotify user.
 
@@ -1762,7 +1773,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         market: str | None = None,
         fields: str | None = None,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PlaylistObject, GetPlaylistErrorBody]:
         """Get a playlist owned by a Spotify user.
 
@@ -1792,7 +1803,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         )
 
     async def get_playlist_cover(
-        self, playlist_id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[ImageObject], GetPlaylistCoverErrorBody]:
         """Get the current image associated with a specific playlist.
 
@@ -1822,7 +1833,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         limit: int | None = 20,
         offset: int | None = 0,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingPlaylistTrackObject, GetPlaylistsTracksErrorBody]:
         """Get full details of the items of a playlist owned by a Spotify user.
 
@@ -1860,7 +1871,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         playlist_id: str,
         *,
         body: PlaylistsTracksRequest2 | PlaylistsTracksRequest2Dict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PlaylistSnapshotId, RemoveTracksPlaylistErrorBody]:
         """Remove one or more items from a user's playlist.
 
@@ -1890,7 +1901,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         *,
         uris: str | None = None,
         body: PlaylistsTracksRequest1 | PlaylistsTracksRequest1Dict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PlaylistSnapshotId, ReorderOrReplacePlaylistsTracksErrorBody]:
         """Either reorder or replace items in a playlist depending on the request's parameters. To reorder items,
         include ``range_start``, ``insert_before``, ``range_length`` and ``snapshot_id`` in the request's body. To
@@ -1922,7 +1933,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         )
 
     async def unfollow_playlist(
-        self, playlist_id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, UnfollowPlaylistErrorBody]:
         """Remove the current user as a follower of a playlist.
 
@@ -1945,7 +1956,7 @@ class AsyncPlaylistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, A
         )
 
     async def upload_custom_playlist_cover(
-        self, playlist_id: str, body: Any, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, body: Any, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, UploadCustomPlaylistCoverErrorBody]:
         """Replace the image used to represent a specific playlist.
 

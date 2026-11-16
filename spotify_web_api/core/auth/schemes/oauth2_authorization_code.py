@@ -23,7 +23,7 @@ from typing_extensions import NotRequired, Self, TypedDict
 
 from ..._internal.urls import build_url
 from ...bodies import form_body
-from ...decoding import async_json_decoder, json_decoder
+from ...decoding import async_json_decoder, json_decoder, raw_error_response
 from ...params import UrlTemplate, param
 from ...raw_client import AsyncRawClient, RawClient
 from ...results import Success, unwrap
@@ -33,7 +33,6 @@ from ..models import (
     OAuthParams,
     OAuthTokenRefreshable,
     ScopeT,
-    oauth_error_response,
     scope_params,
 )
 
@@ -298,7 +297,7 @@ class AuthorizationCodeTokenSource(Generic[ScopeT]):
                     *client_params,
                 ),
                 decoder=json_decoder[OAuthTokenRefreshable],
-                error_mapper=oauth_error_response,
+                error_mapper=raw_error_response,
             )
         )
 
@@ -315,8 +314,8 @@ class AuthorizationCodeTokenSource(Generic[ScopeT]):
             refresh_token: The refresh token to spend.
 
         Returns:
-            The new token, or ``None`` for a provider refusal. A transport failure propagates, as
-            does a success whose body will not decode."""
+            The new token, or ``None`` for a provider refusal. A transport failure propagates as
+            ``SdkConnectionError``, and a success whose body will not decode as ``ResponseDecodeError``."""
         headers, client_params = self.placement(credentials.client_id, credentials.client_secret)
         result = self.client.execute(
             http_method="POST",
@@ -328,7 +327,7 @@ class AuthorizationCodeTokenSource(Generic[ScopeT]):
                 *client_params,
             ),
             decoder=json_decoder[OAuthTokenRefreshable],
-            error_mapper=oauth_error_response,
+            error_mapper=raw_error_response,
         )
         return result.payload if isinstance(result, Success) else None
 
@@ -364,7 +363,7 @@ class AsyncAuthorizationCodeTokenSource(Generic[ScopeT]):
                     *client_params,
                 ),
                 decoder=async_json_decoder[OAuthTokenRefreshable],
-                error_mapper=oauth_error_response,
+                error_mapper=raw_error_response,
             )
         )
 
@@ -390,6 +389,6 @@ class AsyncAuthorizationCodeTokenSource(Generic[ScopeT]):
                 *client_params,
             ),
             decoder=async_json_decoder[OAuthTokenRefreshable],
-            error_mapper=oauth_error_response,
+            error_mapper=raw_error_response,
         )
         return result.payload if isinstance(result, Success) else None

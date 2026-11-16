@@ -6,6 +6,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -241,7 +242,7 @@ class AsyncEpisodes:
         self._with_raw_response = AsyncEpisodesWithRawResponse(client, server, auth)
 
     async def check_users_saved_episodes(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more episodes is already saved in the current Spotify user's 'Your Episodes' library.<br/>
         This API endpoint is in __beta__ and could change without warning. Please share any feedback that you have, or
@@ -270,7 +271,7 @@ class AsyncEpisodes:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSimplifiedEpisodeObject:
         """Get Spotify catalog information about an show’s episodes. Optional parameters can be used to limit the number
         of episodes returned.
@@ -298,7 +299,7 @@ class AsyncEpisodes:
         )
 
     async def get_an_episode(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> EpisodeObject:
         """Get Spotify catalog information for a single episode identified by its unique Spotify ID.
 
@@ -319,7 +320,7 @@ class AsyncEpisodes:
         return unwrap(await self._with_raw_response.get_an_episode(id_, market=market, request_options=request_options))
 
     async def get_multiple_episodes(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyEpisodes:
         """Get Spotify catalog information for several episodes based on their Spotify IDs.
 
@@ -347,7 +348,7 @@ class AsyncEpisodes:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedEpisodeObject:
         """Get a list of the episodes saved in the current Spotify user's library.<br/> This API endpoint is in __beta__
         and could change without warning. Please share any feedback that you have, or issues that you discover, in our
@@ -379,7 +380,7 @@ class AsyncEpisodes:
         ids: str,
         *,
         body: RemoveEpisodesRequest | RemoveEpisodesRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Remove one or more episodes from the current user's library.<br/> This API endpoint is in __beta__ and could
         change without warning. Please share any feedback that you have, or issues that you discover, in our `developer
@@ -408,7 +409,7 @@ class AsyncEpisodes:
         ids: str,
         *,
         body: SaveEpisodesRequest | SaveEpisodesRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Save one or more episodes to the current user's library.<br/> This API endpoint is in __beta__ and could
         change without warning. Please share any feedback that you have, or issues that you discover, in our `developer
@@ -645,7 +646,7 @@ class EpisodesWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]
 
 class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def check_users_saved_episodes(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedEpisodesErrorBody]:
         """Check if one or more episodes is already saved in the current Spotify user's 'Your Episodes' library.<br/>
         This API endpoint is in __beta__ and could change without warning. Please share any feedback that you have, or
@@ -676,7 +677,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSimplifiedEpisodeObject, GetAShowsEpisodesErrorBody]:
         """Get Spotify catalog information about an show’s episodes. Optional parameters can be used to limit the number
         of episodes returned.
@@ -707,7 +708,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         )
 
     async def get_an_episode(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[EpisodeObject, GetAnEpisodeErrorBody]:
         """Get Spotify catalog information for a single episode identified by its unique Spotify ID.
 
@@ -731,7 +732,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         )
 
     async def get_multiple_episodes(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyEpisodes, GetMultipleEpisodesErrorBody]:
         """Get Spotify catalog information for several episodes based on their Spotify IDs.
 
@@ -759,7 +760,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedEpisodeObject, GetUsersSavedEpisodesErrorBody]:
         """Get a list of the episodes saved in the current Spotify user's library.<br/> This API endpoint is in __beta__
         and could change without warning. Please share any feedback that you have, or issues that you discover, in our
@@ -793,7 +794,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         ids: str,
         *,
         body: RemoveEpisodesRequest | RemoveEpisodesRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, RemoveEpisodesUserErrorBody]:
         """Remove one or more episodes from the current user's library.<br/> This API endpoint is in __beta__ and could
         change without warning. Please share any feedback that you have, or issues that you discover, in our `developer
@@ -824,7 +825,7 @@ class AsyncEpisodesWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, As
         ids: str,
         *,
         body: SaveEpisodesRequest | SaveEpisodesRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SaveEpisodesUserErrorBody]:
         """Save one or more episodes to the current user's library.<br/> This API endpoint is in __beta__ and could
         change without warning. Please share any feedback that you have, or issues that you discover, in our `developer

@@ -6,6 +6,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -219,7 +220,7 @@ class AsyncShows:
         self._with_raw_response = AsyncShowsWithRawResponse(client, server, auth)
 
     async def check_users_saved_shows(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more shows is already saved in the current Spotify user's library.
 
@@ -239,7 +240,7 @@ class AsyncShows:
         return unwrap(await self._with_raw_response.check_users_saved_shows(ids, request_options=request_options))
 
     async def get_a_show(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ShowObject:
         """Get Spotify catalog information for a single show identified by its unique Spotify ID.
 
@@ -266,7 +267,7 @@ class AsyncShows:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSimplifiedEpisodeObject:
         """Get Spotify catalog information about an show’s episodes. Optional parameters can be used to limit the number
         of episodes returned.
@@ -294,7 +295,7 @@ class AsyncShows:
         )
 
     async def get_multiple_shows(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManySimplifiedShows:
         """Get Spotify catalog information for several shows based on their Spotify IDs.
 
@@ -317,7 +318,11 @@ class AsyncShows:
         )
 
     async def get_users_saved_shows(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedShowObject:
         """Get a list of shows saved in the current Spotify user's library. Optional parameters can be used to limit the
         number of shows returned.
@@ -348,7 +353,7 @@ class AsyncShows:
         *,
         market: str | None = None,
         body: RemoveShowsRequest | RemoveShowsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Delete one or more shows from current Spotify user's library.
 
@@ -378,7 +383,7 @@ class AsyncShows:
         ids: str,
         *,
         body: SaveShowsRequest | SaveShowsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Save one or more shows to current Spotify user's library.
 
@@ -597,7 +602,7 @@ class ShowsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
 class AsyncShowsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def check_users_saved_shows(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedShowsErrorBody]:
         """Check if one or more shows is already saved in the current Spotify user's library.
 
@@ -619,7 +624,7 @@ class AsyncShowsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         )
 
     async def get_a_show(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ShowObject, GetAShowErrorBody]:
         """Get Spotify catalog information for a single show identified by its unique Spotify ID.
 
@@ -649,7 +654,7 @@ class AsyncShowsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSimplifiedEpisodeObject, GetAShowsEpisodesErrorBody]:
         """Get Spotify catalog information about an show’s episodes. Optional parameters can be used to limit the number
         of episodes returned.
@@ -680,7 +685,7 @@ class AsyncShowsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         )
 
     async def get_multiple_shows(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManySimplifiedShows, GetMultipleShowsErrorBody]:
         """Get Spotify catalog information for several shows based on their Spotify IDs.
 
@@ -703,7 +708,11 @@ class AsyncShowsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         )
 
     async def get_users_saved_shows(
-        self, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None
+        self,
+        *,
+        limit: int | None = 20,
+        offset: int | None = 0,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedShowObject, GetUsersSavedShowsErrorBody]:
         """Get a list of shows saved in the current Spotify user's library. Optional parameters can be used to limit the
         number of shows returned.
@@ -732,7 +741,7 @@ class AsyncShowsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         *,
         market: str | None = None,
         body: RemoveShowsRequest | RemoveShowsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, RemoveShowsUserErrorBody]:
         """Delete one or more shows from current Spotify user's library.
 
@@ -762,7 +771,7 @@ class AsyncShowsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         ids: str,
         *,
         body: SaveShowsRequest | SaveShowsRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SaveShowsUserErrorBody]:
         """Save one or more shows to current Spotify user's library.
 

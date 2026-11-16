@@ -1,9 +1,10 @@
 """What every security scheme trades in, and the OAuth 2.0 vocabulary its grants share.
 
 :class:`AuthParams` is what one scheme contributes to a request. The rest is managed OAuth 2.0's
-grant-agnostic half: the token endpoint's success and error bodies (RFC 6749 §5.1 and §5.2, fixed for
-every provider, which is why they are runtime types at all), §2.3.1's client-authentication placements,
-§3.3's scope delimiter, and the scope vocabulary parameter every grant's credentials carry.
+grant-agnostic half: the token endpoint's success body (RFC 6749 §5.1, fixed for every provider, which
+is why it is a runtime type at all), §2.3.1's client-authentication placements, §3.3's scope delimiter,
+and the scope vocabulary parameter every grant's credentials carry. A refusal is not typed: the token
+endpoint maps through ``raw_error_response``.
 
 The bottom of the auth layer. It names no protocol and no scheme, so ``protocols``, ``composition`` and
 ``schemes/`` all import from here and nothing imports back. It performs no token request either --
@@ -14,7 +15,7 @@ from __future__ import annotations
 from base64 import b64encode
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
-from typing import Any, Final, TypeAlias
+from typing import Any, TypeAlias
 from urllib.parse import quote
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -23,10 +24,8 @@ from pydantic import BaseModel, ConfigDict, Field
 # below needs one at the 3.10 floor.
 from typing_extensions import TypeVar
 
-from .._internal.wire import parse_json, text_values
-from ..decoding import ErrorMapper
+from .._internal.wire import text_values
 from ..params import Param, param
-from ..results import RawError
 
 
 @dataclass(frozen=True, slots=True)
@@ -114,41 +113,6 @@ class OAuthTokenRefreshable(OAuthToken):
     optional field, so a source's declared return type says which tier it belongs to."""
 
     refresh_token: str | None = Field(default=None, repr=False)
-
-
-class OAuthProviderError(BaseModel):
-    """The token endpoint's error body (RFC 6749 §5.2).
-
-    Typed, unlike the rest of a failed token fetch, because §5.2 fixes these three members for every
-    provider."""
-
-    model_config = ConfigDict(frozen=True)
-
-    error: str
-    error_description: str | None = None
-    error_uri: str | None = None
-
-
-OAuthError: TypeAlias = OAuthProviderError | RawError
-"""What a failed token fetch carries: the RFC 6749 §5.2 body, or the raw response without one."""
-
-
-@dataclass(frozen=True, slots=True)
-class OAuthErrorResponse:
-    """Error mapper for the token endpoint.
-
-    The only mapper here that selects a *schema*, and it can: RFC 6749 §5.2 fixes one error body for
-    every provider. A response that does not conform becomes a :class:`RawError` rather than raising
-    out of the mapper, because a failed fetch must surface the provider's answer, not a parse error."""
-
-    def map(self, status_code: int, content: bytes) -> OAuthError:
-        try:
-            return OAuthProviderError.model_validate(parse_json(content))
-        except ValueError:
-            return RawError(status_code, content)
-
-
-oauth_error_response: Final[ErrorMapper[OAuthError]] = OAuthErrorResponse()
 
 
 OAuthParams: TypeAlias = tuple[Param[Any], ...]

@@ -4,6 +4,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -128,7 +129,7 @@ class AsyncCategoriesApi:
         *,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingFeaturedPlaylistObject:
         """Get a list of Spotify playlists tagged with a particular category.
 
@@ -154,7 +155,7 @@ class AsyncCategoriesApi:
         )
 
     async def get_a_category(
-        self, category_id: str, *, locale: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, category_id: str, *, locale: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> CategoryObject:
         """Get a single category used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
 
@@ -182,7 +183,7 @@ class AsyncCategoriesApi:
         locale: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagedCategories:
         """Get a list of categories used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
 
@@ -308,7 +309,7 @@ class AsyncCategoriesApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Serve
         *,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingFeaturedPlaylistObject, GetACategoriesPlaylistsErrorBody]:
         """Get a list of Spotify playlists tagged with a particular category.
 
@@ -333,7 +334,7 @@ class AsyncCategoriesApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Serve
         )
 
     async def get_a_category(
-        self, category_id: str, *, locale: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, category_id: str, *, locale: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[CategoryObject, GetACategoryErrorBody]:
         """Get a single category used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
 
@@ -362,7 +363,7 @@ class AsyncCategoriesApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Serve
         locale: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagedCategories, GetCategoriesErrorBody]:
         """Get a list of categories used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
 

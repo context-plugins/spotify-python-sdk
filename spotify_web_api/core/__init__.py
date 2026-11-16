@@ -14,6 +14,7 @@ path for the unit tests that target it.
 Everything remains importable from its fully-qualified module path as well."""
 
 from ._internal.headers import find_link_target, read_header
+from ._internal.urls import safe_url
 from .auth import (
     AllSchemes,
     AnySchemes,
@@ -24,8 +25,6 @@ from .auth import (
     AsyncTokenSource,
     AuthParams,
     AuthScheme,
-    OAuthError,
-    OAuthProviderError,
     OAuthToken,
     OAuthTokenRefreshable,
     RefreshableTokenSource,
@@ -36,7 +35,6 @@ from .auth import (
     invalidate,
     is_configured,
     no_auth,
-    oauth_error_response,
     resolve_auth,
 )
 from .auth.schemes import (
@@ -143,7 +141,14 @@ from .decoding import (
 )
 from .discriminators import WireDiscriminator
 from .event_streams import AsyncEventStream, EventStream
-from .exceptions import ApiError, TransportError
+from .exceptions import (
+    ApiError,
+    AuthSchemeError,
+    ResponseDecodeError,
+    SdkConnectionError,
+    SdkError,
+    SdkTimeoutError,
+)
 from .file_responses import AsyncFileResponse, FileResponse
 from .files import (
     AsyncBinaryContent,
@@ -154,7 +159,16 @@ from .files import (
     FileInput,
     NamedFile,
 )
+from .hooks import (
+    AsyncHookContext,
+    AsyncSdkHook,
+    AsyncSdkHooksDict,
+    HookContext,
+    SdkHook,
+    SdkHooksDict,
+)
 from .httpx2_transport import AsyncHttpx2Client, Httpx2Client
+from .logging import LoggingOptions, LoggingOptionsDict, LoggingOptionsOrDict
 from .models import SdkBaseModel
 from .optionality import UNSET, Optional, OptionalNullable, UnsetType
 from .pagination import (
@@ -173,7 +187,14 @@ from .raw_client import (
     RawClient,
     RawClientT,
 )
-from .request_options import RequestOptions, RequestOptionsDict, RequestOptionsOrDict
+from .request_options import (
+    AsyncRequestOptions,
+    AsyncRequestOptionsDict,
+    AsyncRequestOptionsOrDict,
+    RequestOptions,
+    RequestOptionsDict,
+    RequestOptionsOrDict,
+)
 from .results import ApiResult, Failure, RawError, Success, unwrap
 from .retries import RetryOptions, RetryOptionsDict, RetryOptionsOrDict
 from .runtime_env import OPERATING_SYSTEM, PYTHON_RUNTIME
@@ -194,8 +215,12 @@ __all__ = [
     "Failure",
     "unwrap",
     "RawError",
+    "SdkError",
     "ApiError",
-    "TransportError",
+    "ResponseDecodeError",
+    "SdkConnectionError",
+    "SdkTimeoutError",
+    "AuthSchemeError",
     # HTTP transport
     "HttpClient",
     "AsyncHttpClient",
@@ -203,6 +228,7 @@ __all__ = [
     "HttpRequest",
     "HttpResponse",
     "AsyncHttpResponse",
+    "safe_url",
     "Httpx2Client",
     "AsyncHttpx2Client",
     # Request parameters and bodies
@@ -242,10 +268,24 @@ __all__ = [
     "RequestOptions",
     "RequestOptionsDict",
     "RequestOptionsOrDict",
+    "AsyncRequestOptions",
+    "AsyncRequestOptionsDict",
+    "AsyncRequestOptionsOrDict",
+    # Hooks
+    "SdkHook",
+    "AsyncSdkHook",
+    "HookContext",
+    "AsyncHookContext",
+    "SdkHooksDict",
+    "AsyncSdkHooksDict",
     # Retries
     "RetryOptions",
     "RetryOptionsDict",
     "RetryOptionsOrDict",
+    # Logging
+    "LoggingOptions",
+    "LoggingOptionsDict",
+    "LoggingOptionsOrDict",
     # Authentication
     "AuthParams",
     "AuthScheme",
@@ -280,9 +320,6 @@ __all__ = [
     "client_secret_post",
     "OAuthToken",
     "OAuthTokenRefreshable",
-    "OAuthProviderError",
-    "OAuthError",
-    "oauth_error_response",
     # oauth2 / clientCredentials
     "ClientCredentials",
     "ClientCredentialsDict",

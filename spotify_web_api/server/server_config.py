@@ -1,26 +1,52 @@
 from __future__ import annotations
 
+from typing import TypeAlias
+
 from pydantic import BaseModel, ConfigDict, Field
+from typing_extensions import NotRequired, TypedDict
 
 from ..core import UrlTemplate
-from .environment import Environment
 
 
-class ProductionConfig(BaseModel):
+class DefaultConfig(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
     base_url: str = "https://api.spotify.com/v1"
 
+    def resolve(self, path: str) -> UrlTemplate:
+        return UrlTemplate(base_url=self.base_url, path=path)
 
-class Environment2Config(BaseModel):
+
+class DefaultConfigDict(TypedDict):
+    base_url: NotRequired[str]
+
+
+class AuthServerConfig(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
     base_url: str = "https://accounts.spotify.com"
+
+    def resolve(self, path: str) -> UrlTemplate:
+        return UrlTemplate(base_url=self.base_url, path=path)
+
+
+class AuthServerConfigDict(TypedDict):
+    base_url: NotRequired[str]
 
 
 class ServerConfig(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
-    production: ProductionConfig = Field(default_factory=ProductionConfig)
-    environment2: Environment2Config = Field(default_factory=Environment2Config)
+    default: DefaultConfig = Field(default_factory=DefaultConfig)
+    auth_server: AuthServerConfig = Field(default_factory=AuthServerConfig)
 
-    def resolve(self, environment: Environment, path: str) -> UrlTemplate:
-        variant = self.production if environment == "production" else self.environment2
-        return UrlTemplate(base_url=variant.base_url, path=path)
+    @classmethod
+    def coerce(cls, value: ServerConfigOrDict | None) -> ServerConfig:
+        if isinstance(value, cls):
+            return value
+        return cls.model_validate(value if value is not None else {})
+
+
+class ServerConfigDict(TypedDict):
+    default: NotRequired[DefaultConfigDict]
+    auth_server: NotRequired[AuthServerConfigDict]
+
+
+ServerConfigOrDict: TypeAlias = ServerConfig | ServerConfigDict

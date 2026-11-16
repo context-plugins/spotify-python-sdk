@@ -8,6 +8,7 @@ from ..core import (
     ApiResult,
     AsyncAnySchemes,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -686,7 +687,7 @@ class AsyncTracks:
         position: int | None = None,
         uris: str | None = None,
         body: PlaylistsTracksRequest | PlaylistsTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PlaylistSnapshotId:
         """Add one or more items to a user's playlist.
 
@@ -713,7 +714,7 @@ class AsyncTracks:
         )
 
     async def check_users_saved_tracks(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check if one or more tracks is already saved in the current Spotify user's 'Your Music' library.
 
@@ -739,7 +740,7 @@ class AsyncTracks:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSimplifiedTrackObject:
         """Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number
         of tracks returned.
@@ -767,7 +768,7 @@ class AsyncTracks:
         )
 
     async def get_an_artists_top_tracks(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyTracks:
         """Get Spotify catalog information about an artist's top tracks by country.
 
@@ -790,7 +791,7 @@ class AsyncTracks:
         )
 
     async def get_audio_analysis(
-        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> AudioAnalysisObject:
         """Get a low-level audio analysis for a track in the Spotify catalog. The audio analysis describes the track’s
         structure and musical content, including rhythm, pitch, and timbre.
@@ -811,7 +812,7 @@ class AsyncTracks:
         return unwrap(await self._with_raw_response.get_audio_analysis(id_, request_options=request_options))
 
     async def get_audio_features(
-        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> AudioFeaturesObject:
         """Get audio feature information for a single track identified by its unique Spotify ID.
 
@@ -839,7 +840,7 @@ class AsyncTracks:
         limit: int | None = 20,
         offset: int | None = 0,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingPlaylistTrackObject:
         """Get full details of the items of a playlist owned by a Spotify user.
 
@@ -923,7 +924,7 @@ class AsyncTracks:
         min_valence: float | None = None,
         max_valence: float | None = None,
         target_valence: float | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> RecommendationsObject:
         """Recommendations are generated based on the available information for a given seed entity and matched against
         similar artists and tracks. If there is sufficient information about the provided seeds, a list of tracks will
@@ -1044,7 +1045,7 @@ class AsyncTracks:
         )
 
     async def get_several_audio_features(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyAudioFeatures:
         """Get audio features for multiple tracks based on their Spotify IDs.
 
@@ -1064,7 +1065,7 @@ class AsyncTracks:
         return unwrap(await self._with_raw_response.get_several_audio_features(ids, request_options=request_options))
 
     async def get_several_tracks(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyTracks:
         """Get Spotify catalog information for multiple tracks based on their Spotify IDs.
 
@@ -1087,7 +1088,7 @@ class AsyncTracks:
         )
 
     async def get_track(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> TrackObject:
         """Get Spotify catalog information for a single track identified by its unique Spotify ID.
 
@@ -1113,7 +1114,7 @@ class AsyncTracks:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingSavedTrackObject:
         """Get a list of the songs saved in the current Spotify user's 'Your Music' library.
 
@@ -1144,7 +1145,7 @@ class AsyncTracks:
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingTrackObject:
         """Get the current user's top tracks based on calculated affinity.
 
@@ -1174,7 +1175,7 @@ class AsyncTracks:
         playlist_id: str,
         *,
         body: PlaylistsTracksRequest2 | PlaylistsTracksRequest2Dict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PlaylistSnapshotId:
         """Remove one or more items from a user's playlist.
 
@@ -1203,7 +1204,7 @@ class AsyncTracks:
         ids: str,
         *,
         body: RemoveTracksRequest | RemoveTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Remove one or more tracks from the current user's 'Your Music' library.
 
@@ -1229,7 +1230,7 @@ class AsyncTracks:
         *,
         uris: str | None = None,
         body: PlaylistsTracksRequest1 | PlaylistsTracksRequest1Dict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PlaylistSnapshotId:
         """Either reorder or replace items in a playlist depending on the request's parameters. To reorder items,
         include ``range_start``, ``insert_before``, ``range_length`` and ``snapshot_id`` in the request's body. To
@@ -1264,7 +1265,7 @@ class AsyncTracks:
         ids: str,
         *,
         body: SaveTracksRequest | SaveTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Save one or more tracks to the current user's 'Your Music' library.
 
@@ -1931,7 +1932,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         position: int | None = None,
         uris: str | None = None,
         body: PlaylistsTracksRequest | PlaylistsTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PlaylistSnapshotId, AddTracksToPlaylistErrorBody]:
         """Add one or more items to a user's playlist.
 
@@ -1959,7 +1960,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def check_users_saved_tracks(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckUsersSavedTracksErrorBody]:
         """Check if one or more tracks is already saved in the current Spotify user's 'Your Music' library.
 
@@ -1987,7 +1988,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSimplifiedTrackObject, GetAnAlbumsTracksErrorBody]:
         """Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number
         of tracks returned.
@@ -2018,7 +2019,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_an_artists_top_tracks(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]:
         """Get Spotify catalog information about an artist's top tracks by country.
 
@@ -2042,7 +2043,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_audio_analysis(
-        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[AudioAnalysisObject, GetAudioAnalysisErrorBody]:
         """Get a low-level audio analysis for a track in the Spotify catalog. The audio analysis describes the track’s
         structure and musical content, including rhythm, pitch, and timbre.
@@ -2065,7 +2066,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_audio_features(
-        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[AudioFeaturesObject, GetAudioFeaturesErrorBody]:
         """Get audio feature information for a single track identified by its unique Spotify ID.
 
@@ -2095,7 +2096,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         limit: int | None = 20,
         offset: int | None = 0,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingPlaylistTrackObject, GetPlaylistsTracksErrorBody]:
         """Get full details of the items of a playlist owned by a Spotify user.
 
@@ -2178,7 +2179,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         min_valence: float | None = None,
         max_valence: float | None = None,
         target_valence: float | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[RecommendationsObject, GetRecommendationsErrorBody]:
         """Recommendations are generated based on the available information for a given seed entity and matched against
         similar artists and tracks. If there is sufficient information about the provided seeds, a list of tracks will
@@ -2298,7 +2299,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_several_audio_features(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyAudioFeatures, GetSeveralAudioFeaturesErrorBody]:
         """Get audio features for multiple tracks based on their Spotify IDs.
 
@@ -2320,7 +2321,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_several_tracks(
-        self, ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyTracks, GetSeveralTracksErrorBody]:
         """Get Spotify catalog information for multiple tracks based on their Spotify IDs.
 
@@ -2343,7 +2344,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_track(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[TrackObject, GetTrackErrorBody]:
         """Get Spotify catalog information for a single track identified by its unique Spotify ID.
 
@@ -2372,7 +2373,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingSavedTrackObject, GetUsersSavedTracksErrorBody]:
         """Get a list of the songs saved in the current Spotify user's 'Your Music' library.
 
@@ -2405,7 +2406,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingTrackObject, GetUsersTopTracksErrorBody]:
         """Get the current user's top tracks based on calculated affinity.
 
@@ -2437,7 +2438,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         playlist_id: str,
         *,
         body: PlaylistsTracksRequest2 | PlaylistsTracksRequest2Dict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PlaylistSnapshotId, RemoveTracksPlaylistErrorBody]:
         """Remove one or more items from a user's playlist.
 
@@ -2466,7 +2467,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         ids: str,
         *,
         body: RemoveTracksRequest | RemoveTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, RemoveTracksUserErrorBody]:
         """Remove one or more tracks from the current user's 'Your Music' library.
 
@@ -2496,7 +2497,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         *,
         uris: str | None = None,
         body: PlaylistsTracksRequest1 | PlaylistsTracksRequest1Dict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PlaylistSnapshotId, ReorderOrReplacePlaylistsTracksErrorBody]:
         """Either reorder or replace items in a playlist depending on the request's parameters. To reorder items,
         include ``range_start``, ``insert_before``, ``range_length`` and ``snapshot_id`` in the request's body. To
@@ -2532,7 +2533,7 @@ class AsyncTracksWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         ids: str,
         *,
         body: SaveTracksRequest | SaveTracksRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SaveTracksUserErrorBody]:
         """Save one or more tracks to the current user's 'Your Music' library.
 

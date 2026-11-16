@@ -12,7 +12,7 @@ from pydantic import ConfigDict, Field
 from typing_extensions import NotRequired, TypedDict
 
 from ...bodies import form_body
-from ...decoding import async_json_decoder, json_decoder
+from ...decoding import async_json_decoder, json_decoder, raw_error_response
 from ...params import UrlTemplate, param
 from ...raw_client import AsyncRawClient, RawClient
 from ...results import unwrap
@@ -22,7 +22,6 @@ from ..models import (
     OAuthParams,
     OAuthToken,
     ScopeT,
-    oauth_error_response,
     scope_params,
 )
 
@@ -103,7 +102,7 @@ class ClientCredentialsTokenSource(Generic[ScopeT]):
                 headers=headers,
                 body=form_body(*_token_params(credentials), *client_params),
                 decoder=json_decoder[OAuthToken],
-                error_mapper=oauth_error_response,
+                error_mapper=raw_error_response,
             )
         )
 
@@ -125,6 +124,6 @@ class AsyncClientCredentialsTokenSource(Generic[ScopeT]):
                 headers=headers,
                 body=form_body(*_token_params(credentials), *client_params),
                 decoder=async_json_decoder[OAuthToken],
-                error_mapper=oauth_error_response,
+                error_mapper=raw_error_response,
             )
         )

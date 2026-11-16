@@ -4,6 +4,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -50,7 +51,9 @@ class AsyncGenres:
     def __init__(self, client: AsyncRawClient, server: Server, auth: AsyncAuthSchemes) -> None:
         self._with_raw_response = AsyncGenresWithRawResponse(client, server, auth)
 
-    async def get_recommendation_genres(self, *, request_options: RequestOptionsOrDict | None = None) -> ManyGenres:
+    async def get_recommendation_genres(
+        self, *, request_options: AsyncRequestOptionsOrDict | None = None
+    ) -> ManyGenres:
         """Retrieve a list of available genres seed parameter values for `recommendations
         <https://developer.spotify.com/documentation/web-api/reference/get-recommendations>`__.
 
@@ -98,7 +101,7 @@ class GenresWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
 class AsyncGenresWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def get_recommendation_genres(
-        self, *, request_options: RequestOptionsOrDict | None = None
+        self, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyGenres, GetRecommendationGenresErrorBody]:
         """Retrieve a list of available genres seed parameter values for `recommendations
         <https://developer.spotify.com/documentation/web-api/reference/get-recommendations>`__.

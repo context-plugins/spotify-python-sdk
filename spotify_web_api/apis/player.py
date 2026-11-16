@@ -6,6 +6,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -466,7 +467,7 @@ class AsyncPlayer:
         self._with_raw_response = AsyncPlayerWithRawResponse(client, server, auth)
 
     async def add_to_queue(
-        self, uri: str, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, uri: str, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> None:
         """Add an item to the end of the user's current playback queue. This API only works for users who have Spotify
         Premium. The order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -490,7 +491,7 @@ class AsyncPlayer:
         )
 
     async def get_a_users_available_devices(
-        self, *, request_options: RequestOptionsOrDict | None = None
+        self, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyDevices:
         """Get information about a user’s available Spotify Connect devices. Some device models are not supported and
         will not be listed in the API response.
@@ -514,7 +515,7 @@ class AsyncPlayer:
         *,
         market: str | None = None,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> CurrentlyPlayingContextObject:
         """Get information about the user’s current playback state, including track or episode, progress, and active
         device.
@@ -539,7 +540,7 @@ class AsyncPlayer:
             ),
         )
 
-    async def get_queue(self, *, request_options: RequestOptionsOrDict | None = None) -> QueueObject:
+    async def get_queue(self, *, request_options: AsyncRequestOptionsOrDict | None = None) -> QueueObject:
         """Get the list of objects that make up the user's queue.
 
         Args:
@@ -562,7 +563,7 @@ class AsyncPlayer:
         limit: int | None = 20,
         after: int | None = None,
         before: int | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> CursorPagingPlayHistoryObject:
         """Get tracks from the current user's recently played tracks. _**Note**: Currently doesn't support podcast
         episodes._
@@ -593,7 +594,7 @@ class AsyncPlayer:
         *,
         market: str | None = None,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> CurrentlyPlayingObject:
         """Get the object currently being played on the user's Spotify account.
 
@@ -618,7 +619,7 @@ class AsyncPlayer:
         )
 
     async def pause_a_users_playback(
-        self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> None:
         """Pause playback on the user's account. This API only works for users who have Spotify Premium. The order of
         execution is not guaranteed when you use this API with other Player API endpoints.
@@ -641,7 +642,11 @@ class AsyncPlayer:
         )
 
     async def seek_to_position_in_currently_playing_track(
-        self, position_ms: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self,
+        position_ms: int,
+        *,
+        device_id: str | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Seeks to the given position in the user’s currently playing track. This API only works for users who have
         Spotify Premium. The order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -667,7 +672,7 @@ class AsyncPlayer:
         )
 
     async def set_repeat_mode_on_users_playback(
-        self, state: str, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, state: str, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> None:
         """Set the repeat mode for the user's playback. This API only works for users who have Spotify Premium. The
         order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -693,7 +698,11 @@ class AsyncPlayer:
         )
 
     async def set_volume_for_users_playback(
-        self, volume_percent: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self,
+        volume_percent: int,
+        *,
+        device_id: str | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Set the volume for the user’s current playback device. This API only works for users who have Spotify
         Premium. The order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -719,7 +728,7 @@ class AsyncPlayer:
         )
 
     async def skip_users_playback_to_next_track(
-        self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> None:
         """Skips to next track in the user’s queue. This API only works for users who have Spotify Premium. The order of
         execution is not guaranteed when you use this API with other Player API endpoints.
@@ -744,7 +753,7 @@ class AsyncPlayer:
         )
 
     async def skip_users_playback_to_previous_track(
-        self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> None:
         """Skips to previous track in the user’s queue. This API only works for users who have Spotify Premium. The
         order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -773,7 +782,7 @@ class AsyncPlayer:
         *,
         device_id: str | None = None,
         body: StartOrResumePlaybackRequest | StartOrResumePlaybackRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Start a new context or resume current playback on the user's active device. This API only works for users who
         have Spotify Premium. The order of execution is not guaranteed when you use this API with other Player API
@@ -800,7 +809,7 @@ class AsyncPlayer:
         )
 
     async def toggle_shuffle_for_users_playback(
-        self, state: bool, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, state: bool, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> None:
         """Toggle shuffle on or off for user’s playback. This API only works for users who have Spotify Premium. The
         order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -829,7 +838,7 @@ class AsyncPlayer:
         self,
         *,
         body: MePlayerRequest | MePlayerRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Transfer playback to a new device and optionally begin playback. This API only works for users who have
         Spotify Premium. The order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -1245,7 +1254,7 @@ class PlayerWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
 class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def add_to_queue(
-        self, uri: str, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, uri: str, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, AddToQueueErrorBody]:
         """Add an item to the end of the user's current playback queue. This API only works for users who have Spotify
         Premium. The order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -1270,7 +1279,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_a_users_available_devices(
-        self, *, request_options: RequestOptionsOrDict | None = None
+        self, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyDevices, GetAUsersAvailableDevicesErrorBody]:
         """Get information about a user’s available Spotify Connect devices. Some device models are not supported and
         will not be listed in the API response.
@@ -1295,7 +1304,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         *,
         market: str | None = None,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[CurrentlyPlayingContextObject, GetInformationAboutTheUsersCurrentPlaybackErrorBody]:
         """Get information about the user’s current playback state, including track or episode, progress, and active
         device.
@@ -1319,7 +1328,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def get_queue(
-        self, *, request_options: RequestOptionsOrDict | None = None
+        self, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[QueueObject, GetQueueErrorBody]:
         """Get the list of objects that make up the user's queue.
 
@@ -1344,7 +1353,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         limit: int | None = 20,
         after: int | None = None,
         before: int | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[CursorPagingPlayHistoryObject, GetRecentlyPlayedErrorBody]:
         """Get tracks from the current user's recently played tracks. _**Note**: Currently doesn't support podcast
         episodes._
@@ -1377,7 +1386,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         *,
         market: str | None = None,
         additional_types: str | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[CurrentlyPlayingObject, GetTheUsersCurrentlyPlayingTrackErrorBody]:
         """Get the object currently being played on the user's Spotify account.
 
@@ -1400,7 +1409,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def pause_a_users_playback(
-        self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, PauseAUsersPlaybackErrorBody]:
         """Pause playback on the user's account. This API only works for users who have Spotify Premium. The order of
         execution is not guaranteed when you use this API with other Player API endpoints.
@@ -1424,7 +1433,11 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def seek_to_position_in_currently_playing_track(
-        self, position_ms: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self,
+        position_ms: int,
+        *,
+        device_id: str | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SeekToPositionInCurrentlyPlayingTrackErrorBody]:
         """Seeks to the given position in the user’s currently playing track. This API only works for users who have
         Spotify Premium. The order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -1449,7 +1462,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def set_repeat_mode_on_users_playback(
-        self, state: str, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, state: str, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, SetRepeatModeOnUsersPlaybackErrorBody]:
         """Set the repeat mode for the user's playback. This API only works for users who have Spotify Premium. The
         order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -1474,7 +1487,11 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def set_volume_for_users_playback(
-        self, volume_percent: int, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self,
+        volume_percent: int,
+        *,
+        device_id: str | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, SetVolumeForUsersPlaybackErrorBody]:
         """Set the volume for the user’s current playback device. This API only works for users who have Spotify
         Premium. The order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -1499,7 +1516,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def skip_users_playback_to_next_track(
-        self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, SkipUsersPlaybackToNextTrackErrorBody]:
         """Skips to next track in the user’s queue. This API only works for users who have Spotify Premium. The order of
         execution is not guaranteed when you use this API with other Player API endpoints.
@@ -1523,7 +1540,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def skip_users_playback_to_previous_track(
-        self, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, SkipUsersPlaybackToPreviousTrackErrorBody]:
         """Skips to previous track in the user’s queue. This API only works for users who have Spotify Premium. The
         order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -1551,7 +1568,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         *,
         device_id: str | None = None,
         body: StartOrResumePlaybackRequest | StartOrResumePlaybackRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, StartAUsersPlaybackErrorBody]:
         """Start a new context or resume current playback on the user's active device. This API only works for users who
         have Spotify Premium. The order of execution is not guaranteed when you use this API with other Player API
@@ -1578,7 +1595,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         )
 
     async def toggle_shuffle_for_users_playback(
-        self, state: bool, *, device_id: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, state: bool, *, device_id: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, ToggleShuffleForUsersPlaybackErrorBody]:
         """Toggle shuffle on or off for user’s playback. This API only works for users who have Spotify Premium. The
         order of execution is not guaranteed when you use this API with other Player API endpoints.
@@ -1606,7 +1623,7 @@ class AsyncPlayerWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asyn
         self,
         *,
         body: MePlayerRequest | MePlayerRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, TransferAUsersPlaybackErrorBody]:
         """Transfer playback to a new device and optionally begin playback. This API only works for users who have
         Spotify Premium. The order of execution is not guaranteed when you use this API with other Player API endpoints.

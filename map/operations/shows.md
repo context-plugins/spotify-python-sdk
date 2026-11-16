@@ -4,12 +4,13 @@
 
 Accessor: `client.shows` · Source: `spotify_web_api/apis/shows.py` · 7 operations
 
-Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameters (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
+Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameter names, the async ones typing `request_options` as `AsyncRequestOptionsOrDict` (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
 
 ### client.shows.check_users_saved_shows
 
 - **Route**: `GET /me/shows/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_users_saved_shows(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -29,6 +30,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /shows/{id}`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_a_show(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `id_`
 - **Params**: `id_` — path `id` · `market` — query
@@ -49,6 +51,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /shows/{id}/episodes`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_a_shows_episodes(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `id_`
 - **Params**: `id_` — path `id` · `market` — query · `limit` — query · `offset` — query
@@ -69,6 +72,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /shows`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_multiple_shows(ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `market` — query
@@ -89,6 +93,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/shows`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_saved_shows(*, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSavedShowObject`
@@ -108,6 +113,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/shows`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def remove_shows_user(ids: str, *, market: str | None = None, body: RemoveShowsRequest | RemoveShowsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `market` — query · `body` — JSON body
@@ -129,6 +135,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/shows`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def save_shows_user(ids: str, *, body: SaveShowsRequest | SaveShowsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body

@@ -4,12 +4,13 @@
 
 Accessor: `client.library` · Source: `spotify_web_api/apis/library.py` · 29 operations
 
-Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameters (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
+Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameter names, the async ones typing `request_options` as `AsyncRequestOptionsOrDict` (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
 
 ### client.library.change_playlist_details
 
 - **Route**: `PUT /playlists/{playlist_id}`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def change_playlist_details(playlist_id: str, *, body: PlaylistsRequest | PlaylistsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path · `body` — JSON body
@@ -31,6 +32,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/following/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_current_user_follows(type_: ItemType3OrStr, ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `type_`, `ids`
 - **Params**: `type_` — query `type` · `ids` — query
@@ -51,6 +53,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/albums/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_users_saved_albums(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -70,6 +73,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/audiobooks/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_users_saved_audiobooks(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -89,6 +93,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/episodes/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_users_saved_episodes(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -108,6 +113,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/shows/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_users_saved_shows(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -127,6 +133,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/tracks/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_users_saved_tracks(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -146,6 +153,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `POST /users/{user_id}/playlists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def create_playlist(user_id: str, *, body: UsersPlaylistsRequest | UsersPlaylistsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `user_id`
 - **Params**: `user_id` — path · `body` — JSON body
@@ -168,6 +176,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/following`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def follow_artists_users(type_: ItemType2OrStr, ids: str, *, body: FollowArtistsOrUsersRequest | FollowArtistsOrUsersRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `type_`, `ids`
 - **Params**: `type_` — query `type` · `ids` — query · `body` — JSON body
@@ -190,6 +199,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/playlists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_a_list_of_current_users_playlists(*, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingPlaylistObject`
@@ -209,6 +219,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/following`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_followed(type_: ItemType1OrStr, *, after: str | None = None, limit: int | None = 20, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `type_`
 - **Params**: `type_` — query `type` · `after` — query · `limit` — query
@@ -230,6 +241,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/albums`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_saved_albums(*, limit: int | None = 20, offset: int | None = 0, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `limit` — query · `offset` — query · `market` — query
 - **Returns (parsed)**: `PagingSavedAlbumObject`
@@ -249,6 +261,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/audiobooks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_saved_audiobooks(*, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSavedAudiobookObject`
@@ -268,6 +281,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/episodes`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_saved_episodes(*, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `market` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSavedEpisodeObject`
@@ -287,6 +301,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/shows`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_saved_shows(*, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSavedShowObject`
@@ -306,6 +321,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/tracks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_saved_tracks(*, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `market` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSavedTrackObject`
@@ -325,6 +341,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/top/artists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_top_artists(*, time_range: str | None = "medium_term", limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `time_range` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingArtistObject`
@@ -344,6 +361,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/top/tracks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_top_tracks(*, time_range: str | None = "medium_term", limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `time_range` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingTrackObject`
@@ -363,6 +381,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/albums`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def remove_albums_user(ids: str, *, body: RemoveAlbumsRequest | RemoveAlbumsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body
@@ -384,6 +403,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/audiobooks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def remove_audiobooks_user(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -403,6 +423,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/episodes`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def remove_episodes_user(ids: str, *, body: RemoveEpisodesRequest | RemoveEpisodesRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body
@@ -424,6 +445,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/shows`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def remove_shows_user(ids: str, *, market: str | None = None, body: RemoveShowsRequest | RemoveShowsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `market` — query · `body` — JSON body
@@ -445,6 +467,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/tracks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def remove_tracks_user(ids: str, *, body: RemoveTracksRequest | RemoveTracksRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body
@@ -466,6 +489,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/albums`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def save_albums_user(ids: str, *, body: SaveAlbumsRequest | SaveAlbumsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body
@@ -487,6 +511,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/audiobooks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def save_audiobooks_user(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -506,6 +531,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/episodes`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def save_episodes_user(ids: str, *, body: SaveEpisodesRequest | SaveEpisodesRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body
@@ -527,6 +553,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/shows`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def save_shows_user(ids: str, *, body: SaveShowsRequest | SaveShowsRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body
@@ -548,6 +575,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/tracks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def save_tracks_user(ids: str, *, body: SaveTracksRequest | SaveTracksRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body
@@ -569,6 +597,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/following`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def unfollow_artists_users(type_: ItemType3OrStr, ids: str, *, body: UnfollowArtistsOrUsersRequest | UnfollowArtistsOrUsersRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `type_`, `ids`
 - **Params**: `type_` — query `type` · `ids` — query · `body` — JSON body

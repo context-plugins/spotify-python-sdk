@@ -9,10 +9,12 @@ client's own close, exactly as a file's is. A stream that is never iterated at a
 
 The parser is ``_internal/sse_parser.py``; this module decides what happens to what it yields. An event
 whose ``data`` equals the sentinel ends the stream and is never surfaced. An event the declared type
-rejects raises pydantic's ``ValidationError`` -- a ``ValueError``, exactly what a buffered body's decoder
-raises -- after the close; raised, not skipped, because a silently dropped event in a token stream is data
-loss the caller cannot see. The bytes are taken as the transport delivers them, ``iter_bytes(None)``, never
-re-chunked: a fixed chunk size would hold a twenty-byte event back until enough followed it.
+rejects raises :class:`ResponseDecodeError` after the close, from pydantic's ``ValidationError`` -- exactly
+what a buffered body's rejection raises out of ``execute``; raised, not skipped, because a silently dropped
+event in a token stream is data loss the caller cannot see. A body the transport could not deliver raises
+:class:`SdkConnectionError` the same way. The bytes are taken as the transport delivers them,
+``iter_bytes(None)``, never re-chunked: a fixed chunk size would hold a twenty-byte event back until enough
+followed it.
 
 A finalizer here only ever *reports*, never acts (ADR-0007): nothing is closed at GC time, and the
 consuming generator re-raises ``GeneratorExit`` without closing for the same reason."""
@@ -25,8 +27,10 @@ from typing import Generic, TypeVar
 
 from typing_extensions import Self
 
+from ._internal.redaction import redact_url
 from ._internal.sse_parser import SseParser
-from ._internal.urls import strip_query
+from ._internal.urls import safe_url
+from .exceptions import ResponseDecodeError
 from .transport import AsyncHttpResponse, HttpResponse
 
 T = TypeVar("T")
@@ -50,7 +54,7 @@ class EventStream(Generic[T]):
     one connection from the transport's pool until it is closed, so many left open will make later
     requests wait on the pool."""
 
-    __slots__ = ("_closed", "_decode_data", "_parser", "_response", "_sentinel", "_url")
+    __slots__ = ("_closed", "_decode_data", "_method", "_parser", "_response", "_safe_url", "_sentinel", "_url")
 
     def __init__(self, response: HttpResponse, decode_data: Callable[[str], T], sentinel: str | None) -> None:
         # Total by design: this runs between the head arriving and the raw client returning, so a
@@ -58,8 +62,11 @@ class EventStream(Generic[T]):
         self._response = response
         self._closed = False
         # Captured here rather than read off the response inside the finalizer, which can run at
-        # interpreter shutdown; query-stripped, so an api key placed there cannot reach a warning.
-        self._url = strip_query(response.url)
+        # interpreter shutdown; its query values masked, so an api key placed there cannot reach a warning.
+        self._url = redact_url(response.url)
+        # The call, as every result and exception names it -- see FileResponse.
+        self._method = response.method
+        self._safe_url = safe_url(response.url)
         self._decode_data = decode_data
         self._sentinel = sentinel
         self._parser = SseParser()
@@ -76,9 +83,12 @@ class EventStream(Generic[T]):
             Each event's decoded ``data``, in order.
 
         Raises:
-            ValueError: If the stream is already closed; if an event's ``data`` is rejected by the
-                declared type (pydantic's ``ValidationError``); or if the wire breaks the event-stream
-                grammar."""
+            ValueError: If the stream is already closed.
+            ResponseDecodeError: From the iteration, if an event's ``data`` is rejected by the declared
+                type -- pydantic's ``ValidationError`` is the cause -- or if the wire breaks the
+                event-stream grammar.
+            SdkConnectionError: From the iteration, if the transport could not deliver the body, a wait
+                between events that timed out included."""
         # Checked here, not in the generator: a closed stream must raise at the call, the way a closed
         # file does -- not at the first next().
         self._ensure_open()
@@ -94,7 +104,19 @@ class EventStream(Generic[T]):
             # Abandoned mid-iteration: deliberately left open. Closing here would run at GC time, and a
             # finalizer may report, never act (ADR-0007) -- __del__ warns, client.close() reaps.
             raise
+        except ValueError as error:
+            # A rejected event (pydantic's ValidationError), or the wire breaking the grammar or the 1 MiB
+            # cap: closed first, then raised as the family's, never skipped (ADR-0064).
+            self.close()
+            raise ResponseDecodeError(
+                method=self._method,
+                url=self._safe_url,
+                status_code=self._response.status_code,
+                headers=self._response.headers,
+            ) from error
         except BaseException:
+            # A body the transport could not deliver arrives as the family's exception already naming the
+            # call -- closed here with everything else, and passed as it is.
             self.close()
             raise
         self.close()
@@ -147,13 +169,16 @@ class AsyncEventStream(Generic[T]):
     ``loop.shutdown_asyncgens()``, where the ``ResourceWarning`` still fires but later and less usefully,
     and ``aclose`` must run on the loop that created the stream."""
 
-    __slots__ = ("_closed", "_decode_data", "_parser", "_response", "_sentinel", "_url")
+    __slots__ = ("_closed", "_decode_data", "_method", "_parser", "_response", "_safe_url", "_sentinel", "_url")
 
     def __init__(self, response: AsyncHttpResponse, decode_data: Callable[[str], T], sentinel: str | None) -> None:
-        # Total by design, and the URL captured and stripped, as in the sync twin.
+        # Total by design, and the URL captured and masked, as in the sync twin.
         self._response = response
         self._closed = False
-        self._url = strip_query(response.url)
+        self._url = redact_url(response.url)
+        # The call, as every result and exception names it -- see FileResponse.
+        self._method = response.method
+        self._safe_url = safe_url(response.url)
         self._decode_data = decode_data
         self._sentinel = sentinel
         self._parser = SseParser()
@@ -165,9 +190,12 @@ class AsyncEventStream(Generic[T]):
             Each event's decoded ``data``, in order.
 
         Raises:
-            ValueError: If the stream is already closed; if an event's ``data`` is rejected by the
-                declared type (pydantic's ``ValidationError``); or if the wire breaks the event-stream
-                grammar."""
+            ValueError: If the stream is already closed.
+            ResponseDecodeError: From the iteration, if an event's ``data`` is rejected by the declared
+                type -- pydantic's ``ValidationError`` is the cause -- or if the wire breaks the
+                event-stream grammar.
+            SdkConnectionError: From the iteration, if the transport could not deliver the body, a wait
+                between events that timed out included."""
         self._ensure_open()
         return self._consume()
 
@@ -180,6 +208,14 @@ class AsyncEventStream(Generic[T]):
         except GeneratorExit:
             # Abandoned mid-iteration: deliberately left open, as in the sync twin.
             raise
+        except ValueError as error:
+            await self.aclose()
+            raise ResponseDecodeError(
+                method=self._method,
+                url=self._safe_url,
+                status_code=self._response.status_code,
+                headers=self._response.headers,
+            ) from error
         except BaseException:
             await self.aclose()
             raise

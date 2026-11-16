@@ -14,12 +14,13 @@ Both variants are frozen dataclasses, so pattern matching needs nothing added. T
 call ``unwrap(result)``: it returns the payload or raises ``ApiError``. It is a function, not a method, so
 the same name also covers paginators: ``unwrap(paginator, items_selector)`` returns a paginator of payloads.
 
-Each carries the response's **head** -- its status and headers -- as fields of its own rather than a
-response object. There is no body beside them: the body *is* the payload on a success, and on a
-failure it is the error, reachable through :class:`RawError` where the operation documents no schema
-for it. A no-content operation therefore cannot show a caller the body it discarded; reaching one
-deliberately is future work, and an empty ``content`` on a response object was the wrong way to
-advertise its absence.
+Each carries the response's **head** -- its status and headers -- and the **call** -- its method and
+URL, the path rendered and the query dropped, as every exception names it -- as fields of its own
+rather than a response or a request object. There is no body beside them: the body *is* the payload
+on a success, and on a failure it is the error, reachable through :class:`RawError` where the
+operation documents no schema for it. A no-content operation therefore cannot show a caller the body
+it discarded; reaching one deliberately is future work, and an empty ``content`` on a response object
+was the wrong way to advertise its absence.
 
 :class:`RawError` lives here too: it is the error type a :class:`Failure` carries when the operation
 does not document the status that came back."""
@@ -32,7 +33,9 @@ from typing import Any, Generic, NoReturn, TypeAlias, TypeVar, overload
 
 from ._internal.wire import parse_json
 from .exceptions import ApiError
+from .optionality import OptionalNullable, items_or_empty
 from .paginator import AsyncPaginator, Paginator
+from .transport import HttpMethod
 
 T = TypeVar("T")
 E = TypeVar("E")
@@ -51,6 +54,10 @@ class Success(Generic[T]):
     Kept out of the generated repr: a response's headers carry ``set-cookie``, so a result printed
     in a log line or a debugger pane would otherwise hand over a session secret. The status stays,
     because identifying the result is the whole job of the string form (ADR-0017)."""
+    method: HttpMethod
+    url: str
+    """The call, as every exception names it: its path rendered, its query dropped -- the diagnostic
+    record ADR-0050 foresaw, in place of the request itself."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -68,6 +75,10 @@ class Failure(Generic[E]):
     Kept out of the generated repr: a response's headers carry ``set-cookie``, so a result printed
     in a log line or a debugger pane would otherwise hand over a session secret. The status stays,
     because identifying the result is the whole job of the string form (ADR-0017)."""
+    method: HttpMethod
+    url: str
+    """The call, as every exception names it: its path rendered, its query dropped -- the diagnostic
+    record ADR-0050 foresaw, in place of the request itself."""
 
 
 # One call returns exactly one of these. Narrow with ``match`` or ``isinstance``,
@@ -122,19 +133,21 @@ def unwrap(result: ApiResult[T, E], /) -> T: ...
 
 @overload
 def unwrap(
-    paginator: Paginator[ApiResult[T, E], ItemT], items_selector: Callable[[T], Sequence[ItemT]], /
+    paginator: Paginator[ApiResult[T, E], ItemT], items_selector: Callable[[T], OptionalNullable[Sequence[ItemT]]], /
 ) -> Paginator[T, ItemT]: ...
 
 
 @overload
 def unwrap(
-    paginator: AsyncPaginator[ApiResult[T, E], ItemT], items_selector: Callable[[T], Sequence[ItemT]], /
+    paginator: AsyncPaginator[ApiResult[T, E], ItemT],
+    items_selector: Callable[[T], OptionalNullable[Sequence[ItemT]]],
+    /,
 ) -> AsyncPaginator[T, ItemT]: ...
 
 
 def unwrap(
     value: ApiResult[T, E] | Paginator[ApiResult[T, E], ItemT] | AsyncPaginator[ApiResult[T, E], ItemT],
-    items_selector: Callable[[T], Sequence[ItemT]] | None = None,
+    items_selector: Callable[[T], OptionalNullable[Sequence[ItemT]]] | None = None,
     /,
 ) -> T | Paginator[T, ItemT] | AsyncPaginator[T, ItemT]:
     """Return the parsed form of a raw value: a result's payload, or a paginator over payloads.
@@ -145,34 +158,40 @@ def unwrap(
 
     Args:
         value: A result, or a paginator whose pages are results.
-        items_selector: Returns one payload's items, in order. Required with a paginator; omit it with a result.
+        items_selector: Returns one payload's items, in order, as the field is modelled: ``None`` or ``UNSET`` is a
+            page with none. Required with a paginator; omit it with a result.
 
     Returns:
         The payload, or a lazy paginator over payloads that can be iterated more than once.
 
     Raises:
-        ApiError: For a ``Failure``, carrying its ``error`` and response head. For a paginator, raised while
-            iterating, at the first failed page.
+        ApiError: For a ``Failure``, carrying its ``error``, the response head and the call. For a paginator,
+            raised while iterating, at the first failed page.
         TypeError: If the value is neither a result nor a paginator, or a paginator arrives without ``items_selector``.
             The overloads reject both statically."""
     match value, items_selector:
         case Success(payload=payload), _:
             return payload
-        case Failure(error=error, status_code=status_code, headers=headers), _:
-            raise ApiError(error=error, status_code=status_code, headers=headers)
+        case Failure(error=error, status_code=status_code, headers=headers, method=method, url=url), _:
+            raise ApiError(error=error, status_code=status_code, headers=headers, method=method, url=url)
         case Paginator(), items if items is not None:
 
             def fetch_pages() -> Iterator[T]:
                 for result in value.iter_pages():
                     yield unwrap(result)
 
-            return Paginator(fetch_pages, items)
+            return Paginator(
+                fetch_pages, lambda page: items_or_empty(items_selector(page)) if items_selector is not None else ()
+            )
         case AsyncPaginator(), items if items is not None:
 
             async def async_fetch_pages() -> AsyncIterator[T]:
                 async for result in value.iter_pages():
                     yield unwrap(result)
 
-            return AsyncPaginator(async_fetch_pages, items)
+            return AsyncPaginator(
+                async_fetch_pages,
+                lambda page: items_or_empty(items_selector(page)) if items_selector is not None else (),
+            )
         case _:
             raise TypeError("the value cannot be unwrapped")

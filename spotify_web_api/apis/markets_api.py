@@ -4,6 +4,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -46,7 +47,7 @@ class AsyncMarketsApi:
     def __init__(self, client: AsyncRawClient, server: Server, auth: AsyncAuthSchemes) -> None:
         self._with_raw_response = AsyncMarketsApiWithRawResponse(client, server, auth)
 
-    async def get_available_markets(self, *, request_options: RequestOptionsOrDict | None = None) -> Markets:
+    async def get_available_markets(self, *, request_options: AsyncRequestOptionsOrDict | None = None) -> Markets:
         """Get the list of markets where Spotify is available.
 
         Args:
@@ -92,7 +93,7 @@ class MarketsApiWithRawResponse(SecuredRawResponse[RawClient, Server, AuthScheme
 
 class AsyncMarketsApiWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def get_available_markets(
-        self, *, request_options: RequestOptionsOrDict | None = None
+        self, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[Markets, GetAvailableMarketsErrorBody]:
         """Get the list of markets where Spotify is available.
 

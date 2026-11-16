@@ -4,12 +4,13 @@
 
 Accessor: `client.audiobooks` · Source: `spotify_web_api/apis/audiobooks.py` · 7 operations
 
-Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameters (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
+Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameter names, the async ones typing `request_options` as `AsyncRequestOptionsOrDict` (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
 
 ### client.audiobooks.check_users_saved_audiobooks
 
 - **Route**: `GET /me/audiobooks/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_users_saved_audiobooks(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -29,6 +30,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /audiobooks/{id}`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_an_audiobook(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `id_`
 - **Params**: `id_` — path `id` · `market` — query
@@ -51,6 +53,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /audiobooks/{id}/chapters`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_audiobook_chapters(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `id_`
 - **Params**: `id_` — path `id` · `market` — query · `limit` — query · `offset` — query
@@ -71,6 +74,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /audiobooks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_multiple_audiobooks(ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `market` — query
@@ -91,6 +95,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/audiobooks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_saved_audiobooks(*, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSavedAudiobookObject`
@@ -110,6 +115,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/audiobooks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def remove_audiobooks_user(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -129,6 +135,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/audiobooks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def save_audiobooks_user(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query

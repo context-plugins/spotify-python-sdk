@@ -8,6 +8,7 @@ from ..core import (
     ApiResult,
     AsyncAnySchemes,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -325,7 +326,7 @@ class AsyncArtists:
         self._with_raw_response = AsyncArtistsWithRawResponse(client, server, auth)
 
     async def check_current_user_follows(
-        self, type_: ItemType3OrStr, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, type_: ItemType3OrStr, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check to see if the current user is following one or more artists or other Spotify users.
 
@@ -353,7 +354,7 @@ class AsyncArtists:
         ids: str,
         *,
         body: FollowArtistsOrUsersRequest | FollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Add the current user as a follower of one or more artists or other Spotify users.
 
@@ -376,7 +377,9 @@ class AsyncArtists:
             await self._with_raw_response.follow_artists_users(type_, ids, body=body, request_options=request_options)
         )
 
-    async def get_an_artist(self, id_: str, *, request_options: RequestOptionsOrDict | None = None) -> ArtistObject:
+    async def get_an_artist(
+        self, id_: str, *, request_options: AsyncRequestOptionsOrDict | None = None
+    ) -> ArtistObject:
         """Get Spotify catalog information for a single artist identified by their unique Spotify ID.
 
         Args:
@@ -402,7 +405,7 @@ class AsyncArtists:
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingArtistDiscographyAlbumObject:
         """Get Spotify catalog information about an artist's albums.
 
@@ -435,7 +438,7 @@ class AsyncArtists:
         )
 
     async def get_an_artists_related_artists(
-        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyArtists:
         """Get Spotify catalog information about artists similar to a given artist. Similarity is based on analysis of
         the Spotify community's listening history.
@@ -458,7 +461,7 @@ class AsyncArtists:
         )
 
     async def get_an_artists_top_tracks(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyTracks:
         """Get Spotify catalog information about an artist's top tracks by country.
 
@@ -486,7 +489,7 @@ class AsyncArtists:
         *,
         after: str | None = None,
         limit: int | None = 20,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> CursorPagedArtists:
         """Get the current user's followed artists.
 
@@ -510,7 +513,7 @@ class AsyncArtists:
         )
 
     async def get_multiple_artists(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ManyArtists:
         """Get Spotify catalog information for several artists based on their Spotify IDs.
 
@@ -535,7 +538,7 @@ class AsyncArtists:
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingArtistObject:
         """Get the current user's top artists based on calculated affinity.
 
@@ -566,7 +569,7 @@ class AsyncArtists:
         ids: str,
         *,
         body: UnfollowArtistsOrUsersRequest | UnfollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Remove the current user as a follower of one or more artists or other Spotify users.
 
@@ -879,7 +882,7 @@ class ArtistsWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes])
 
 class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def check_current_user_follows(
-        self, type_: ItemType3OrStr, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, type_: ItemType3OrStr, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckCurrentUserFollowsErrorBody]:
         """Check to see if the current user is following one or more artists or other Spotify users.
 
@@ -907,7 +910,7 @@ class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: FollowArtistsOrUsersRequest | FollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, FollowArtistsUsersErrorBody]:
         """Add the current user as a follower of one or more artists or other Spotify users.
 
@@ -933,7 +936,7 @@ class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def get_an_artist(
-        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ArtistObject, GetAnArtistErrorBody]:
         """Get Spotify catalog information for a single artist identified by their unique Spotify ID.
 
@@ -962,7 +965,7 @@ class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         market: str | None = None,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingArtistDiscographyAlbumObject, GetAnArtistsAlbumsErrorBody]:
         """Get Spotify catalog information about an artist's albums.
 
@@ -994,7 +997,7 @@ class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def get_an_artists_related_artists(
-        self, id_: str, *, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyArtists, GetAnArtistsRelatedArtistsErrorBody]:
         """Get Spotify catalog information about artists similar to a given artist. Similarity is based on analysis of
         the Spotify community's listening history.
@@ -1017,7 +1020,7 @@ class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def get_an_artists_top_tracks(
-        self, id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None
+        self, id_: str, *, market: str | None = None, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyTracks, GetAnArtistsTopTracksErrorBody]:
         """Get Spotify catalog information about an artist's top tracks by country.
 
@@ -1046,7 +1049,7 @@ class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         *,
         after: str | None = None,
         limit: int | None = 20,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[CursorPagedArtists, GetFollowedErrorBody]:
         """Get the current user's followed artists.
 
@@ -1074,7 +1077,7 @@ class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         )
 
     async def get_multiple_artists(
-        self, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[ManyArtists, GetMultipleArtistsErrorBody]:
         """Get Spotify catalog information for several artists based on their Spotify IDs.
 
@@ -1101,7 +1104,7 @@ class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingArtistObject, GetUsersTopArtistsErrorBody]:
         """Get the current user's top artists based on calculated affinity.
 
@@ -1134,7 +1137,7 @@ class AsyncArtistsWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Asy
         ids: str,
         *,
         body: UnfollowArtistsOrUsersRequest | UnfollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, UnfollowArtistsUsersErrorBody]:
         """Remove the current user as a follower of one or more artists or other Spotify users.
 

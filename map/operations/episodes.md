@@ -4,12 +4,13 @@
 
 Accessor: `client.episodes` · Source: `spotify_web_api/apis/episodes.py` · 7 operations
 
-Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameters (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
+Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameter names, the async ones typing `request_options` as `AsyncRequestOptionsOrDict` (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
 
 ### client.episodes.check_users_saved_episodes
 
 - **Route**: `GET /me/episodes/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_users_saved_episodes(ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query
@@ -29,6 +30,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /shows/{id}/episodes`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_a_shows_episodes(id_: str, *, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `id_`
 - **Params**: `id_` — path `id` · `market` — query · `limit` — query · `offset` — query
@@ -49,6 +51,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /episodes/{id}`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_an_episode(id_: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `id_`
 - **Params**: `id_` — path `id` · `market` — query
@@ -69,6 +72,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /episodes`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_multiple_episodes(ids: str, *, market: str | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `market` — query
@@ -89,6 +93,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/episodes`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_saved_episodes(*, market: str | None = None, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `market` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingSavedEpisodeObject`
@@ -108,6 +113,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/episodes`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def remove_episodes_user(ids: str, *, body: RemoveEpisodesRequest | RemoveEpisodesRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body
@@ -129,6 +135,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/episodes`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def save_episodes_user(ids: str, *, body: SaveEpisodesRequest | SaveEpisodesRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `ids`
 - **Params**: `ids` — query · `body` — JSON body

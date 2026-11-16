@@ -6,6 +6,7 @@ from ..auth import AsyncAuthSchemes, AuthSchemes
 from ..core import (
     ApiResult,
     AsyncRawClient,
+    AsyncRequestOptionsOrDict,
     RawClient,
     RequestOptionsOrDict,
     SecuredRawResponse,
@@ -374,7 +375,7 @@ class AsyncUsers:
         self._with_raw_response = AsyncUsersWithRawResponse(client, server, auth)
 
     async def check_current_user_follows(
-        self, type_: ItemType3OrStr, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, type_: ItemType3OrStr, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check to see if the current user is following one or more artists or other Spotify users.
 
@@ -397,7 +398,7 @@ class AsyncUsers:
         )
 
     async def check_if_user_follows_playlist(
-        self, playlist_id: str, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> list[bool]:
         """Check to see if one or more Spotify users are following a specified playlist.
 
@@ -427,7 +428,7 @@ class AsyncUsers:
         ids: str,
         *,
         body: FollowArtistsOrUsersRequest | FollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Add the current user as a follower of one or more artists or other Spotify users.
 
@@ -455,7 +456,7 @@ class AsyncUsers:
         playlist_id: str,
         *,
         body: PlaylistsFollowersRequest | PlaylistsFollowersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Add the current user as a follower of a playlist.
 
@@ -478,7 +479,7 @@ class AsyncUsers:
         )
 
     async def get_current_users_profile(
-        self, *, request_options: RequestOptionsOrDict | None = None
+        self, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> PrivateUserObject:
         """Get detailed profile information about the current user (including the current user's username).
 
@@ -502,7 +503,7 @@ class AsyncUsers:
         *,
         after: str | None = None,
         limit: int | None = 20,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> CursorPagedArtists:
         """Get the current user's followed artists.
 
@@ -531,7 +532,7 @@ class AsyncUsers:
         *,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingPlaylistObject:
         """Get a list of the playlists owned or followed by a Spotify user.
 
@@ -557,7 +558,7 @@ class AsyncUsers:
         )
 
     async def get_users_profile(
-        self, user_id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, user_id: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> PublicUserObject:
         """Get public profile information about a Spotify user.
 
@@ -582,7 +583,7 @@ class AsyncUsers:
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingArtistObject:
         """Get the current user's top artists based on calculated affinity.
 
@@ -613,7 +614,7 @@ class AsyncUsers:
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> PagingTrackObject:
         """Get the current user's top tracks based on calculated affinity.
 
@@ -644,7 +645,7 @@ class AsyncUsers:
         ids: str,
         *,
         body: UnfollowArtistsOrUsersRequest | UnfollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> None:
         """Remove the current user as a follower of one or more artists or other Spotify users.
 
@@ -667,7 +668,9 @@ class AsyncUsers:
             await self._with_raw_response.unfollow_artists_users(type_, ids, body=body, request_options=request_options)
         )
 
-    async def unfollow_playlist(self, playlist_id: str, *, request_options: RequestOptionsOrDict | None = None) -> None:
+    async def unfollow_playlist(
+        self, playlist_id: str, *, request_options: AsyncRequestOptionsOrDict | None = None
+    ) -> None:
         """Remove the current user as a follower of a playlist.
 
         Args:
@@ -1026,7 +1029,7 @@ class UsersWithRawResponse(SecuredRawResponse[RawClient, Server, AuthSchemes]):
 
 class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, AsyncAuthSchemes]):
     async def check_current_user_follows(
-        self, type_: ItemType3OrStr, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, type_: ItemType3OrStr, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckCurrentUserFollowsErrorBody]:
         """Check to see if the current user is following one or more artists or other Spotify users.
 
@@ -1049,7 +1052,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         )
 
     async def check_if_user_follows_playlist(
-        self, playlist_id: str, ids: str, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, ids: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[list[bool], CheckIfUserFollowsPlaylistErrorBody]:
         """Check to see if one or more Spotify users are following a specified playlist.
 
@@ -1078,7 +1081,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         ids: str,
         *,
         body: FollowArtistsOrUsersRequest | FollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, FollowArtistsUsersErrorBody]:
         """Add the current user as a follower of one or more artists or other Spotify users.
 
@@ -1108,7 +1111,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         playlist_id: str,
         *,
         body: PlaylistsFollowersRequest | PlaylistsFollowersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, FollowPlaylistErrorBody]:
         """Add the current user as a follower of a playlist.
 
@@ -1133,7 +1136,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         )
 
     async def get_current_users_profile(
-        self, *, request_options: RequestOptionsOrDict | None = None
+        self, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[PrivateUserObject, GetCurrentUsersProfileErrorBody]:
         """Get detailed profile information about the current user (including the current user's username).
 
@@ -1158,7 +1161,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         *,
         after: str | None = None,
         limit: int | None = 20,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[CursorPagedArtists, GetFollowedErrorBody]:
         """Get the current user's followed artists.
 
@@ -1191,7 +1194,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         *,
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingPlaylistObject, GetListUsersPlaylistsErrorBody]:
         """Get a list of the playlists owned or followed by a Spotify user.
 
@@ -1216,7 +1219,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         )
 
     async def get_users_profile(
-        self, user_id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, user_id: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[PublicUserObject, GetUsersProfileErrorBody]:
         """Get public profile information about a Spotify user.
 
@@ -1243,7 +1246,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingArtistObject, GetUsersTopArtistsErrorBody]:
         """Get the current user's top artists based on calculated affinity.
 
@@ -1276,7 +1279,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         time_range: str | None = "medium_term",
         limit: int | None = 20,
         offset: int | None = 0,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[PagingTrackObject, GetUsersTopTracksErrorBody]:
         """Get the current user's top tracks based on calculated affinity.
 
@@ -1309,7 +1312,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         ids: str,
         *,
         body: UnfollowArtistsOrUsersRequest | UnfollowArtistsOrUsersRequestDict | None = None,
-        request_options: RequestOptionsOrDict | None = None,
+        request_options: AsyncRequestOptionsOrDict | None = None,
     ) -> ApiResult[None, UnfollowArtistsUsersErrorBody]:
         """Remove the current user as a follower of one or more artists or other Spotify users.
 
@@ -1335,7 +1338,7 @@ class AsyncUsersWithRawResponse(SecuredRawResponse[AsyncRawClient, Server, Async
         )
 
     async def unfollow_playlist(
-        self, playlist_id: str, *, request_options: RequestOptionsOrDict | None = None
+        self, playlist_id: str, *, request_options: AsyncRequestOptionsOrDict | None = None
     ) -> ApiResult[None, UnfollowPlaylistErrorBody]:
         """Remove the current user as a follower of a playlist.
 

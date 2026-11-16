@@ -4,12 +4,13 @@
 
 Accessor: `client.users` · Source: `spotify_web_api/apis/users.py` · 12 operations
 
-Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameters (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
+Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omit what its invariants table covers and are otherwise self-contained, so chunk at block level. Signatures are the sync parsed spelling; the async and raw spellings take the same parameter names, the async ones typing `request_options` as `AsyncRequestOptionsOrDict` (see sdk-map.md). **Type sources** names the module declaring each type an operation mentions, so resolving a body, return or error payload is a lookup rather than a search; the runtime types `RawError` and `ApiResult` are excluded.
 
 ### client.users.check_current_user_follows
 
 - **Route**: `GET /me/following/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_current_user_follows(type_: ItemType3OrStr, ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `type_`, `ids`
 - **Params**: `type_` — query `type` · `ids` — query
@@ -30,6 +31,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /playlists/{playlist_id}/followers/contains`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def check_if_user_follows_playlist(playlist_id: str, ids: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`, `ids`
 - **Params**: `playlist_id` — path · `ids` — query
@@ -49,6 +51,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /me/following`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def follow_artists_users(type_: ItemType2OrStr, ids: str, *, body: FollowArtistsOrUsersRequest | FollowArtistsOrUsersRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `type_`, `ids`
 - **Params**: `type_` — query `type` · `ids` — query · `body` — JSON body
@@ -71,6 +74,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `PUT /playlists/{playlist_id}/followers`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def follow_playlist(playlist_id: str, *, body: PlaylistsFollowersRequest | PlaylistsFollowersRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path · `body` — JSON body
@@ -92,6 +96,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_current_users_profile(*, request_options: RequestOptionsOrDict | None = None)`
 - **Returns (parsed)**: `PrivateUserObject`
 - **Returns (raw)**: `ApiResult[PrivateUserObject, GetCurrentUsersProfileErrorBody]`
@@ -110,6 +115,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/following`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_followed(type_: ItemType1OrStr, *, after: str | None = None, limit: int | None = 20, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `type_`
 - **Params**: `type_` — query `type` · `after` — query · `limit` — query
@@ -131,6 +137,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /users/{user_id}/playlists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_list_users_playlists(user_id: str, *, limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `user_id`
 - **Params**: `user_id` — path · `limit` — query · `offset` — query
@@ -151,6 +158,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /users/{user_id}`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_profile(user_id: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `user_id`
 - **Params**: `user_id` — path
@@ -171,6 +179,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/top/artists`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_top_artists(*, time_range: str | None = "medium_term", limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `time_range` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingArtistObject`
@@ -190,6 +199,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `GET /me/top/tracks`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def get_users_top_tracks(*, time_range: str | None = "medium_term", limit: int | None = 20, offset: int | None = 0, request_options: RequestOptionsOrDict | None = None)`
 - **Params**: `time_range` — query · `limit` — query · `offset` — query
 - **Returns (parsed)**: `PagingTrackObject`
@@ -209,6 +219,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /me/following`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def unfollow_artists_users(type_: ItemType3OrStr, ids: str, *, body: UnfollowArtistsOrUsersRequest | UnfollowArtistsOrUsersRequestDict | None = None, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `type_`, `ids`
 - **Params**: `type_` — query `type` · `ids` — query · `body` — JSON body
@@ -231,6 +242,7 @@ Each `###` block is one operation and assumes `sdk-map.md` is loaded: blocks omi
 
 - **Route**: `DELETE /playlists/{playlist_id}/followers`
 - **Auth**: `oauth_2_0`
+- **Server**: `default`
 - **Signature**: `def unfollow_playlist(playlist_id: str, *, request_options: RequestOptionsOrDict | None = None)`
   - required, positional: `playlist_id`
 - **Params**: `playlist_id` — path

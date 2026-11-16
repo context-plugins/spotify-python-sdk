@@ -20,7 +20,7 @@ import os
 import ssl
 from collections.abc import AsyncIterable, AsyncIterator, Callable, Iterable, Iterator, Mapping
 from contextlib import ExitStack, suppress
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from tempfile import mkstemp
 from typing import Any
@@ -29,7 +29,7 @@ import certifi
 import httpx2
 from typing_extensions import TypeIs
 
-from ._internal.content_disposition import render_content_disposition
+from ._internal.urls import safe_url
 from .bodies import (
     BinaryBody,
     FormBody,
@@ -41,12 +41,13 @@ from .bodies import (
     RequestBody,
     TextBody,
 )
-from .exceptions import TransportError
+from .exceptions import SdkConnectionError, SdkTimeoutError
 from .files import AsyncBinaryContent, AsyncBinaryReader, BinaryReader
 from .transport import (
     AsyncHttpClient,
     AsyncHttpResponse,
     HttpClient,
+    HttpMethod,
     HttpRequest,
     HttpResponse,
 )
@@ -479,45 +480,36 @@ async def _drained_parts(body: RequestBody | None, stack: ExitStack) -> RequestB
 def _httpx2_part(part: MultipartPart, stack: ExitStack) -> tuple[str, Any]:
     """Render one part in httpx2's ``files=`` tuple spelling.
 
-    Text parts go through the *file* spelling -- ``(None, text)``, a part with no filename --
+    Text parts go through the *file* spelling -- ``(None, content)``, a part with no filename --
     rather than through ``data=``, because httpx2 chooses the encoding on the **truthiness** of
     ``files``: an operation declaring ``multipart/form-data`` with no binary part would otherwise
     be sent as ``application/x-www-form-urlencoded``. The rendered bytes are identical either way,
-    repeated keys and name escaping included, so the invariant costs nothing."""
+    repeated keys and name escaping included, so the invariant costs nothing. A text part's bytes
+    pass through the encoder as given: it frames them and encodes nothing."""
     match part:
-        case MultipartText(name, text, None):
-            return (name, (None, text))
-        case MultipartText(name, text, media_type):
-            return (name, (None, text, media_type))
+        case MultipartText(name, content, None):
+            return (name, (None, content))
+        case MultipartText(name, content, media_type):
+            return (name, (None, content, media_type))
         case MultipartFile(name, content, filename, media_type):
             return (name, (filename, _open(content, stack), media_type))
 
 
 def _body_kwargs(
     body: RequestBody | None,
-    headers: Mapping[str, str],
     stack: ExitStack,
     *,
     binary_content: Callable[[AsyncBinaryContent, ExitStack], object],
 ) -> dict[str, Any]:
-    """Map the request's body -- and the headers that describe it -- onto httpx2's keywords.
+    """Map the request's body onto the httpx2 keyword that carries it.
 
-    This ``match`` is the only place the body union is interpreted, and it is exhaustive by
+    This ``match`` is the only place the transport interprets the body union, and it is exhaustive by
     construction: adding a body shape without handling it here is a type error.
 
-    Nothing here spells a media type, a charset or a filename. A body that has one carries it,
-    written at the endpoint from the operation's content key, and it is merged **underneath** the
-    request's own headers so a caller's ``extra_headers`` still wins -- the precedence httpx2 gives
-    its own derived headers. A text body is encoded with the charset it declares and labelled with
-    that same field, so the bytes and the label cannot disagree. A raw body that has a name -- given
-    or derived, the factory having already settled which -- takes a second derived header, its
-    ``Content-Disposition``, on that same precedence, and the nameless arm beneath it carries none
-    rather than an empty one. That pair is ordered name-first because
-    ``str()`` is what narrows the name for the renderer; the arm below is total over
-    :class:`BinaryBody`, which is what keeps this ``match`` exhaustive. The two arms that carry no
-    media type are the two whose media type belongs to the encoder: url-encoded is fixed by the
-    ``data=`` keyword, and multipart's boundary exists only once httpx2 has minted it. That is why
-    headers travel out of this function rather than beside it.
+    Nothing here spells a header. A body's label -- its media type, and a raw body's
+    ``Content-Disposition`` -- is already among ``request.headers``, folded there when the request was
+    built (``bodies.content_headers``), so this function moves bytes and nothing else. The one label
+    a transport still writes is multipart's, whose boundary exists only once httpx2 has minted it.
 
     ``binary_content`` is the one flavour-differing arm, passed as data with no default so each
     transport must name its own adapter -- ``_sync_content`` or ``_async_content``. One shared
@@ -527,45 +519,20 @@ def _body_kwargs(
     Args:
         body: The body being mapped -- the request's own, or the one :func:`_drained_parts`
             resolved from it.
-        headers: The request's headers, which every arm carries through and two arms extend.
         stack: The send's exit stack, onto which any handle opened for this body is registered.
         binary_content: The flavour's raw-body adapter.
 
     Returns:
-        The httpx2 keyword arguments carrying this body, ``headers`` among them."""
+        The httpx2 keyword argument carrying this body; empty when there is none."""
     match body:
         case None:
-            return {"headers": headers}
-        case JsonBody(None, media_type):
-            # ``json=None`` is indistinguishable to httpx2 from no ``json`` argument at all, so the
-            # body would vanish rather than going out as the four bytes the caller asked for.
-            # ``content=`` is the only keyword that will carry them.
-            return {"headers": {"content-type": media_type, **headers}, "content": b"null"}
-        case JsonBody(value, media_type):
-            return {"headers": {"content-type": media_type, **headers}, "json": value}
-        case FormBody(fields):
-            return {"headers": headers, "data": fields}
+            return {}
+        case JsonBody(content, _) | FormBody(content) | TextBody(content, _, _):
+            return {"content": content}
         case MultipartBody(parts):
-            return {"headers": headers, "files": [_httpx2_part(part, stack) for part in parts]}
-        case BinaryBody(content, str() as filename, media_type):
-            return {
-                "headers": {
-                    "content-type": media_type,
-                    "content-disposition": render_content_disposition(filename),
-                    **headers,
-                },
-                "content": binary_content(content, stack),
-            }
-        case BinaryBody(content, _, media_type):
-            return {
-                "headers": {"content-type": media_type, **headers},
-                "content": binary_content(content, stack),
-            }
-        case TextBody(text, media_type, charset):
-            return {
-                "headers": {"content-type": f"{media_type}; charset={charset}", **headers},
-                "content": text.encode(charset),
-            }
+            return {"files": [_httpx2_part(part, stack) for part in parts]}
+        case BinaryBody(content, _, _):
+            return {"content": binary_content(content, stack)}
 
 
 def _timeout_kwargs(request: HttpRequest) -> dict[str, Any]:
@@ -604,16 +571,24 @@ class _Httpx2Response:
 
     httpx2 lowercases header names on iteration, so ``headers`` meets the protocols' casing
     obligation by construction; ``read`` is the library's own, which both buffers the body and
-    releases the connection -- the exact obligation the protocol states."""
+    releases the connection -- the exact obligation the protocol states. Every read of the body
+    translates the library's failures into the family's: ``httpx2.TimeoutException`` into
+    :class:`~.exceptions.SdkTimeoutError`, carrying ``timeout`` -- the window the request ran under,
+    its own or the client's -- and the rest of ``httpx2.TransportError`` together with
+    ``DecodingError`` into :class:`~.exceptions.SdkConnectionError`. ``DecodingError`` sits under
+    ``RequestError`` rather than ``TransportError`` in httpx2's tree, is raised for a content-encoding
+    the library could not undo, and can only surface once the body is being read, which is why
+    ``send`` need not name it. A read timeout bounds each wait for the next chunk, never the whole
+    body, so its message says the read stalled rather than that nothing arrived. Each names the call as
+    every result does, from the request's own ``method`` and ``url``, the URL cut by ``safe_url``."""
 
     _response: httpx2.Response
-
-    @property
-    def url(self) -> str:
-        # httpx2 answers this from the request it kept, and the SDK never sets follow_redirects, so
-        # it is the URL that was asked for. A property rather than a field: the generated dataclass
-        # repr would otherwise print a query string a credential can sit in (ADR-0017).
-        return str(self._response.url)
+    method: HttpMethod
+    # The request's spelling, never ``self._response.url``: httpx2 lowercases the host and drops a default
+    # port, and the call a payload names must be the call the result names. Out of the generated repr,
+    # which would otherwise print a query string a credential can sit in (ADR-0017).
+    url: str = field(repr=False)
+    timeout: float
 
     @property
     def status_code(self) -> int:
@@ -624,10 +599,38 @@ class _Httpx2Response:
         return dict(self._response.headers)
 
     def iter_bytes(self, chunk_size: int | None) -> Iterator[bytes]:
-        return self._response.iter_bytes(chunk_size)
+        try:
+            yield from self._response.iter_bytes(chunk_size)
+        except httpx2.TimeoutException as e:
+            raise SdkTimeoutError(
+                f"{self.method} {safe_url(self.url)} stalled for {self.timeout:g} s reading the response body",
+                method=self.method,
+                url=safe_url(self.url),
+                timeout=self.timeout,
+            ) from e
+        except (httpx2.TransportError, httpx2.DecodingError) as e:
+            raise SdkConnectionError(
+                f"{self.method} {safe_url(self.url)} could not read the response body: {e}",
+                method=self.method,
+                url=safe_url(self.url),
+            ) from e
 
     def read(self) -> bytes:
-        return self._response.read()
+        try:
+            return self._response.read()
+        except httpx2.TimeoutException as e:
+            raise SdkTimeoutError(
+                f"{self.method} {safe_url(self.url)} stalled for {self.timeout:g} s reading the response body",
+                method=self.method,
+                url=safe_url(self.url),
+                timeout=self.timeout,
+            ) from e
+        except (httpx2.TransportError, httpx2.DecodingError) as e:
+            raise SdkConnectionError(
+                f"{self.method} {safe_url(self.url)} could not read the response body: {e}",
+                method=self.method,
+                url=safe_url(self.url),
+            ) from e
 
     def close(self) -> None:
         self._response.close()
@@ -638,13 +641,10 @@ class _AsyncHttpx2Response:
     """The awaited twin of :class:`_Httpx2Response`, meeting :class:`AsyncHttpResponse`."""
 
     _response: httpx2.Response
-
-    @property
-    def url(self) -> str:
-        # httpx2 answers this from the request it kept, and the SDK never sets follow_redirects, so
-        # it is the URL that was asked for. A property rather than a field: the generated dataclass
-        # repr would otherwise print a query string a credential can sit in (ADR-0017).
-        return str(self._response.url)
+    method: HttpMethod
+    # The request's spelling, out of the repr -- see :class:`_Httpx2Response`.
+    url: str = field(repr=False)
+    timeout: float
 
     @property
     def status_code(self) -> int:
@@ -654,11 +654,40 @@ class _AsyncHttpx2Response:
     def headers(self) -> Mapping[str, str]:
         return dict(self._response.headers)
 
-    def aiter_bytes(self, chunk_size: int | None) -> AsyncIterator[bytes]:
-        return self._response.aiter_bytes(chunk_size)
+    async def aiter_bytes(self, chunk_size: int | None) -> AsyncIterator[bytes]:
+        try:
+            async for chunk in self._response.aiter_bytes(chunk_size):
+                yield chunk
+        except httpx2.TimeoutException as e:
+            raise SdkTimeoutError(
+                f"{self.method} {safe_url(self.url)} stalled for {self.timeout:g} s reading the response body",
+                method=self.method,
+                url=safe_url(self.url),
+                timeout=self.timeout,
+            ) from e
+        except (httpx2.TransportError, httpx2.DecodingError) as e:
+            raise SdkConnectionError(
+                f"{self.method} {safe_url(self.url)} could not read the response body: {e}",
+                method=self.method,
+                url=safe_url(self.url),
+            ) from e
 
     async def aread(self) -> bytes:
-        return await self._response.aread()
+        try:
+            return await self._response.aread()
+        except httpx2.TimeoutException as e:
+            raise SdkTimeoutError(
+                f"{self.method} {safe_url(self.url)} stalled for {self.timeout:g} s reading the response body",
+                method=self.method,
+                url=safe_url(self.url),
+                timeout=self.timeout,
+            ) from e
+        except (httpx2.TransportError, httpx2.DecodingError) as e:
+            raise SdkConnectionError(
+                f"{self.method} {safe_url(self.url)} could not read the response body: {e}",
+                method=self.method,
+                url=safe_url(self.url),
+            ) from e
 
     async def aclose(self) -> None:
         await self._response.aclose()
@@ -693,6 +722,7 @@ class Httpx2Client(HttpClient):
             timeout=httpx2.Timeout(timeout),
             verify=_default_ssl_context() if verify is True else verify,
         )
+        self._timeout = timeout
         self._closed = False
 
     def send(self, request: HttpRequest) -> HttpResponse:
@@ -701,23 +731,46 @@ class Httpx2Client(HttpClient):
         # early. An exception mid-send closes it on the unwind. The *response* body is pending; the
         # returned wrapper owns that connection until it is closed.
         #
-        # httpx2.TransportError is the exact line the protocol draws -- it covers a refused, dropped,
-        # timed-out or protocol-broken connection, and excludes httpx2.DecodingError and
-        # TooManyRedirects, which are things that went wrong *after* a response arrived. One clause
-        # for all of it: the wrapper carries no detail to sort them by, and the caller is handed the
-        # httpx2 exception itself. The same guard sits at both seams.
+        # httpx2.TransportError is the line the protocol draws at this seam -- a refused, dropped,
+        # timed-out or protocol-broken connection -- and its timeout subclasses are the family's one leaf,
+        # carrying the window the request ran under: its own, else this client's. A PoolTimeout has its
+        # own arm and wording, since it waited for a connection and so wrote no request. Each names the
+        # call as every result does, the request's URL cut to the path. httpx2.DecodingError and
+        # TooManyRedirects are things that go wrong *after* a response arrived: the first is the
+        # response wrapper's to translate, the second unreachable, since follow_redirects is never set.
+        # The same arms sit at both seams.
+        timeout = self._timeout if request.timeout is None else request.timeout
         try:
             with ExitStack() as stack:
                 httpx2_request = self._client.build_request(
                     method=request.method,
                     url=request.url,
+                    headers=request.headers,
                     **_timeout_kwargs(request),
-                    **_body_kwargs(request.body, request.headers, stack, binary_content=_sync_content),
+                    **_body_kwargs(request.body, stack, binary_content=_sync_content),
                 )
                 response = self._client.send(httpx2_request, stream=True)
+        except httpx2.PoolTimeout as e:
+            raise SdkTimeoutError(
+                f"{request.method} {safe_url(request.url)} found no free connection in the pool within {timeout:g} s",
+                method=request.method,
+                url=safe_url(request.url),
+                timeout=timeout,
+            ) from e
+        except httpx2.TimeoutException as e:
+            raise SdkTimeoutError(
+                f"{request.method} {safe_url(request.url)} received no response within {timeout:g} s",
+                method=request.method,
+                url=safe_url(request.url),
+                timeout=timeout,
+            ) from e
         except httpx2.TransportError as e:
-            raise TransportError(e) from e
-        return _Httpx2Response(response)
+            raise SdkConnectionError(
+                f"{request.method} {safe_url(request.url)} could not be sent: {e}",
+                method=request.method,
+                url=safe_url(request.url),
+            ) from e
+        return _Httpx2Response(response, request.method, request.url, timeout)
 
     def close(self) -> None:
         if self._closed:
@@ -755,9 +808,11 @@ class AsyncHttpx2Client(AsyncHttpClient):
             timeout=httpx2.Timeout(timeout),
             verify=_default_ssl_context() if verify is True else verify,
         )
+        self._timeout = timeout
         self._closed = False
 
     async def send(self, request: HttpRequest) -> AsyncHttpResponse:
+        timeout = self._timeout if request.timeout is None else request.timeout
         try:
             with ExitStack() as stack:
                 # Inside the stack, necessarily: the pre-pass opens a spill file per async part, and
@@ -766,13 +821,32 @@ class AsyncHttpx2Client(AsyncHttpClient):
                 httpx2_request = self._client.build_request(
                     method=request.method,
                     url=request.url,
+                    headers=request.headers,
                     **_timeout_kwargs(request),
-                    **_body_kwargs(body, request.headers, stack, binary_content=_async_content),
+                    **_body_kwargs(body, stack, binary_content=_async_content),
                 )
                 response = await self._client.send(httpx2_request, stream=True)
+        except httpx2.PoolTimeout as e:
+            raise SdkTimeoutError(
+                f"{request.method} {safe_url(request.url)} found no free connection in the pool within {timeout:g} s",
+                method=request.method,
+                url=safe_url(request.url),
+                timeout=timeout,
+            ) from e
+        except httpx2.TimeoutException as e:
+            raise SdkTimeoutError(
+                f"{request.method} {safe_url(request.url)} received no response within {timeout:g} s",
+                method=request.method,
+                url=safe_url(request.url),
+                timeout=timeout,
+            ) from e
         except httpx2.TransportError as e:
-            raise TransportError(e) from e
-        return _AsyncHttpx2Response(response)
+            raise SdkConnectionError(
+                f"{request.method} {safe_url(request.url)} could not be sent: {e}",
+                method=request.method,
+                url=safe_url(request.url),
+            ) from e
+        return _AsyncHttpx2Response(response, request.method, request.url, timeout)
 
     async def aclose(self) -> None:
         if self._closed:
